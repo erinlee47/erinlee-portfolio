@@ -56,7 +56,6 @@ img, video { display: block; max-width: 100%; }
   border-bottom: 1px solid var(--line);
 }
 .nav__inner {
-  max-width: 1440px; margin: 0 auto;
   padding: 20px var(--pad);
   display: flex; justify-content: space-between; align-items: center; gap: 24px;
 }
@@ -66,9 +65,7 @@ img, video { display: block; max-width: 100%; }
 
 /* ---------- Page frame ---------- */
 .frame {
-  max-width: 1440px; margin: 0 auto;
-  border-left: 1px solid var(--line);
-  border-right: 1px solid var(--line);
+  width: 100%;
 }
 
 /* ---------- Hero ---------- */
@@ -228,7 +225,7 @@ img, video { display: block; max-width: 100%; }
 
 .footer { background: var(--ink); color: var(--paper); }
 .footer__inner {
-  max-width: 1440px; margin: 0 auto; padding: 40px var(--pad);
+  padding: 40px var(--pad);
   display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
   font-size: 14px; color: rgba(251,251,252,.55);
 }
