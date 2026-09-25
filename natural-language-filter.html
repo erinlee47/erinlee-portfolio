@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Natural Language Filter — Erin Lee</title>
+<meta name="description" content="Case study: Natural Language Filter for DealCloud — letting people ask for the records they need in plain language.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/reveal.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__brand">Erin Lee</a>
+    <nav class="nav__links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="frame">
+
+  <section class="cs-hero">
+    <div class="cs-eyebrow">
+      <span class="cs-eyebrow__num">01</span><span class="cs-eyebrow__rule"></span>
+      <span>Intapp · DealCloud · 2024</span>
+    </div>
+    <h1>Natural Language Filter</h1>
+    <p class="cs-hero__lede">At Intapp, I led the design of Natural Language Filter for DealCloud, a CRM used by thousands of financial services professionals across private equity, investment banking, and M&amp;A advisory. The feature lets users find what they need by typing a question in plain English, instead of wrestling with dropdowns or building filters from scratch.</p>
+  </section>
+
+  <div class="meta">
+    <div class="meta__cell"><div class="meta__label">Role</div><div class="meta__value">Lead designer</div></div>
+    <div class="meta__cell"><div class="meta__label">Focus</div><div class="meta__value">Query &amp; data structure</div></div>
+    <div class="meta__cell"><div class="meta__label">Discipline</div><div class="meta__value">Web design</div></div>
+    <div class="meta__cell"><div class="meta__label">Year</div><div class="meta__value">2024</div></div>
+  </div>
+
+  <div class="cs-cover">
+    <img class="media" src="https://framerusercontent.com/images/fGlElhVUBvC1ni4jHxjeCngxXs.png?width=1844&amp;height=1224" width="1844" height="1224" alt="Natural Language Filter cover">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">Context</div>
+    <div class="cs-copy">
+      <p>DealCloud is highly customizable, which is one of the things customers love about it. But that same flexibility made the filter system feel foreign to anyone who didn't set it up. To answer something as simple as <em>"Which Tier A clients haven't been contacted in the last four months?"</em>, you had to know the exact field names your firm had configured, navigate through several menu layers, and stack conditions in the right order.</p>
+      <p>The people who felt this most weren't the admins. They were the relationship managers and partners making decisions on live deals. A lot of them had quietly stopped using filters altogether. When I sat with users early on, I didn't hear frustration. I heard resignation. They'd accepted this was just how it worked.</p>
+      <p class="pullquote">DealCloud had all the data. The gap was that the system spoke schema and users spoke intent.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="https://framerusercontent.com/images/rq9RHV0wJq5PlJhFQWIKehYnuL4.png?width=1844&amp;height=1176" width="1844" height="1176" loading="lazy" alt="Filter system context">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">Explorations</div>
+    <div class="cs-copy">
+      <p>I explored three directions. A conversational overlay broke down the moment users wanted to tweak a result — there was no way to adjust individual conditions without starting over. An AI-enhanced filter builder kept the familiar UI but didn't solve anything. If you didn't know what fields existed, suggestions still didn't help.</p>
+      <p>The direction I pushed for was an integrated view that converts natural language into editable filter tokens right in context. You could see exactly how your words had been interpreted, fix individual pieces without losing the whole query, and build on it. For professionals in regulated industries who need to trust what they're looking at before acting on it, that transparency wasn't optional.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="https://framerusercontent.com/images/CLdQgbpEo9XcDnkjVVIZ6xnmdiU.png?width=1844&amp;height=931" width="1844" height="931" loading="lazy" alt="Exploration directions">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">Final solution</div>
+    <p class="cs-copy">Users describe what they're looking for in plain language, and the system generates structured, editable filter conditions instead of a static result. Because the generated filters use the existing filtering model, users can inspect, adjust, or extend the query using familiar controls rather than starting over.</p>
+  </section>
+
+  <div class="cs-media">
+    <video class="media" src="assets/video/nl-filter.mp4" autoplay loop muted playsinline></video>
+  </div>
+
+  <div class="cs-split">
+    <div class="cs-split__col">
+      <div class="cs-split__title">Prompt guidance</div>
+      <p>The experience guides users with contextual prompt suggestions and examples, helping them understand what they can ask without needing to learn the underlying data model.</p>
+      <img class="media" src="https://framerusercontent.com/images/yNYQmdeCTi42E0VPYpnlyqFYe4.png?width=1844&amp;height=960" width="1844" height="960" loading="lazy" alt="Prompt guidance">
+    </div>
+    <div class="cs-split__col">
+      <div class="cs-split__title">Loading state</div>
+      <p>During processing, the loading state provides clear feedback that the system is interpreting their request and translating it into filter logic.</p>
+      <img class="media" src="https://framerusercontent.com/images/ESUsikqq5HpQQ4ySAYBsqpf7FQ.png?width=1844&amp;height=931" width="1844" height="931" loading="lazy" alt="Loading state">
+    </div>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label cs-label--muted">Generated editable filters</div>
+    <p class="cs-copy">Once generated, the AI output is converted into familiar, editable filter tokens rather than a black-box answer. Users can review how their request was interpreted, adjust individual conditions, and refine the query without starting over — combining the speed of natural language with the flexibility of structured filtering.</p>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="https://framerusercontent.com/images/leQtzWBkCxUTEatFZfesgO23frA.png?width=1624&amp;height=1167" width="1624" height="1167" loading="lazy" alt="Generated editable filters">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label cs-label--muted">Workflow continuity</div>
+    <p class="cs-copy">Users can return to their previous grid view with a single action and switch between AI-generated and manual filters without losing context. They can also save AI-generated views as reusable configurations, turning one-time queries into persistent workflows teams can revisit and build on.</p>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="https://framerusercontent.com/images/PHJP6h0QdKIr2qPzklSbV86TKww.png?width=1844&amp;height=931" width="1844" height="931" loading="lazy" alt="Workflow continuity">
+  </div>
+
+  <section class="cs-section cs-section--impact">
+    <div class="cs-label">Impact</div>
+    <div class="cs-copy">
+      <p>While formal adoption metrics were not available at the time, early feedback showed a shift in how users approached filtering. Instead of building filters from scratch, users used Natural Language Filter to generate a starting point and refined the results from there.</p>
+      <p class="cs-impact-quote">10 of 10 internal testers said they would use it over the standard filter.</p>
+    </div>
+  </section>
+
+  <a href="ai-assisted-intake-form.html" class="next">
+    <span class="next__label">Next project</span>
+    <span class="next__title">AI Assisted Intake Form →</span>
+  </a>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <span>Erin Lee — All rights reserved</span>
+    <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+  </div>
+</footer>
+
+</body>
+</html>
