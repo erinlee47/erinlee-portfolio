@@ -80,6 +80,11 @@
   .intro-list li { transition: color .25s ease; text-underline-offset: 3px; }
   .intro-list li.hl { color: var(--chip-ink); text-decoration: underline; }
   .nocam { transition: none !important; }
+  /* Panel-only scenes: just the View Builder chat, floating on the gradient */
+  .panel-only .app { background: transparent; box-shadow: none; overflow: visible; }
+  .panel-only .nav, .panel-only .rail, .panel-only .main { visibility: hidden; }
+  .panel-only .pwrap { overflow: visible; }
+  .panel-only .panel { box-shadow: 0 30px 70px -25px rgba(20, 16, 60, .35), 0 0 0 1px rgba(20, 16, 60, .06); }
   .later .sug { transition: box-shadow .3s ease, border-color .3s ease, opacity .3s ease, transform .35s cubic-bezier(.2,1.2,.4,1); }
   .later .sug.glow { border-color: #B9ACF3; box-shadow: 0 0 0 4px rgba(90,63,208,.14); }
   .token { transition: opacity .3s ease, transform .4s cubic-bezier(.2,1.2,.4,1), color .25s ease; }
@@ -343,7 +348,7 @@
   const stage = $('stage');
   // ?scene= picks which moment to play: cover (default), guidance, loading, filters
   const SCENE = new URLSearchParams(location.search).get('scene') || 'cover';
-  const W = { cover: 1800, guidance: 960, loading: 960, filters: 1600 }[SCENE] || 1800, H = 1200;
+  const W = { cover: 1800, guidance: 960, loading: 960, filters: 1800 }[SCENE] || 1800, H = 1200;
   stage.style.width = W + 'px'; stage.style.height = H + 'px';
   document.querySelector('.app').style.left = (W - 1520) / 2 + 'px';
   document.querySelector('.app').style.top = (H - 836) / 2 + 'px';
@@ -563,7 +568,7 @@
   // Set everything up without animation: panel open, camera framed
   async function stageSetup(cam, fn) {
     stage.classList.add('instant');
-    bodyEl.classList.remove('closed');
+    if (SCENE !== 'filters') bodyEl.classList.remove('closed');
     setCam(cam.p, cam.z, true);
     if (fn) await fn();
     void stage.offsetWidth;
@@ -590,8 +595,9 @@
   const endLoop = async hold => { await wait(hold); cursor.style.opacity = 0; stage.classList.add('fade'); await wait(600); };
 
   // Framing: the chat panel with a slice of the table beside it, or the tokens and table
-  const CAM_PANEL = { p: { x: 1215, y: 418 }, z: 1.45 };
-  const CAM_TOKENS = { p: { x: 560, y: 418 }, z: 1.45 };
+  const CAM_PANEL = { p: { x: 1303, y: 448 }, z: 1.45 };
+  const CAM_TOKENS = { p: { x: 760, y: 418 }, z: 1.1 };
+  if (SCENE === 'guidance' || SCENE === 'loading') stage.classList.add('panel-only');
 
   const scenes = {
     cover: { run, still() {
