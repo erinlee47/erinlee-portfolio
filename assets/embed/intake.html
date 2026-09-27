@@ -33,6 +33,12 @@
   .cClientLbl { clip-path: inset(822px 426px 138px 74px); }
   .hov { position: absolute; left: 82px; top: 539px; width: 925px; height: 27px; background: #E9EFF8; mix-blend-mode: multiply; opacity: 0; transition: opacity .15s; }
   .hov.on { opacity: 1; }
+  .pfLondon { clip-path: inset(560px 434px 428px 82px); }
+  .pfClient { clip-path: inset(844px 434px 144px 82px); }
+  .pfLblOffice { clip-path: inset(539px 1140px 467px 78px); }
+  .pfLblBono { clip-path: inset(704px 1140px 301px 78px); }
+  .pfLblClient { clip-path: inset(822px 1140px 183px 78px); }
+  .noHint { position: absolute; left: 80px; width: 240px; height: 24px; background: #FFFFFF; }
   .lawyer { position: absolute; left: 80px; top: 462px; width: 928px; height: 40px; background: #F6FAFD; border: 1px solid #C4C8CE; border-radius: 2px;
     display: flex; align-items: center; justify-content: space-between; padding: 0 11px 0 11px; font-size: 14.5px; color: #1B1D29; opacity: 0; transition: opacity .3s ease; }
   .lawyer.on { opacity: 1; }
@@ -50,6 +56,10 @@
     <div class="layer on" id="Llist"><img class="clip" src="intake-ui/list.webp" alt=""><div class="toastCover"></div></div>
     <img class="clip toast" id="toast" src="intake-ui/list.webp" alt="">
     <div class="layer" id="Lhint"><img class="clip" src="intake-ui/hint.webp" alt="">
+      <!-- Before highlighting: pre-filled fields keep their tint and label; suggestion hints wait for the switch -->
+      <img class="clip pfLondon" src="intake-ui/page.webp" alt=""><img class="clip pfClient" src="intake-ui/page.webp" alt="">
+      <img class="clip pfLblOffice" src="intake-ui/page.webp" alt=""><img class="clip pfLblBono" src="intake-ui/page.webp" alt=""><img class="clip pfLblClient" src="intake-ui/page.webp" alt="">
+      <div class="noHint" style="top:505px"></div><div class="noHint" style="top:671px"></div>
     </div>
     <div class="layer" id="hl"><img class="clip" src="intake-ui/page.webp" alt=""></div>
     <div class="layer" id="Ldd"><img class="clip" src="intake-ui/dropdown.webp" alt=""><img class="clip cPractice" src="intake-ui/hint.webp" alt=""><img class="clip cProBono" src="intake-ui/page.webp" alt=""><img class="clip cClientLbl" src="intake-ui/page.webp" alt=""><div class="hov" id="hov"></div></div>
