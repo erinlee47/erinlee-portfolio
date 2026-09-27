@@ -293,7 +293,7 @@ img, video { display: block; max-width: 100%; }
 .cs-split__col:last-child { padding: 48px var(--pad) 48px 48px; }
 .cs-split__title { font-family: var(--serif); font-size: 30px; letter-spacing: -.01em; }
 .cs-split__col p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--text); text-wrap: pretty; }
-.cs-split__col .media { margin-top: 6px; }
+.cs-split__col .media { margin-top: auto; } /* media sits on the bottom edge, so paired columns line up */
 
 .next {
   display: flex; justify-content: space-between; align-items: baseline; gap: 24px;
