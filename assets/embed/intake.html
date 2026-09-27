@@ -108,7 +108,7 @@
   async function run() {
     while (true) {
       reset(); stage.classList.remove('fade');
-      await wait(900);
+      await wait(600);
       // The email has been read: the request is ready
       $('toast').classList.add('in');
       await wait(700); cursor.style.opacity = 1;
@@ -131,7 +131,10 @@
       await wait(1400);
       cam(null, 1);
       await wait(2200);
-      stage.classList.add('fade'); await wait(600);
+      // Loop without a blank frame: the list screen fades back in on top, then everything resets underneath
+      const list = $('Llist'); list.style.zIndex = 30; list.classList.add('on');
+      await wait(500);
+      reset(); list.style.zIndex = '';
     }
   }
   function still() { show('Llist', false); show('Lhint', true); show('hl', true); show('lawyer', true); $('hl').classList.add('compact'); }
