@@ -44,6 +44,9 @@
   .seg2 { clip-path: inset(695px 416px 72px 64px); transition: transform .5s cubic-bezier(.4,0,.2,1); }
   .compact .seg1 { transform: translateY(-24px); }
   .compact .seg2 { transform: translateY(-48px); }
+  .cardFillP { position: absolute; left: 64px; top: 928px; width: 960px; height: 24px; background: #FFFFFF; }
+  .segP { clip-path: inset(529px 416px 72px 64px); transition: transform .5s cubic-bezier(.4,0,.2,1); }
+  #hl.compact .segP { transform: translateY(-24px); }
   .gone-hint { opacity: 0; transition: opacity .3s ease; }
   .gone-hint.on { opacity: 1; }
   .lawyer { position: absolute; left: 80px; top: 462px; width: 928px; height: 40px; background: #F6FAFD; border: 1px solid #C4C8CE; border-radius: 2px;
@@ -68,7 +71,9 @@
       <div class="cardFill"></div>
       <img class="clip seg1" src="intake-ui/hint.webp" alt=""><img class="clip seg2" src="intake-ui/hint.webp" alt="">
     </div>
-    <div class="layer" id="hl"><img class="clip" src="intake-ui/page.webp" alt=""></div>
+    <div class="layer" id="hl"><img class="clip" src="intake-ui/page.webp" alt="">
+      <!-- after a lawyer is picked, the fields below slide up into the hint's space -->
+      <div class="cardFillP"></div><img class="clip segP" src="intake-ui/page.webp" alt=""></div>
     <div class="layer" id="Ldd"><img class="clip" src="intake-ui/dropdown.webp" alt=""><img class="clip cPractice" src="intake-ui/hint.webp" alt=""><img class="clip cProBono" src="intake-ui/page.webp" alt=""><img class="clip cClientLbl" src="intake-ui/page.webp" alt=""><div class="hov" id="hov"></div></div>
     <div class="lawyer" id="lawyer"><span>Larry Lawyer</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A2F3A" stroke-width="1.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></div>
     <div class="noHint gone-hint" id="lawyerHint" style="top:505px"></div>
@@ -96,7 +101,7 @@
 
   function reset() {
     stage.classList.add('instant');
-    show('Llist', true); show('Lhint', false); $('Lhint').classList.remove('compact'); show('Ldd', false); show('hl', false); show('lawyer', false); show('lawyerHint', false); show('hov', false);
+    show('Llist', true); show('Lhint', false); $('Lhint').classList.remove('compact'); $('hl').classList.remove('compact'); show('Ldd', false); show('hl', false); show('lawyer', false); show('lawyerHint', false); show('hov', false);
     $('toast').classList.remove('in'); cam(null, 1, true); cursor.style.opacity = 0; moveCursor(1180, 330);
     void stage.offsetWidth; stage.classList.remove('instant');
   }
@@ -120,7 +125,8 @@
       show('Ldd', true);
       await wait(700);
       await to(200, 556); show('hov', true); await wait(350); await click();
-      show('lawyer', true); show('lawyerHint', true); show('Ldd', false); show('hov', false);
+      show('lawyer', true); show('Ldd', false); show('hov', false);
+      await wait(150); $('hl').classList.add('compact');
       await wait(500); cursor.style.opacity = 0;
       await wait(1400);
       cam(null, 1);
@@ -128,7 +134,7 @@
       stage.classList.add('fade'); await wait(600);
     }
   }
-  function still() { show('Llist', false); show('Lhint', true); show('hl', true); show('lawyer', true); show('lawyerHint', true); }
+  function still() { show('Llist', false); show('Lhint', true); show('hl', true); show('lawyer', true); $('hl').classList.add('compact'); }
   if (reduced) still(); else run();
 </script>
 </body>
