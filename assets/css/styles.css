@@ -170,7 +170,7 @@ img, video { display: block; max-width: 100%; }
 .story-grid__cell .story__body { line-height: 1.55; }
 
 .project__band { background: var(--band); padding: 56px var(--pad) 64px; }
-.project__band img {
+.project__band img, .project__band video {
   width: 100%; height: auto;
   background: #FFFFFF; box-shadow: var(--shadow);
   border-radius: var(--radius); overflow: hidden;
