@@ -26,14 +26,11 @@
   .toast { opacity: 0; transform: translateY(-14px); transition: opacity .35s ease, transform .45s cubic-bezier(.2,1.2,.4,1); clip-path: inset(56px 20px 882px 996px); }
   .toast.in { opacity: 1; transform: none; }
   /* highlight-on details, lifted from the highlighted design */
-  .hlOn { opacity: 0; transition: opacity .3s ease; }
-  .hlOn.on { opacity: 1; }
-  .cTog { clip-path: inset(228px 520px 764px 866px); }
-  .cClient { clip-path: inset(836px 426px 136px 74px); }
-  .cRadio { clip-path: inset(720px 1276px 276px 130px); }
-  .office { position: absolute; left: 80px; top: 558px; width: 928px; height: 40px; border: 2px solid #5C33B2; border-radius: 4px; background: #F3EEFD; mix-blend-mode: multiply; }
   /* practice area stays as it was while the dropdown is open */
   .cPractice { clip-path: inset(637px 430px 330px 76px); }
+  /* keep the "(pre-filled)" labels while the dropdown is open */
+  .cProBono { clip-path: inset(704px 1100px 296px 76px); }
+  .cClientLbl { clip-path: inset(822px 426px 138px 74px); }
   .hov { position: absolute; left: 82px; top: 539px; width: 925px; height: 27px; background: #E9EFF8; mix-blend-mode: multiply; opacity: 0; transition: opacity .15s; }
   .hov.on { opacity: 1; }
   .lawyer { position: absolute; left: 80px; top: 462px; width: 928px; height: 40px; background: #F6FAFD; border: 1px solid #C4C8CE; border-radius: 2px;
@@ -53,10 +50,10 @@
     <div class="layer on" id="Llist"><img class="clip" src="intake-ui/list.webp" alt=""><div class="toastCover"></div></div>
     <img class="clip toast" id="toast" src="intake-ui/list.webp" alt="">
     <div class="layer" id="Lhint"><img class="clip" src="intake-ui/hint.webp" alt="">
-      <div class="hlOn" id="hl"><img class="clip cTog" src="intake-ui/dropdown.webp" alt=""><img class="clip cClient" src="intake-ui/dropdown.webp" alt="">
-        <img class="clip cRadio" src="intake-ui/dropdown.webp" alt=""><div class="office"></div></div>
-      <div class="lawyer" id="lawyer"><span>Larry Lawyer</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A2F3A" stroke-width="1.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></div></div>
-    <div class="layer" id="Ldd"><img class="clip" src="intake-ui/dropdown.webp" alt=""><img class="clip cPractice" src="intake-ui/hint.webp" alt=""><div class="hov" id="hov"></div></div>
+    </div>
+    <div class="layer" id="hl"><img class="clip" src="intake-ui/page.webp" alt=""></div>
+    <div class="layer" id="Ldd"><img class="clip" src="intake-ui/dropdown.webp" alt=""><img class="clip cPractice" src="intake-ui/hint.webp" alt=""><img class="clip cProBono" src="intake-ui/page.webp" alt=""><img class="clip cClientLbl" src="intake-ui/page.webp" alt=""><div class="hov" id="hov"></div></div>
+    <div class="lawyer" id="lawyer"><span>Larry Lawyer</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A2F3A" stroke-width="1.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></div>
     <div class="cursor" id="cursor" aria-hidden="true"><span class="ring"></span>
       <svg width="26" height="30" viewBox="0 0 26 30"><path d="M2 2l20 12-9 2-4 9z" fill="#1C1C1F" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div>
   </div>
