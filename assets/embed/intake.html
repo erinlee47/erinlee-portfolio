@@ -121,13 +121,7 @@
       await wait(700);
       await to(200, 556); show('hov', true); await wait(350); await click();
       show('lawyer', true); show('lawyerHint', true); show('Ldd', false); show('hov', false);
-      await wait(1400);
-      // Switch highlighting off: the form tightens up
-      await to(893, 248); await click();
-      show('hl', false); show('lawyerHint', false);
-      await wait(250);
-      $('Lhint').classList.add('compact');
-      await wait(700); cursor.style.opacity = 0;
+      await wait(500); cursor.style.opacity = 0;
       await wait(1400);
       cam(null, 1);
       await wait(2200);
