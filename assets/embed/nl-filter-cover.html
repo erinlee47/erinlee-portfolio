@@ -80,6 +80,19 @@
   .intro-list li { transition: color .25s ease; text-underline-offset: 3px; }
   .intro-list li.hl { color: var(--chip-ink); text-decoration: underline; }
   .nocam { transition: none !important; }
+  /* Workflow continuity: hovering a step reveals return / save */
+  .cthread { display: flex; flex-direction: column; gap: 10px; }
+  .crow { display: flex; align-items: center; gap: 10px; margin: 0 -22px; padding: 6px 22px; transition: background-color .2s ease; }
+  .crow .b { max-width: 80%; }
+  .crow.hover { background: #F6F6FA; }
+  .cact { margin-left: auto; width: 38px; height: 38px; border-radius: 8px; color: #2E5BD8; display: grid; place-items: center;
+    position: relative; opacity: 0; transform: scale(.85); transition: opacity .2s ease, transform .25s cubic-bezier(.2,1.3,.4,1), background-color .2s ease; }
+  .crow.hover .cact { opacity: 1; transform: none; }
+  .cact.hot { background: #E7ECFB; }
+  .cact.done { color: #1F8A5B; }
+  .cact .tip { position: absolute; bottom: calc(100% + 8px); right: -4px; background: #1C1C1F; color: #fff; font-size: 13px; line-height: 1;
+    padding: 7px 10px; border-radius: 6px; white-space: nowrap; opacity: 0; transform: translateY(4px); transition: opacity .2s ease, transform .2s ease; pointer-events: none; }
+  .cact.hot .tip { opacity: 1; transform: none; }
   /* Panel-only scenes: just the View Builder chat, floating on the gradient */
   .panel-only .app { background: transparent; box-shadow: none; overflow: visible; }
   .panel-only .nav, .panel-only .rail, .panel-only .main { visibility: hidden; }
@@ -348,7 +361,7 @@
   const stage = $('stage');
   // ?scene= picks which moment to play: cover (default), guidance, loading, filters
   const SCENE = new URLSearchParams(location.search).get('scene') || 'cover';
-  const W = { cover: 1800, guidance: 960, loading: 960, filters: 1800 }[SCENE] || 1800, H = 1200;
+  const W = { cover: 1800, guidance: 960, loading: 960, filters: 1800, continuity: 1800 }[SCENE] || 1800, H = 1200;
   stage.style.width = W + 'px'; stage.style.height = H + 'px';
   document.querySelector('.app').style.left = (W - 1520) / 2 + 'px';
   document.querySelector('.app').style.top = (H - 836) / 2 + 'px';
@@ -732,6 +745,94 @@
         });
       }
     }
+  };
+
+
+  // ---------- Workflow continuity: hover a step to return to it, or save the latest view ----------
+  const ICON_RETURN = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5v5h5"/><path d="M5.5 14.5A7.5 7.5 0 1 0 6.3 7.4L4 10"/></svg>';
+  const ICON_SAVE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 4h11l3 3v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4z"/><path d="M8 4v5h7V4"/><rect x="8" y="13" width="8" height="5" rx=".5"/></svg>';
+  const ICON_CHECK = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const MINE = [all[0], all[3], all[5], all[6], all[8], all[15], all[1], all[9], all[12], all[7]];
+  const MINE_TECH = [all[0], all[3], all[5], all[6], all[8], all[15]];
+  const CONT = {
+    ask: '', lines: [],
+    tokens: ['Account Owner Equals Erin Lee', 'Industry Includes Technology'],
+    rows: MINE_TECH
+  };
+  function buildThread() {
+    const old = $('cthread'); if (old) old.remove();
+    [...$('convo').children].forEach(c => c.classList.add('gone'));
+    const t = document.createElement('div');
+    t.className = 'cthread'; t.id = 'cthread';
+    t.innerHTML = `
+      <div class="b me">Show me my companies</div>
+      <div class="crow" id="rowA"><div class="b ai">Got it! I’m setting up these filters in the view:<br>“Account owner” = “Erin Lee”</div>
+        <span class="cact" id="actA">${ICON_RETURN}<span class="tip">Return to this view</span></span></div>
+      <div class="b me">Show me only technology companies</div>
+      <div class="crow" id="rowB"><div class="b ai">Got it! I’m setting up these filters in the view:<br>“Industry” includes “Technology”</div>
+        <span class="cact" id="actB">${ICON_SAVE}<span class="tip">Save this view</span></span></div>
+      <div class="b ai">Done, I updated the view with your filters. What would you like to do next?</div>`;
+    $('convo').prepend(t);
+  }
+  const CAM_CONT = { p: { x: 760, y: 418 }, z: 1.18 };
+  async function contSetup() {
+    setContent(CONT); reset(); buildThread();
+    await stageSetup(CAM_CONT, () => {
+      $('allRows').classList.add('hidden');
+      document.querySelectorAll('.token').forEach(t => { t.classList.add('shown', 'in'); });
+      $('tokens').classList.add('open');
+      $('tokens').style.height = $('tokensIn').offsetHeight + 'px';
+      $('results').classList.remove('hidden');
+      document.querySelectorAll('#results .tr').forEach(r => r.classList.add('in'));
+      moveCursor({ x: 1000, y: 640 });
+    });
+  }
+  scenes.continuity = {
+    label: 'Hovering a step in the View Builder chat shows a button to return to that view, or to save the latest one',
+    async run() {
+      while (true) {
+        await contSetup();
+        stage.classList.remove('fade');
+        await wait(900);
+        cursor.style.opacity = 1;
+        const rowA = $('rowA'), rowB = $('rowB'), actA = $('actA'), actB = $('actB');
+
+        // Hover the latest step: the save button appears
+        await cursorTo(rowB.querySelector('.b'), 40, 6);
+        rowB.classList.add('hover');
+        await wait(500);
+        await cursorTo(actB, 2, 4);
+        actB.classList.add('hot');
+        await wait(700);
+        await click();
+        actB.innerHTML = ICON_CHECK + '<span class="tip">View saved</span>';
+        actB.classList.add('done');
+        await wait(1400);
+
+        // Hover an earlier step: the return button appears
+        rowB.classList.remove('hover'); actB.classList.remove('hot');
+        await cursorTo(rowA.querySelector('.b'), 40, 6);
+        rowA.classList.add('hover');
+        await wait(500);
+        await cursorTo(actA, 2, 4);
+        actA.classList.add('hot');
+        await wait(700);
+        await click();
+
+        // Back to that view: the technology filter drops off and the table widens
+        const t2 = $('tk2');
+        t2.classList.add('removing');
+        await wait(300);
+        t2.classList.remove('shown', 'in', 'removing');
+        $('tokens').style.height = $('tokensIn').offsetHeight + 'px';
+        await refreshRows(MINE);
+        await wait(500);
+        actA.classList.remove('hot'); rowA.classList.remove('hover');
+        cursor.style.opacity = 0;
+        await endLoop(1600);
+      }
+    },
+    still() { contSetup().then(() => { $('rowB').classList.add('hover'); $('actB').classList.add('hot'); }); }
   };
 
   const sc = scenes[SCENE] || scenes.cover;
