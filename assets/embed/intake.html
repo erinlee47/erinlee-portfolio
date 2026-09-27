@@ -39,6 +39,11 @@
   .pfLblBono { clip-path: inset(704px 1140px 301px 78px); }
   .pfLblClient { clip-path: inset(822px 1140px 183px 78px); }
   .noHint { position: absolute; left: 80px; width: 240px; height: 24px; background: #FFFFFF; }
+  .cardFill { position: absolute; left: 64px; top: 904px; width: 960px; height: 48px; background: #FFFFFF; }
+  .seg1 { clip-path: inset(529px 416px 353px 64px); transition: transform .5s cubic-bezier(.4,0,.2,1); }
+  .seg2 { clip-path: inset(695px 416px 72px 64px); transition: transform .5s cubic-bezier(.4,0,.2,1); }
+  .compact .seg1 { transform: translateY(-24px); }
+  .compact .seg2 { transform: translateY(-48px); }
   .gone-hint { opacity: 0; transition: opacity .3s ease; }
   .gone-hint.on { opacity: 1; }
   .lawyer { position: absolute; left: 80px; top: 462px; width: 928px; height: 40px; background: #F6FAFD; border: 1px solid #C4C8CE; border-radius: 2px;
@@ -58,8 +63,10 @@
     <div class="layer on" id="Llist"><img class="clip" src="intake-ui/list.webp" alt=""><div class="toastCover"></div></div>
     <img class="clip toast" id="toast" src="intake-ui/list.webp" alt="">
     <div class="layer" id="Lhint"><img class="clip" src="intake-ui/hint.webp" alt="">
-      <!-- Before highlighting: suggestion hints wait for the switch -->
+      <!-- Highlight off: no suggestion hints, and the fields close up the space they used -->
       <div class="noHint" style="top:505px"></div><div class="noHint" style="top:671px"></div>
+      <div class="cardFill"></div>
+      <img class="clip seg1" src="intake-ui/hint.webp" alt=""><img class="clip seg2" src="intake-ui/hint.webp" alt="">
     </div>
     <div class="layer" id="hl"><img class="clip" src="intake-ui/page.webp" alt=""></div>
     <div class="layer" id="Ldd"><img class="clip" src="intake-ui/dropdown.webp" alt=""><img class="clip cPractice" src="intake-ui/hint.webp" alt=""><img class="clip cProBono" src="intake-ui/page.webp" alt=""><img class="clip cClientLbl" src="intake-ui/page.webp" alt=""><div class="hov" id="hov"></div></div>
@@ -89,7 +96,7 @@
 
   function reset() {
     stage.classList.add('instant');
-    show('Llist', true); show('Lhint', false); show('Ldd', false); show('hl', false); show('lawyer', false); show('lawyerHint', false); show('hov', false);
+    show('Llist', true); show('Lhint', false); $('Lhint').classList.remove('compact'); show('Ldd', false); show('hl', false); show('lawyer', false); show('lawyerHint', false); show('hov', false);
     $('toast').classList.remove('in'); cam(null, 1, true); cursor.style.opacity = 0; moveCursor(1180, 330);
     void stage.offsetWidth; stage.classList.remove('instant');
   }
@@ -101,24 +108,26 @@
       $('toast').classList.add('in');
       await wait(700); cursor.style.opacity = 1;
       await to(1338, 90); await click();
-      // Open Request #5602, pre-filled
-      show('Lhint', true); await wait(450); show('Llist', false); $('toast').classList.remove('in');
+      // Open Request #5602, pre-filled and highlighted
+      show('Lhint', true); show('hl', true); await wait(450); show('Llist', false); $('toast').classList.remove('in');
       cursor.style.opacity = 0;
       await wait(500);
       cam({ x: 700, y: 560 }, 1.35);
-      await wait(1150);
-      // Highlight what the AI filled
-      moveCursor(960, 330); cursor.style.opacity = 1; await wait(200);
-      await to(893, 248); await click();
-      show('hl', true);
       await wait(1500);
       // Suggestions right in the field
+      moveCursor(760, 620); cursor.style.opacity = 1; await wait(200);
       await to(560, 486); await click();
       show('Ldd', true);
       await wait(700);
       await to(200, 556); show('hov', true); await wait(350); await click();
       show('lawyer', true); show('lawyerHint', true); show('Ldd', false); show('hov', false);
-      await wait(500); cursor.style.opacity = 0;
+      await wait(1400);
+      // Switch highlighting off: the form tightens up
+      await to(893, 248); await click();
+      show('hl', false); show('lawyerHint', false);
+      await wait(250);
+      $('Lhint').classList.add('compact');
+      await wait(700); cursor.style.opacity = 0;
       await wait(1400);
       cam(null, 1);
       await wait(2200);
