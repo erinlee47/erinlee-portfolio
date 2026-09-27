@@ -39,6 +39,8 @@
   .pfLblBono { clip-path: inset(704px 1140px 301px 78px); }
   .pfLblClient { clip-path: inset(822px 1140px 183px 78px); }
   .noHint { position: absolute; left: 80px; width: 240px; height: 24px; background: #FFFFFF; }
+  .gone-hint { opacity: 0; transition: opacity .3s ease; }
+  .gone-hint.on { opacity: 1; }
   .lawyer { position: absolute; left: 80px; top: 462px; width: 928px; height: 40px; background: #F6FAFD; border: 1px solid #C4C8CE; border-radius: 2px;
     display: flex; align-items: center; justify-content: space-between; padding: 0 11px 0 11px; font-size: 14.5px; color: #1B1D29; opacity: 0; transition: opacity .3s ease; }
   .lawyer.on { opacity: 1; }
@@ -56,14 +58,13 @@
     <div class="layer on" id="Llist"><img class="clip" src="intake-ui/list.webp" alt=""><div class="toastCover"></div></div>
     <img class="clip toast" id="toast" src="intake-ui/list.webp" alt="">
     <div class="layer" id="Lhint"><img class="clip" src="intake-ui/hint.webp" alt="">
-      <!-- Before highlighting: pre-filled fields keep their tint and label; suggestion hints wait for the switch -->
-      <img class="clip pfLondon" src="intake-ui/page.webp" alt=""><img class="clip pfClient" src="intake-ui/page.webp" alt="">
-      <img class="clip pfLblOffice" src="intake-ui/page.webp" alt=""><img class="clip pfLblBono" src="intake-ui/page.webp" alt=""><img class="clip pfLblClient" src="intake-ui/page.webp" alt="">
+      <!-- Before highlighting: suggestion hints wait for the switch -->
       <div class="noHint" style="top:505px"></div><div class="noHint" style="top:671px"></div>
     </div>
     <div class="layer" id="hl"><img class="clip" src="intake-ui/page.webp" alt=""></div>
     <div class="layer" id="Ldd"><img class="clip" src="intake-ui/dropdown.webp" alt=""><img class="clip cPractice" src="intake-ui/hint.webp" alt=""><img class="clip cProBono" src="intake-ui/page.webp" alt=""><img class="clip cClientLbl" src="intake-ui/page.webp" alt=""><div class="hov" id="hov"></div></div>
     <div class="lawyer" id="lawyer"><span>Larry Lawyer</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A2F3A" stroke-width="1.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></div>
+    <div class="noHint gone-hint" id="lawyerHint" style="top:505px"></div>
     <div class="cursor" id="cursor" aria-hidden="true"><span class="ring"></span>
       <svg width="26" height="30" viewBox="0 0 26 30"><path d="M2 2l20 12-9 2-4 9z" fill="#1C1C1F" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div>
   </div>
@@ -88,7 +89,7 @@
 
   function reset() {
     stage.classList.add('instant');
-    show('Llist', true); show('Lhint', false); show('Ldd', false); show('hl', false); show('lawyer', false); show('hov', false);
+    show('Llist', true); show('Lhint', false); show('Ldd', false); show('hl', false); show('lawyer', false); show('lawyerHint', false); show('hov', false);
     $('toast').classList.remove('in'); cam(null, 1, true); cursor.style.opacity = 0; moveCursor(1180, 330);
     void stage.offsetWidth; stage.classList.remove('instant');
   }
@@ -116,7 +117,7 @@
       show('Ldd', true);
       await wait(700);
       await to(200, 556); show('hov', true); await wait(350); await click();
-      show('lawyer', true); show('Ldd', false); show('hov', false);
+      show('lawyer', true); show('lawyerHint', true); show('Ldd', false); show('hov', false);
       await wait(500); cursor.style.opacity = 0;
       await wait(1400);
       cam(null, 1);
@@ -124,7 +125,7 @@
       stage.classList.add('fade'); await wait(600);
     }
   }
-  function still() { show('Llist', false); show('Lhint', true); show('hl', true); show('lawyer', true); }
+  function still() { show('Llist', false); show('Lhint', true); show('hl', true); show('lawyer', true); show('lawyerHint', true); }
   if (reduced) still(); else run();
 </script>
 </body>
