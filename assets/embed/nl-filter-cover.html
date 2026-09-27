@@ -77,6 +77,20 @@
   .app { transform-origin: 0 0; transition: transform 1.1s cubic-bezier(.65,0,.25,1); }
   .instant, .instant * { transition: none !important; }
   .intro-list { margin: 4px 0 0; padding-left: 22px; }
+  .intro-list li { transition: color .25s ease; text-underline-offset: 3px; }
+  .intro-list li.hl { color: var(--chip-ink); text-decoration: underline; }
+  .nocam { transition: none !important; }
+  .later .sug { transition: box-shadow .3s ease, border-color .3s ease, opacity .3s ease, transform .35s cubic-bezier(.2,1.2,.4,1); }
+  .later .sug.glow { border-color: #B9ACF3; box-shadow: 0 0 0 4px rgba(90,63,208,.14); }
+  .token { transition: opacity .3s ease, transform .4s cubic-bezier(.2,1.2,.4,1), color .25s ease; }
+  .token.dim { color: #8A8D96; }
+  .token.removing { opacity: 0 !important; transform: scale(.9) !important; }
+  .toggle { transition: background-color .22s ease; }
+  .toggle::before { transition: opacity .18s ease; }
+  .toggle::after { transition: transform .22s cubic-bezier(.4,0,.2,1); }
+  .toggle.off { background: #C5C9D2; }
+  .toggle.off::before { opacity: 0; }
+  .toggle.off::after { transform: translateX(-28px); }
   .cursor { position: absolute; left: 0; top: 0; z-index: 20; pointer-events: none; opacity: 0;
     transition: transform .85s cubic-bezier(.5,0,.2,1), opacity .3s ease; }
   .cursor .ring { position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; border-radius: 50%;
@@ -327,10 +341,16 @@
 <script>
   const $ = id => document.getElementById(id);
   const stage = $('stage');
+  // ?scene= picks which moment to play: cover (default), guidance, loading, filters
+  const SCENE = new URLSearchParams(location.search).get('scene') || 'cover';
+  const W = { cover: 1800, guidance: 960, loading: 960, filters: 1600 }[SCENE] || 1800, H = 1200;
+  stage.style.width = W + 'px'; stage.style.height = H + 'px';
+  document.querySelector('.app').style.left = (W - 1520) / 2 + 'px';
+  document.querySelector('.app').style.top = (H - 836) / 2 + 'px';
 
   let S = 1;
   function fit() {
-    S = Math.min(window.innerWidth / 1800, window.innerHeight / 1200);
+    S = Math.min(window.innerWidth / W, window.innerHeight / H);
     stage.style.transform = `translate(-50%, -50%) scale(${S})`;
   }
   const app = document.querySelector('.app');
@@ -500,13 +520,217 @@
     }
   }
 
-  if (reduced) {
+  // ---------- Scenes ----------
+  const RM = document.querySelector('#tk1 .rm').outerHTML + '<span class="toggle"></span>';
+  const TIER = {
+    ask: 'show me Tier A banks who we haven’t talked to in 4 months',
+    lines: ['Tier = Tier 1', 'Date/Time of Last Interaction = Between 05/23/26 – 09/23/26', 'Coverage Person(s) = Susan Cobb', 'Sub-type = Investment Bank'],
+    tokens: ['Tier Equals Tier 1', 'Sub-Type Equals Investment Bank', 'Coverage Person(s) Equals Susan Cobb', 'Date/Time of Last Interaction Between 05/23/2026 - 09/23/2026'],
+    rows: banks
+  };
+  const SF = {
+    ask: 'Show me companies in San Francisco, CA',
+    lines: ['City = San Francisco', 'State = CA'],
+    tokens: ['City Equals San Francisco', 'State Equals CA'],
+    rows: [all[4], all[5], all[6], all[8], all[15]]
+  };
+  const moreBanks = [
+    ['Pinecrest Capital Markets', 'PCM', 'Equity capital markets'],
+    ['Bayview Investment Bank', 'BAY_IB', 'Sell-side M&A advisory'],
+    ['Ironwood Securities', 'IRN_SEC', 'Leveraged finance and syndication'],
+    ['Meridian Merchant Partners', 'MMP', 'Restructuring advisory'],
+    ['Silverline Bank', 'SLV_BANK', 'Corporate and commercial banking']
+  ];
+
+  function setContent(c) {
+    $('ask').textContent = c.ask;
+    $('work').innerHTML = '<span id="workHead"></span>' + c.lines.map(l => `<span class="fl">${l}</span>`).join('');
+    $('tokensIn').innerHTML = c.tokens.map((t, i) => `<div class="token" id="tk${i + 1}">${t}${RM}</div>`).join('') +
+      '<span class="hide-tokens" id="tkHide">Hide Tokens</span>';
+    $('results').innerHTML = c.rows.map(row).join('');
+  }
+
+  let camZ = 1;
+  function setCam(p, z, instant) {
+    camZ = z;
+    if (instant) app.classList.add('nocam');
+    zoomTo(p, z);
+    if (instant) { void app.offsetWidth; app.classList.remove('nocam'); }
+  }
+  // Element centre in the app's own coordinates, whatever the camera zoom
+  const at = el => { const p = pos(el); return { x: p.x / camZ, y: p.y / camZ }; };
+
+  // Set everything up without animation: panel open, camera framed
+  async function stageSetup(cam, fn) {
+    stage.classList.add('instant');
+    bodyEl.classList.remove('closed');
+    setCam(cam.p, cam.z, true);
+    if (fn) await fn();
+    void stage.offsetWidth;
+    stage.classList.remove('instant');
+  }
+  const openAsk = () => {
     document.querySelectorAll('.intro').forEach(e => e.classList.add('gone'));
-    ['ask','work'].forEach(id => { $(id).classList.remove('gone'); $(id).classList.add('in'); });
-    document.querySelectorAll('.fl').forEach(e => e.classList.add('on'));
+    $('ask').classList.remove('gone'); $('ask').classList.add('in');
+  };
+  const startLoading = () => {
     $('allRows').classList.add('hidden');
-    finish(false);
-  } else run();
+    $('skeleton').classList.remove('hidden'); document.querySelector('.table').classList.add('loading');
+  };
+  async function refreshRows(rows) {
+    $('results').classList.add('hidden'); $('skeleton').classList.remove('hidden');
+    await wait(450);
+    $('results').innerHTML = rows.map(row).join('');
+    $('skeleton').classList.add('hidden'); $('results').classList.remove('hidden');
+    for (const r of document.querySelectorAll('#results .tr')) { r.classList.add('in'); await wait(40); }
+  }
+  async function cursorTo(el, dx = 0, dy = 0) {
+    const p = at(el); moveCursor({ x: p.x + dx, y: p.y + dy }); await wait(900);
+  }
+  const endLoop = async hold => { await wait(hold); cursor.style.opacity = 0; stage.classList.add('fade'); await wait(600); };
+
+  // Framing: the chat panel with a slice of the table beside it, or the tokens and table
+  const CAM_PANEL = { p: { x: 1215, y: 418 }, z: 1.45 };
+  const CAM_TOKENS = { p: { x: 560, y: 418 }, z: 1.45 };
+
+  const scenes = {
+    cover: { run, still() {
+      document.querySelectorAll('.intro').forEach(e => e.classList.add('gone'));
+      ['ask', 'work'].forEach(id => { $(id).classList.remove('gone'); $(id).classList.add('in'); });
+      document.querySelectorAll('.fl').forEach(e => e.classList.add('on'));
+      $('allRows').classList.add('hidden');
+      finish(false);
+    }},
+
+    // Suggested prompts show people what they can ask; new suggestions follow the result
+    guidance: {
+      label: 'View Builder suggests example prompts; picking one fills the request and returns filtered results with follow-up suggestions',
+      async run() {
+        while (true) {
+          setContent(SF); reset();
+          await stageSetup(CAM_PANEL, () => moveCursor({ x: 1280, y: 560 }));
+          stage.classList.remove('fade');
+          await wait(700);
+          const lis = [...document.querySelectorAll('.intro-list li')];
+          for (const li of lis) { li.classList.add('hl'); await wait(650); li.classList.remove('hl'); }
+          await wait(200);
+          cursor.style.opacity = 1;
+          await cursorTo(lis[0], -40, 2);
+          lis[0].classList.add('hl');
+          await click();
+          await wait(250);
+          const input = $('input');
+          input.classList.add('focus');
+          input.innerHTML = '<span id="typed"></span><span class="caret"></span>';
+          const typed = $('typed');
+          for (const ch of SF.ask) { typed.textContent += ch; await wait(12); }
+          await wait(300);
+          await cursorTo($('send'));
+          await click($('send'));
+          cursor.style.opacity = 0;
+          input.classList.remove('focus');
+          input.innerHTML = '<span class="ph">Tell me what you are looking for</span>';
+          document.querySelectorAll('.intro').forEach(e => e.classList.add('gone'));
+          lis[0].classList.remove('hl');
+          await show($('ask'));
+          await wait(400);
+          startLoading();
+          await show($('work')); await show($('cancel'));
+          await wait(200);
+          for (const f of document.querySelectorAll('.fl')) { f.classList.add('on'); await wait(260); }
+          await wait(200);
+          await finish(true);
+          await wait(500);
+          for (const sug of document.querySelectorAll('#later .sug')) { sug.classList.add('glow'); await wait(650); sug.classList.remove('glow'); }
+          await endLoop(1400);
+        }
+      },
+      still() { setContent(SF); reset(); stageSetup(CAM_PANEL); }
+    },
+
+    // Between asking and answering: reasoning in the chat, the table loading
+    loading: {
+      label: 'While View Builder works out the filters, the chat lists them one by one and the table shows a loading state',
+      async run() {
+        while (true) {
+          setContent(TIER); reset();
+          await stageSetup(CAM_PANEL, openAsk);
+          stage.classList.remove('fade');
+          await wait(700);
+          startLoading();
+          await show($('work')); await show($('cancel'));
+          await wait(500);
+          for (const f of document.querySelectorAll('.fl')) { f.classList.add('on'); await wait(520); }
+          await wait(1600);
+          await finish(true);
+          await endLoop(2000);
+        }
+      },
+      still() {
+        setContent(TIER); reset(); stageSetup(CAM_PANEL, () => {
+          openAsk(); startLoading();
+          ['work', 'cancel'].forEach(id => { $(id).classList.remove('gone'); $(id).classList.add('in'); });
+          document.querySelectorAll('.fl').forEach(e => e.classList.add('on'));
+        });
+      }
+    },
+
+    // Generated filters are ordinary tokens: switch one off, remove one, the table follows
+    filters: {
+      label: 'Generated filters appear as editable tokens; switching one off or removing it updates the table',
+      async run() {
+        while (true) {
+          setContent(TIER); reset();
+          await stageSetup(CAM_TOKENS, async () => {
+            openAsk();
+            $('work').classList.remove('gone'); $('work').classList.add('in');
+            document.querySelectorAll('.fl').forEach(e => e.classList.add('on'));
+            $('allRows').classList.add('hidden');
+            await finish(false);
+            moveCursor({ x: 620, y: 560 });
+          });
+          stage.classList.remove('fade');
+          await wait(900);
+          cursor.style.opacity = 1;
+
+          // Switch off "Coverage Person(s)": more banks show up
+          const t3 = $('tk3');
+          await cursorTo(t3.querySelector('.toggle'), 6, 4);
+          await click();
+          t3.querySelector('.toggle').classList.add('off'); t3.classList.add('dim');
+          await refreshRows([...banks, ...moreBanks.slice(0, 3)]);
+          await wait(1300);
+
+          // Remove the date range: the token goes and the table widens again
+          const t4 = $('tk4');
+          await cursorTo(t4.querySelector('.rm'), 4, 4);
+          await click();
+          t4.classList.add('removing');
+          await wait(300);
+          t4.classList.remove('shown', 'in', 'removing');
+          $('tokens').style.height = $('tokensIn').offsetHeight + 'px';
+          await refreshRows([...banks, ...moreBanks]);
+          await wait(1300);
+
+          // Switch "Coverage Person(s)" back on
+          await cursorTo(t3.querySelector('.toggle'), 6, 4);
+          await click();
+          t3.querySelector('.toggle').classList.remove('off'); t3.classList.remove('dim');
+          await refreshRows([banks[0], banks[1], moreBanks[0], banks[2], moreBanks[3], banks[3]]);
+          await endLoop(1800);
+        }
+      },
+      still() {
+        setContent(TIER); reset(); stageSetup(CAM_TOKENS, async () => {
+          openAsk(); $('allRows').classList.add('hidden'); await finish(false);
+        });
+      }
+    }
+  };
+
+  const sc = scenes[SCENE] || scenes.cover;
+  if (sc.label) stage.setAttribute('aria-label', sc.label);
+  if (reduced) sc.still(); else sc.run();
 </script>
 </body>
 </html>

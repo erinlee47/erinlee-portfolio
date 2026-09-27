@@ -255,6 +255,8 @@ img, video { display: block; max-width: 100%; }
 }
 .cs-cover { background: var(--band); padding: 56px var(--pad); }
 .media--embed { display: block; aspect-ratio: 3 / 2; border: 0; overflow: hidden; }
+.media--embed.media--portrait { aspect-ratio: 4 / 5; }
+.media--embed.media--43 { aspect-ratio: 4 / 3; }
 .cs-media { padding: 0 var(--pad) 56px; }
 .cs-media--tight { padding-bottom: 48px; }
 .cs-media--stack { padding-bottom: 24px; display: flex; flex-direction: column; gap: 24px; }
