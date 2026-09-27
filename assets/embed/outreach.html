@@ -237,7 +237,7 @@ Senior M&A`;
     },
     // Closer on the draft and the insights that shaped it
     draft: {
-      cam: { p: { x: 780, y: 450 }, z: 0.75 },
+      cam: { p: { x: AW / 2, y: AH / 2 }, z: 1 },
       async run() {
         while (true) {
           await instant(async () => { resetAll(); document.querySelectorAll('.bars').forEach(b => b.classList.add('in')); cam(this.cam.p, this.cam.z, true); moveCursor({ x: 1100, y: 640 }); });
