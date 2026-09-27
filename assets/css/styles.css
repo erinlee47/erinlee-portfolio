@@ -254,6 +254,7 @@ img, video { display: block; max-width: 100%; }
   border-radius: var(--radius-cs); background: #FFFFFF; box-shadow: var(--shadow);
 }
 .cs-cover { background: var(--band); padding: 56px var(--pad); }
+.media--embed { display: block; aspect-ratio: 3 / 2; border: 0; overflow: hidden; }
 .cs-media { padding: 0 var(--pad) 56px; }
 .cs-media--tight { padding-bottom: 48px; }
 .cs-media--stack { padding-bottom: 24px; display: flex; flex-direction: column; gap: 24px; }
