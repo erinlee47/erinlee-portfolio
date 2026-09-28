@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vendor Risk Review — Erin Lee</title>
+<meta name="description" content="Case study: an AI agent reviews a vendor's security documents, and every finding links back to the sentence it came from.">
+<link rel="icon" href="assets/meta/favicon.ico?v=2" sizes="any">
+<link rel="icon" href="assets/meta/favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="assets/meta/favicon-32.png?v=2" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/meta/apple-touch-icon.png">
+<link rel="manifest" href="assets/meta/site.webmanifest">
+<meta name="theme-color" content="#FBFBFC">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Erin Lee">
+<meta property="og:title" content="Vendor Risk Review — Erin Lee">
+<meta property="og:description" content="Case study: an AI agent reviews a vendor's security documents, and every finding links back to the sentence it came from.">
+<meta property="og:url" content="https://erinlee47.github.io/erinlee-portfolio/vendor-risk-review.html">
+<meta property="og:image" content="https://erinlee47.github.io/erinlee-portfolio/assets/meta/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erin Lee's portfolio homepage: Designing simple experiences for complex problems.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Vendor Risk Review — Erin Lee">
+<meta name="twitter:description" content="Case study: an AI agent reviews a vendor's security documents, and every finding links back to the sentence it came from.">
+<meta name="twitter:image" content="https://erinlee47.github.io/erinlee-portfolio/assets/meta/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css?v=7">
+<script src="assets/js/reveal.js?v=2" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__brand">Erin Lee</a>
+    <nav class="nav__links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="frame">
+
+  <section class="cs-hero">
+    <div class="cs-eyebrow">
+      <span class="cs-eyebrow__num">04</span><span class="cs-eyebrow__rule"></span>
+      <span>Personal project · AI-assisted design · 2026</span>
+    </div>
+    <h1>Vendor Risk Review</h1>
+    <p class="cs-hero__lede">Vendor Risk Review is a personal project I built to show how I design with AI, from first idea to a live prototype. It's a concept for an AI agent that reviews a vendor's security documents and drafts a risk decision. The agent does the reading and checking. A person makes the call and has to be able to explain it later.</p>
+  </section>
+
+  <div class="meta">
+    <div class="meta__cell"><div class="meta__label">Role</div><div class="meta__value">Designer &amp; builder</div></div>
+    <div class="meta__cell"><div class="meta__label">Focus</div><div class="meta__value">AI-assisted design</div></div>
+    <div class="meta__cell"><div class="meta__label">Tools</div><div class="meta__value">Claude, React, GitHub Pages</div></div>
+    <div class="meta__cell"><div class="meta__label">Year</div><div class="meta__value">2026</div></div>
+  </div>
+
+  <div class="cs-cover">
+    <iframe class="media media--embed" src="vendor-risk-review-prototype.html" title="Vendor Risk Review prototype: press Run checks to watch the agent work, then rule on the contradiction" loading="lazy"></iframe>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">The problem</div>
+    <div class="cs-copy">
+      <p>Before a firm works with a vendor, someone checks that the vendor will keep its data safe. The vendor sends a security questionnaire, an audit report and a disaster-recovery test. A reviewer reads them, runs the same checks every time and signs off. They do this many times a week.</p>
+      <p>I started with a fixed five-step flow and restyled it five times. Each version showed the agent's answers clearly: passed, flagged, needs judgment. None of them showed where an answer came from.</p>
+      <p>That's the problem behind the problem. A reviewer doesn't get asked "did the AI pass this vendor?" They get asked "why did <em>you</em> approve them?" If the answer lives inside the agent, the reviewer can't defend it. Making the answers look more polished didn't change that.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">The question</div>
+    <div class="cs-copy">
+      <p class="cs-question">How might we let a reviewer trace every one of the agent's findings back to its source, without making them read every document?</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">What I noticed</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>Five restyles, one layout.</strong> Side by side, every version had a list of checks in the middle and a panel on the side. I'd been changing the paint, not the walls.</li>
+        <li><strong>References that looked like links led nowhere.</strong> Results cited sections like "CC6.5", but nothing opened. For someone who has to defend a decision, that's the biggest gap.</li>
+        <li><strong>The audit trail was the hardest thing to find.</strong> The activity log sat collapsed at the bottom of a side panel, even though it's what a reviewer hands to an auditor.</li>
+        <li><strong>AI made options cheap, so choosing became the work.</strong> Four full directions and a working prototype were quick to make. The design work moved to writing a tight brief, judging what came back and cutting.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Exploration</div>
+    <div class="cs-copy">
+      <p>Instead of a sixth restyle, I asked a different question: what should sit at the center of the screen? I explored four directions, each with a different answer.</p>
+      <ul>
+        <li><strong>Testimony:</strong> the record at the center, written like a court transcript. Very defensible, but slow to scan.</li>
+        <li><strong>Margin Notes:</strong> the vendor's documents at the center, with the agent's findings pinned beside the passages they came from.</li>
+        <li><strong>Inspection Lanes:</strong> checks as tickets moving across a board. Fast, but it hid the reasoning, and the tone felt too playful for audit work.</li>
+        <li><strong>The Route:</strong> a transit-style map with one check at a time. Clear about where you are, but too slow for someone doing this all week.</li>
+      </ul>
+      <p>I picked Margin Notes because the proof was the main surface. Then I built the existing stepper as a working prototype and compared the two on what reviewers need every day.</p>
+      <p>Margin Notes won on proof. The stepper won on everything else: the at-a-glance overview, speed across many reviews, fitting into the product, and working on a phone. It was the better idea but the worse tool. So I kept the stepper and brought in two pieces: Margin Notes' evidence view, and Testimony's named record.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="assets/images/vrr-directions.jpg" width="2000" height="568" loading="lazy" alt="Four directions: Testimony, Margin Notes (picked), Inspection Lanes and The Route, each with what it was good and not so good at">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">The hard part</div>
+    <div class="cs-copy">
+      <p><strong>Proof on demand, not proof everywhere.</strong> Put the documents on screen all the time and the reviewer reads pages even for checks that passed. Hide them and nobody can verify anything. So I made the proof one click away, and made it the same click everywhere:</p>
+      <ul>
+        <li><strong>Every claim cites its source.</strong> Each check result, finding and log entry carries a reference like <em>SOC 2 CC6.5 · p. 31</em>. Clicking it opens the page beside the workflow, with the exact sentence highlighted and the agent's note in the margin.</li>
+        <li><strong>Disputed text looks different.</strong> A flagged passage gets a wavy underline as well as a color, so it reads without relying on color.</li>
+        <li><strong>When two documents disagree, both pages open side by side.</strong> The 30-day and 90-day backup answers each link to their full page, so the reviewer rules with context, not two quotes.</li>
+        <li><strong>If there's nothing to cite, the agent says so.</strong> The password-protected BC/DR file opens to "nothing in this document was used as evidence."</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Final solution</div>
+    <div class="cs-copy">
+      <p>The agent shows its plan, runs ten checks and pauses when it needs a person. The stepper now says "Waiting for you" when that happens. Every result links to its evidence, and a numbered, timestamped record sits in the main column, ready to copy into an audit file.</p>
+      <p class="pullquote">The agent does the reading. The reviewer needs to be able to reread any part of it in one click.</p>
+    </div>
+  </section>
+
+  <div class="cs-media cs-media--stack">
+    <img class="media" src="assets/images/vrr-judgment.jpg" width="2000" height="2166" loading="lazy" alt="The agent pauses at check 6: the stepper says Waiting for you, and the questionnaire's 30 days and the SOC 2's 90 days are shown side by side with three choices">
+    <img class="media" src="assets/images/vrr-evidence.jpg" width="2000" height="1333" loading="lazy" alt="Evidence panel: the SOC 2 page with the disputed sentence highlighted and the agent's note in the margin">
+    <img class="media" src="assets/images/vrr-decision.jpg" width="2000" height="1333" loading="lazy" alt="Decision step at High risk: Send back is the main button, and approving needs a justification">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">Tradeoffs</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>I didn't build my favorite direction.</strong> Margin Notes made the proof the whole screen, but someone doing many reviews a week needs the overview first. Its best idea lives on as the evidence panel.</li>
+        <li><strong>Approval isn't blocked at High risk.</strong> "Send back" becomes the main button, and approving needs a written reason. The reviewer can still overrule the agent, but it becomes a deliberate, recorded act.</li>
+        <li><strong>The record isn't a chat thread.</strong> A conversation reads as talk. A numbered log with names and times reads as something a person can be held to.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">My role</div>
+    <div class="cs-copy">
+      <p>This was a solo project. I used AI (Claude) to generate directions, write the prototype code and draft copy. I made the calls: the brief and what stayed fixed, which direction to pick, auditing that pick against the plain layout, combining the two, and shipping it to this site.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--impact cs-section--impact-gap">
+    <div class="cs-label">Impact</div>
+    <div class="cs-copy">
+      <p class="cs-impact-quote cs-impact-quote--wide">A working prototype, live on this site, where every finding links to the sentence it came from.</p>
+      <p>This is a personal project, so there are no users or metrics. It produced four design directions, three working React prototypes covering the full flow in light and dark mode down to phone width, and the final version you can <a href="vendor-risk-review-prototype.html">try here</a>.</p>
+      <p>If I took it further, I'd test two things first: can a reviewer justify one finding to a mock auditor, and do people actually open the evidence?</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--last">
+    <div class="cs-label">Reflection</div>
+    <div class="cs-copy">
+      <p>With AI, a new direction costs almost nothing, so it's tempting to keep restyling. The useful move was changing the question to "what belongs at the center of the screen?" and then testing my favorite answer against the plain one before shipping.</p>
+    </div>
+  </section>
+
+  <a href="natural-language-filter.html" class="next">
+    <span class="next__label">Next project</span>
+    <span class="next__title">Natural Language Filter →</span>
+  </a>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <span>Erin Lee — All rights reserved</span>
+    <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vendor Risk Review prototype — Erin Lee</title>
+<meta name="description" content="Scripted prototype: an AI agent reviews a vendor's security documents, and every finding links to its source.">
+<link rel="icon" href="assets/meta/favicon.svg?v=2" type="image/svg+xml">
+<style>html,body{margin:0}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --text:#111111; --text2:#555555; --text3:#6B6B6B; --border:#E6E6E6; --panel:#F5F5F5; --chip:#F0F0F0; --chipText:#3F3F3F;
+  --purple:#4B3FC0; --lav:#F1EEFE; --lavBorder:#DAD3FB; --link:#2F55D4;
+  --green:#1C7A4A; --greenBg:#E7F5ED; --amber:#8F5300; --amberBg:#FFF3DC; --red:#B42318; --redBg:#FDECEA;
+  --btn:#111111; --btnText:#FFFFFF; --logo:#111111; --logoIcon:#FFFFFF; --hl:#FFF0B3; --shade:rgba(0,0,0,.3);
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ color-scheme:dark;
+    --bg:#0F0F10; --text:#F2F2F2; --text2:#B5B5B5; --text3:#9C9C9C; --border:#2A2A2D; --panel:#18181A; --chip:#26262A; --chipText:#D6D6D6;
+    --purple:#B9B0FF; --lav:#221F3A; --lavBorder:#3B3563; --link:#93AAFF;
+    --green:#72D39E; --greenBg:#13261B; --amber:#F2B655; --amberBg:#2A2010; --red:#FF8F85; --redBg:#2D1614;
+    --btn:#F2F2F2; --btnText:#111111; --logo:#F2F2F2; --logoIcon:#111111; --hl:#4A3D0C; --shade:rgba(0,0,0,.6); }
+}
+:root[data-theme="dark"]{ color-scheme:dark;
+  --bg:#0F0F10; --text:#F2F2F2; --text2:#B5B5B5; --text3:#9C9C9C; --border:#2A2A2D; --panel:#18181A; --chip:#26262A; --chipText:#D6D6D6;
+  --purple:#B9B0FF; --lav:#221F3A; --lavBorder:#3B3563; --link:#93AAFF;
+  --green:#72D39E; --greenBg:#13261B; --amber:#F2B655; --amberBg:#2A2010; --red:#FF8F85; --redBg:#2D1614;
+  --btn:#F2F2F2; --btnText:#111111; --logo:#F2F2F2; --logoIcon:#111111; --hl:#4A3D0C; --shade:rgba(0,0,0,.6); }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+button,textarea{font:inherit;color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+svg{flex:none}
+.mono{font-family:var(--mono)}
+
+/* rail + top bar */
+.rail{position:fixed;left:0;top:0;bottom:0;width:68px;border-right:1px solid var(--border);background:var(--bg);display:flex;flex-direction:column;align-items:center;padding-top:16px;z-index:30}
+.logo{width:42px;height:42px;border-radius:11px;background:var(--logo);color:var(--logoIcon);display:flex;align-items:center;justify-content:center}
+.rail nav{display:flex;flex-direction:column;gap:6px;margin-top:38px}
+.rail nav .sp{height:18px}
+.ib{width:44px;height:44px;border-radius:10px;border:0;background:transparent;color:var(--text2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.ib:hover{background:var(--chip)}
+.ib.on{background:var(--chip);color:var(--text)}
+.app{margin-left:68px;min-height:100%}
+.topbar{height:76px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;gap:12px}
+.crumb{display:flex;align-items:center;gap:10px;font-size:15px;min-width:0}
+.crumb a{color:var(--text2);text-decoration:none}
+.crumb b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb .mlogo{display:none}
+.tools{display:flex;gap:4px}
+
+.content{max-width:1172px;margin:0 auto;padding:34px 24px 96px}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.head h1{font-size:30px;line-height:1.2;font-weight:700;letter-spacing:-.022em}
+.head .sub{font-size:16px;color:var(--text2);margin-top:8px}
+.hbtns{display:flex;gap:12px;flex-wrap:wrap}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--panel)}
+.btn.lav{background:var(--lav);border-color:var(--lavBorder);color:var(--purple)}
+.btn.lav[aria-pressed="true"]{box-shadow:inset 0 0 0 1px var(--purple)}
+.btn.pri{background:var(--btn);border-color:var(--btn);color:var(--btnText);border-radius:8px}
+.btn.pri:hover{opacity:.88}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--text2);text-decoration:underline;text-underline-offset:3px}
+.btn.sm{height:36px;padding:0 14px;font-size:14px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* stepper */
+.steps{display:flex;align-items:center;gap:8px;margin-top:26px;overflow-x:auto;padding:2px}
+.step{flex:none;display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 15px 0 9px;border:1px solid var(--border);border-radius:999px;font-size:15px;font-weight:500;color:var(--text2)}
+.step .num{width:20px;height:20px;border-radius:50%;background:var(--chip);color:var(--text2);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+.step.cur{border:1.5px solid var(--text);color:var(--text)}
+.step.cur .num{background:var(--text);color:var(--bg)}
+.step.past{color:var(--text)}
+.step.past .num{background:var(--text);color:var(--bg)}
+.conn{flex:none;width:14px;height:1px;background:var(--border)}
+
+/* layout */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;margin-top:24px;align-items:start}
+.sech{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.sech h2{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.35}
+.sech p{font-size:15px;color:var(--text2);line-height:1.55;margin-top:6px;max-width:560px}
+.progress{font-size:13px;color:var(--text3);margin-top:8px}
+.bar{height:4px;border-radius:2px;background:var(--chip);margin-top:8px;max-width:560px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--text);transition:width .4s}
+
+/* check list */
+.checks{list-style:none;margin:22px 0 0;padding:0}
+.ck{padding:14px 0 13px}
+.ckrow{display:flex;align-items:center;gap:16px}
+.ico{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:var(--text3)}
+.ico.pass{color:var(--green)} .ico.flag{color:var(--amber)} .ico.judg,.ico.wait,.ico.ruled{color:var(--purple)} .ico.running{color:var(--text)}
+.ckname{flex:1;min-width:0;font-size:16px;font-weight:500;line-height:1.4}
+.ckname code{font-family:var(--mono);font-size:13px;font-weight:400;color:var(--text3);margin-left:6px;white-space:nowrap}
+.ckres{margin:4px 0 0 38px;font-size:14px;color:var(--text2);line-height:1.5}
+.ckres .ref{font-family:var(--mono);font-size:12.5px;color:var(--text3)}
+.pill{flex:none;display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px;border-radius:999px;background:var(--chip);color:var(--chipText);font-size:13px;font-weight:600;white-space:nowrap}
+.pill.judg{background:var(--lav);color:var(--purple)}
+.pill.judg::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.pill.wait{background:var(--purple);color:var(--bg)}
+.pill.ruled{background:transparent;color:var(--purple);box-shadow:inset 0 0 0 1px var(--lavBorder)}
+.pill.pass{background:var(--greenBg);color:var(--green)}
+.pill.flag{background:var(--amberBg);color:var(--amber)}
+.pill.running{background:var(--chip);color:var(--text)}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* judgment card */
+.jcard{margin:14px 0 4px 38px;border:1px solid var(--lavBorder);border-radius:12px;background:var(--bg);overflow:hidden}
+.jhead{display:flex;gap:10px;align-items:flex-start;padding:14px 16px;background:var(--lav)}
+.jhead b{display:block;font-size:15px;color:var(--text)}
+.jhead span{font-size:14px;color:var(--text2)}
+.jhead .ico{color:var(--purple);margin-top:1px}
+.jbody{padding:16px;display:grid;gap:14px}
+.ev{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.evc{border:1px solid var(--border);border-radius:10px;background:var(--panel);padding:12px 14px;display:grid;gap:6px;align-content:start}
+.evc .fn{font-family:var(--mono);font-size:12.5px;color:var(--link);word-break:break-all}
+.evc .loc{font-size:12.5px;color:var(--text3)}
+.evc q{font-size:14.5px;line-height:1.55;quotes:"“" "”"}
+.evc mark{background:var(--hl);color:var(--text);padding:0 2px;border-radius:3px;font-weight:600}
+.evc .big{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.vs{display:none}
+.opts{display:grid;gap:8px}
+.opts legend{font-size:14px;font-weight:600;margin-bottom:8px;padding:0}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.opt{display:grid;grid-template-columns:18px 1fr;gap:10px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer}
+.opt:hover{background:var(--panel)}
+.opt.on{border-color:var(--purple);box-shadow:inset 0 0 0 1px var(--purple)}
+.opt input{margin:2px 0 0;width:16px;height:16px;accent-color:var(--purple)}
+.opt b{display:block;font-size:14.5px;font-weight:600}
+.opt small{display:block;font-size:13px;color:var(--text2);margin-top:2px}
+.flbl{font-size:13px;color:var(--text2);font-weight:500}
+textarea{width:100%;border:1px solid var(--border);border-radius:8px;background:var(--bg);padding:9px 11px;font-size:14px;line-height:1.5;resize:vertical}
+textarea:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 1px var(--purple)}
+.jact{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.jact span{font-size:13px;color:var(--text3)}
+.unread{border:1px dashed var(--border);border-radius:10px;padding:14px;display:flex;gap:12px;align-items:center;background:var(--panel)}
+.unread .fn{font-family:var(--mono);font-size:12.5px;color:var(--link);word-break:break-all}
+.unread p{font-size:13.5px;color:var(--text2)}
+
+/* summary + decision */
+.card{border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-top:20px}
+.tierrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tier{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 13px;border-radius:999px;font-size:14px;font-weight:700}
+.tier.High{background:var(--redBg);color:var(--red)} .tier.Medium{background:var(--amberBg);color:var(--amber)} .tier.Low{background:var(--greenBg);color:var(--green)}
+.meta{font-size:13px;color:var(--text3)}
+.lbl{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:24px 0 10px}
+.card > p.sum{font-size:15.5px;line-height:1.65;margin-top:14px;max-width:68ch}
+.finds{list-style:none;margin:0;padding:0;border-top:1px solid var(--border)}
+.finds li{display:grid;grid-template-columns:88px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.sev{justify-self:start;display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:700}
+.sev.High{background:var(--redBg);color:var(--red)} .sev.Medium{background:var(--amberBg);color:var(--amber)} .sev.Low{background:var(--chip);color:var(--chipText)}
+.finds b{font-weight:600;font-size:15px}
+.finds p{font-size:14px;color:var(--text2);margin-top:2px}
+.finds .ref{font-family:var(--mono);font-size:12.5px;color:var(--text3);margin-top:4px;display:block}
+.plain{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}
+.recbox{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:12px;background:var(--lav);border:1px solid var(--lavBorder);margin-top:20px}
+.recbox .ico{color:var(--purple)}
+.recbox b{display:block;font-size:15px}
+.recbox p{font-size:14px;color:var(--text2);margin-top:3px}
+.dbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.confirm{margin-top:16px;padding:16px;border:1px solid var(--border);border-radius:12px;display:grid;gap:10px;background:var(--panel)}
+.done{margin-top:20px;border-radius:14px;border:1.5px solid var(--text);padding:20px 22px;display:grid;gap:6px}
+.done strong{font-size:18px;font-weight:700}
+.done p{font-size:14px;color:var(--text2)}
+.edited{font-size:12px;font-weight:600;color:var(--purple);background:var(--lav);padding:3px 8px;border-radius:999px}
+
+/* details panel */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.phead{display:flex;justify-content:space-between;align-items:center;width:100%;padding:18px 24px;border:0;border-bottom:1px solid var(--border);background:transparent;font-size:15px;font-weight:600;cursor:pointer;text-align:left}
+.psec{border-bottom:1px solid var(--border)}
+.psec:last-child{border-bottom:0}
+.psh{display:flex;justify-content:space-between;align-items:center;width:100%;padding:22px 24px 14px;border:0;background:transparent;cursor:pointer;font-size:13.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);text-align:left}
+.psb{padding:0 24px 22px}
+.vend{display:flex;gap:14px;align-items:flex-start}
+.av{width:46px;height:46px;border-radius:9px;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex:none}
+.vend b{display:block;font-size:18px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.vend span{font-size:14px;color:var(--text2);line-height:1.35;display:block;margin-top:3px}
+.kv{margin:18px 0 0;display:grid;grid-template-columns:auto 1fr;gap:12px 12px;font-size:14px}
+.kv dt{color:var(--text2)}
+.kv dd{margin:0;text-align:right;font-weight:500}
+.docs{list-style:none;margin:0;padding:0}
+.docs li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.docs li:first-child{padding-top:2px}
+.docs li:last-child{border-bottom:0}
+.fi{width:28px;height:28px;border-radius:7px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);flex:none}
+.docs a{font-family:var(--mono);font-size:14px;color:var(--link);text-decoration:none;word-break:break-all;line-height:1.4}
+.docs a:hover{text-decoration:underline}
+.docs span{display:block;font-size:14px;color:var(--text2);margin-top:3px}
+.docs .warn{color:var(--amber);font-weight:500}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-height:420px;overflow-y:auto}
+.log li{display:grid;grid-template-columns:62px 1fr;gap:8px;font-size:13.5px;line-height:1.45}
+.log time{font-family:var(--mono);font-size:12px;color:var(--text3);padding-top:1px}
+.log b{font-weight:600}
+.assist{display:grid;gap:14px;padding:18px 24px 24px;max-height:640px;overflow-y:auto}
+.msg{display:grid;gap:4px}
+.msg .who{font-size:12.5px;font-weight:600;color:var(--purple);display:flex;gap:8px;align-items:center}
+.msg .who time{font-family:var(--mono);font-weight:400;color:var(--text3)}
+.msg p{font-size:14px;line-height:1.5}
+.assist .note{font-size:12.5px;color:var(--text3);border-top:1px solid var(--border);padding-top:12px}
+
+/* evidence links */
+.cite{background:none;border:0;padding:0;font:400 12.5px/1.5 var(--mono);color:var(--link);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;text-align:left}
+.cite:hover{text-decoration-style:solid}
+.cites{display:inline-flex;flex-wrap:wrap;gap:2px 14px;vertical-align:baseline}
+.ckres .cites{margin-left:6px}
+.finds .cites{margin-top:4px;display:flex}
+.pill.q{background:transparent;color:var(--text3);font-weight:500;padding:0 2px}
+.step .wb{font-size:11.5px;font-weight:600;background:var(--purple);color:var(--bg);padding:2px 8px;border-radius:999px}
+.evc .open{margin-top:2px}
+
+/* record (main column) */
+.recsec{margin-top:44px;border-top:1px solid var(--border);padding-top:24px;scroll-margin-top:16px}
+.recsec .sech h2{font-size:18px}
+.record{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--border)}
+.record li{display:grid;grid-template-columns:30px 66px minmax(0,1fr);gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;line-height:1.55}
+.record .ln,.record time{font:400 12px/1.8 var(--mono);color:var(--text3)}
+.record .ln{text-align:right}
+.record .who{font:600 11.5px/1 var(--mono);letter-spacing:.06em;margin-right:6px}
+.tag{font:700 11px/1 var(--sans);letter-spacing:.06em;margin-right:6px;white-space:nowrap}
+.tag.pass{color:var(--green)} .tag.flag{color:var(--amber)} .tag.wait,.tag.rule{color:var(--purple)}
+.record .cites{margin-left:8px}
+.recnote{font-size:13px;color:var(--text3)}
+.pnote{font-size:14px;color:var(--text2)}
+
+/* document drawer */
+.shade{position:fixed;inset:0;background:var(--shade);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(800px,100%);z-index:50;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.dh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 22px 12px;background:var(--bg)}
+.dh .fn{font:500 14px/1.4 var(--mono);color:var(--text);word-break:break-all}
+.dh .m{font-size:13px;color:var(--text2);margin-top:2px}
+.dtabs{display:flex;gap:6px;padding:0 22px 12px;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto}
+.dtab{flex:none;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:var(--bg);font-size:13.5px;font-weight:500;color:var(--text2);cursor:pointer}
+.dtab[aria-selected="true"]{border:1.5px solid var(--text);color:var(--text)}
+.db{flex:1;overflow-y:auto;padding:18px 22px 48px;display:grid;gap:16px;align-content:start}
+.db .hint{font-size:13px;color:var(--text3)}
+.dpg{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:6px 0 10px}
+.dpg header{display:flex;justify-content:space-between;padding:10px 18px 4px;font:500 12px/1 var(--mono);color:var(--text3)}
+.drow{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:18px;padding:0 18px 0 6px}
+.dtext{padding:7px 12px;font-size:15px;line-height:1.7;border-radius:6px;scroll-margin:120px}
+.dtext .sec{font:500 12px/1 var(--mono);color:var(--text3);margin-right:6px}
+.dtext.focus{background:var(--lav);box-shadow:inset 3px 0 0 var(--purple)}
+.dtext mark{background:var(--hl);color:var(--text);padding:0 2px;border-radius:3px}
+.dtext mark.bad{text-decoration:underline wavy var(--amber);text-decoration-thickness:1.5px;text-underline-offset:5px;text-decoration-skip-ink:none}
+.dnotes{display:grid;gap:10px;align-content:start;padding-top:8px}
+.dnote{border-left:2px solid var(--border);padding:1px 0 2px 10px;font-size:13px;line-height:1.5;color:var(--text2)}
+.dnote .hd{display:block;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.dnote.pass{border-color:var(--green)} .dnote.pass .hd{color:var(--green)}
+.dnote.flag{border-color:var(--amber)} .dnote.flag .hd{color:var(--amber)}
+.dnote.wait,.dnote.ruled{border-color:var(--purple)} .dnote.wait .hd,.dnote.ruled .hd{color:var(--purple)}
+.dnote.running{border-style:dashed}
+.dnote .btn{margin-top:8px}
+.locked{background:var(--bg);border:1px dashed var(--border);border-radius:12px;padding:28px 22px;display:grid;gap:8px;justify-items:start}
+.locked .ico{color:var(--amber)}
+.locked b{font-size:16px}
+.locked p{font-size:14px;color:var(--text2);max-width:52ch}
+@media (max-width:640px){
+  .drow{grid-template-columns:minmax(0,1fr);padding:0 6px}
+  .dnotes{padding:0 12px 8px}
+  .record li{grid-template-columns:26px minmax(0,1fr)}
+  .record time{grid-column:2}
+  .record li > p{grid-column:2}
+}
+
+/* responsive */
+@media (max-width:1100px){ .grid{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:760px){
+  .rail{display:none} .app{margin-left:0}
+  .topbar{height:60px;padding:0 16px}
+  .crumb .mlogo{display:flex;width:32px;height:32px;border-radius:8px}
+  .crumb a{display:none} .crumb .sepc{display:none}
+  .content{padding:22px 16px 80px}
+  .head h1{font-size:25px}
+  .hbtns{width:100%} .hbtns .btn{flex:1}
+  .ev{grid-template-columns:1fr}
+  .jcard,.ckres{margin-left:0}
+  .ckrow{flex-wrap:wrap;gap:10px 12px}
+  .ckname{flex-basis:calc(100% - 34px)}
+  .ckrow .pill{margin-left:34px}
+  .card{padding:18px 16px}
+  .finds li{grid-template-columns:1fr;gap:6px}
+  .sech .btn{width:100%}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script>
+(function(){
+const {useReducer,useEffect,useState,Fragment}=React;
+const h=React.createElement;
+const cx=(...a)=>a.filter(Boolean).join(' ');
+
+/* ---------- icons (stroke) ---------- */
+const PATHS={
+  search:['circle:11,11,8','M21 21l-4.3-4.3'],
+  grid:['rect:3,3,7,7','rect:14,3,7,7','rect:3,14,7,7','rect:14,14,7,7'],
+  clip:['rect:8,2,8,4','M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2','M9 14l2 2 4-4'],
+  sheet:['rect:4,3,16,18','M8 8h8','M8 12h8','M8 16h8','M12 3v18'],
+  file:['M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z','M14 2v4a2 2 0 0 0 2 2h4'],
+  chart:['M3 3v18h18','M8 17v-4','M13 17V9','M18 17V5'],
+  doc:['M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z','M14 2v4a2 2 0 0 0 2 2h4','M8 13h8','M8 17h6'],
+  bell:['M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9','M10.3 21a1.94 1.94 0 0 0 3.4 0'],
+  help:['circle:12,12,10','M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3','M12 17h.01'],
+  chevD:['M6 9l6 6 6-6'], chevR:['M9 18l6-6-6-6'], chevRs:['M9 18l6-6-6-6'],
+  arrow:['M5 12h14','M12 5l7 7-7 7'],
+  circle:['circle:12,12,9.25'],
+  qcircle:['circle:12,12,9.25','M9.4 9.3a2.7 2.7 0 0 1 5.2.9c0 1.8-2.6 2.4-2.6 2.4','M12 16.6h.01'],
+  pass:['circle:12,12,9.25','M8 12.3l2.7 2.7L16 9.6'],
+  flag:['M10.3 3.9L2.4 17.6A2 2 0 0 0 4.1 20.6h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z','M12 9v4','M12 17h.01'],
+  load:['M21 12a9 9 0 1 1-6.2-8.6'],
+  stop:['rect:6,6,12,12'], play:['M7 5l12 7-12 7z'],
+  sun:['circle:12,12,4','M12 2v2','M12 20v2','M4.9 4.9l1.4 1.4','M17.7 17.7l1.4 1.4','M2 12h2','M20 12h2','M4.9 19.1l1.4-1.4','M17.7 6.3l1.4-1.4'],
+  spark:['M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z'],
+  lock:['rect:5,11,14,10','M8 11V7a4 4 0 0 1 8 0v4']
+};
+function Icon({n,s=20,sw=1.75,cls}){
+  return h('svg',{width:s,height:s,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:sw,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':'true',className:cls},
+    PATHS[n].map((d,i)=>{
+      if(d.startsWith('circle:')){const [x,y,r]=d.slice(7).split(',');return h('circle',{key:i,cx:x,cy:y,r});}
+      if(d.startsWith('rect:')){const [x,y,w,hh]=d.slice(5).split(',');return h('rect',{key:i,x,y,width:w,height:hh,rx:n==='grid'?1.5:2});}
+      return h('path',{key:i,d});
+    }));
+}
+const Shield=()=>h('svg',{width:20,height:20,viewBox:'0 0 24 24','aria-hidden':'true'},h('path',{fill:'currentColor',d:'M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'}));
+const Moon=()=>h('svg',{width:20,height:20,viewBox:'0 0 24 24','aria-hidden':'true'},h('path',{fill:'currentColor',d:'M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z'}));
+
+/* ---------- scripted data ---------- */
+const REVIEWER='Sam Ortega';
+const T0=new Date('2026-09-24T10:14:00').getTime(),LOAD=Date.now();
+const now=()=>new Date(T0+(Date.now()-LOAD));
+const hms=d=>d.toTimeString().slice(0,8);
+const F_Q='Vendor_Security_Questionnaire_v4.pdf',F_S='SOC2_TypeII_Report_Meridian_FY25.pdf',F_B='BCDR_Test_Summary_2025.xlsx';
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches||location.hash.startsWith('#demo');
+
+const DOCS={
+  q:{file:F_Q,short:'Questionnaire',meta:'CAIQ-Lite Questionnaire · 22 pages · submitted Sep 15, 2026'},
+  soc:{file:F_S,short:'SOC 2',meta:'SOC 2 Type II Report · 47 pages · Halvorsen & Pike LLP'},
+  bcdr:{file:F_B,short:'BC/DR',meta:'Exhibit B — BC/DR Test Summary · 1 sheet',locked:true}
+};
+const PARAS=[
+  {id:'q-en01',doc:'q',page:6,sec:'Q-EN-01',text:'Yes. Customer data is encrypted at rest with AES-256 using per-bucket keys held in a hardware security module, and in transit with TLS 1.2 or higher.',hl:'encrypted at rest with AES-256'},
+  {id:'q-en02',doc:'q',page:6,sec:'Q-EN-02',text:'Encryption keys are rotated annually. Access to key material is restricted to the security engineering team.'},
+  {id:'q-dr03',doc:'q',page:14,sec:'Q-DR-03',text:'Backups are replicated to a secondary region (eu-central) within 15 minutes of each snapshot.'},
+  {id:'q-dr04',doc:'q',page:14,sec:'Q-DR-04',text:'Backups are retained for 30 days, after which they are securely deleted.',hl:'retained for 30 days'},
+  {id:'q-dr05',doc:'q',page:14,sec:'Q-DR-05',text:'On contract termination, customer data is deleted within 30 days and a certificate of deletion is issued on request.'},
+  {id:'q-ir03',doc:'q',page:17,sec:'Q-IR-03',text:'Customers are notified of confirmed security incidents affecting their data within 7 days of confirmation.',hl:'within 7 days of confirmation'},
+  {id:'q-sp02',doc:'q',page:19,sec:'Q-SP-02',text:'Subprocessors: Amazon Web Services (hosting), Cloudflare (DNS), Zendesk (support), Stripe (billing).',hl:'Amazon Web Services (hosting), Cloudflare (DNS), Zendesk (support), Stripe (billing)'},
+  {id:'s-3',doc:'soc',page:3,sec:'§I',text:'This is a SOC 2 Type II report on controls relevant to Security, Availability and Confidentiality for the period October 1, 2024 to September 30, 2025.',hl:'SOC 2 Type II report'},
+  {id:'s-5',doc:'soc',page:5,sec:'§I',text:'In our opinion, in all material respects, the controls stated in the description were suitably designed and operated effectively throughout the period.',hl:'operated effectively throughout the period'},
+  {id:'s-5b',doc:'soc',page:5,sec:'§I',text:'Halvorsen & Pike LLP, Denver, Colorado. November 14, 2025.'},
+  {id:'s-9',doc:'soc',page:9,sec:'§II',text:'The trust services categories in scope are Security, Availability and Confidentiality. Processing Integrity and Privacy are not in scope.',hl:'Security, Availability and Confidentiality'},
+  {id:'s-cc61',doc:'soc',page:28,sec:'CC6.1',text:'Data at rest is encrypted using AES-256; keys are managed in a FIPS 140-2 Level 3 HSM. Tested without exception.',hl:'encrypted using AES-256'},
+  {id:'s-cc62',doc:'soc',page:29,sec:'CC6.2',text:'Multi-factor authentication is required for all workforce and administrative access. User access is reviewed quarterly; 4 of 4 reviews inspected without exception.',hl:'Multi-factor authentication is required for all workforce and administrative access'},
+  {id:'s-cc65',doc:'soc',page:31,sec:'CC6.5',text:'Backup snapshots are retained for 90 days prior to secure deletion. Inspected retention settings for 25 sampled buckets; no exceptions noted.',hl:'retained for 90 days'},
+  {id:'s-iv',doc:'soc',page:38,sec:'§IV CC6.6',text:'Exception: the Q2 firewall rule review was completed 19 days late. Management response: review cadence automated in Q3; retested without exception.',hl:'completed 19 days late'},
+  {id:'s-appc',doc:'soc',page:44,sec:'App. C',text:'Subservice organizations: Amazon Web Services, Cloudflare and Fastly (content delivery).',hl:'Fastly (content delivery)'}
+];
+const P=Object.fromEntries(PARAS.map(p=>[p.id,p]));
+const citeLbl=id=>id==='bcdr'?F_B:`${DOCS[P[id].doc].short} ${P[id].sec} · p. ${P[id].page}`;
+const citeDoc=id=>id==='bcdr'?'bcdr':P[id].doc;
+
+const CHECKS=[
+  {n:1,name:'Confirm report type & audit period',ref:'SOC 2',dur:1100,result:'pass',note:'SOC 2 Type II covering Oct 1, 2024 – Sep 30, 2025, a full 12-month period.',cites:['s-3']},
+  {n:2,name:'Check auditor’s opinion',ref:'SOC 2',dur:1100,result:'pass',note:'Unqualified opinion from Halvorsen & Pike LLP.',cites:['s-5']},
+  {n:3,name:'Map Trust Service Criteria coverage',ref:'SOC 2 §II',dur:1400,result:'pass',note:'Security, Availability and Confidentiality are in scope, which covers what this contract needs.',cites:['s-9']},
+  {n:4,name:'Cross-check encryption claims',ref:'CC6.1',dur:1400,result:'pass',note:'Questionnaire and SOC 2 agree: AES-256 at rest, TLS 1.2+ in transit.',cites:['s-cc61','q-en01']},
+  {n:5,name:'Review subprocessor disclosures',ref:'Appendix C',dur:1500,result:'flag',sev:'Low',note:'SOC 2 Appendix C names Fastly, which is missing from the questionnaire’s subprocessor list.',cites:['s-appc','q-sp02']},
+  {n:6,name:'Verify data retention & deletion policy',ref:'CC6.5',dur:1700,judg:'conflict',cites:['q-dr04','s-cc65'],
+   title:'The documents disagree on backup retention',sub:'I found two different answers and can’t tell which is current, so I’m not picking one.',
+   ev:[{pid:'q-dr04',fn:F_Q,loc:'Q-DR-04 · p. 14 · submitted Sep 15, 2026',pre:'Backups are retained for ',val:'30 days',post:', after which they are securely deleted.'},
+       {pid:'s-cc65',fn:F_S,loc:'CC6.5 · p. 31 · audited, period ending Sep 30, 2025',pre:'Backup snapshots are retained for ',val:'90 days',post:' prior to secure deletion.'}],
+   legend:'Which figure should the review use?',
+   options:[
+     {v:'r30',l:'Use 30 days (stricter)',d:'Treat the newer questionnaire as current. This falls below our 35-day minimum and becomes a High finding.',ack:'Using 30 days. That’s below the 35-day minimum, so I’ve added a High finding.',ruled:'Used 30 days (stricter)'},
+     {v:'r90',l:'Use 90 days (audited)',d:'Trust the SOC 2. I’ll ask Meridian to correct the questionnaire.',ack:'Using the audited 90 days. I’ll ask Meridian to correct Q-DR-04.',ruled:'Used 90 days (audited)'},
+     {v:'clarify',l:'Ask vendor to clarify',d:'Keep this as an open item until Meridian answers.',ack:'Backup retention is now an open item until Meridian answers.',ruled:'Asked vendor to clarify'}]},
+  {n:7,name:'Verify access control & MFA enforcement',ref:'CC6.2',dur:1300,result:'pass',note:'MFA enforced for all workforce and admin access; quarterly access reviews tested without exception.',cites:['s-cc62']},
+  {n:8,name:'Confirm business continuity & backup testing cadence',ref:'A1.2',dur:1800,judg:'unreadable',cites:['bcdr'],
+   title:'I can’t open the BC/DR test summary',sub:'The workbook is password-protected, so I can’t confirm when the last recovery test ran or whether it met the 4-hour RTO.',
+   legend:'How do you want to handle it?',
+   options:[
+     {v:'reupload',l:'Request re-upload',d:'I’ll ask Meridian for an unprotected copy. This stays an open item.',ack:'Drafted a request to Meridian for an unprotected copy of the BC/DR summary.',ruled:'Requested re-upload'},
+     {v:'manual',l:'Flag for manual review',d:'Assign this to you to verify outside the tool. This stays an open item.',ack:'Flagged the BC/DR summary for your manual review.',ruled:'Flagged for manual review'}]},
+  {n:9,name:'Check breach notification SLA',ref:'CC7.3',dur:1300,result:'flag',sev:'Medium',note:'Meridian commits to notifying customers within 7 days. Our standard is 72 hours.',cites:['q-ir03']},
+  {n:10,name:'Review exceptions & remediation status',ref:'CC6.6',dur:1400,result:'pass',note:'One exception (late Q2 firewall-rule review) was remediated in Q3 and retested.',cites:['s-iv']}
+];
+
+const SEV={High:0,Medium:1,Low:2};
+function buildDraft(s){
+  const r6=s.rulings[6]&&s.rulings[6].v, r8=s.rulings[8]&&s.rulings[8].v;
+  const F=[],open=[],cond=[];
+  F.push({sev:'Medium',t:'Breach notification SLA is 7 days',d:'Our standard is 72 hours for Confidential data.',c:['q-ir03']});
+  cond.push('Amend the DPA to require breach notification within 72 hours.');
+  if(r6==='r30'){F.push({sev:'High',t:'Backup retention below 35-day minimum',d:'You ruled the questionnaire’s 30 days is current.',c:['q-dr04','s-cc65']});cond.push('Extend backup retention to at least 35 days and confirm in writing.');}
+  if(r6==='r90'){F.push({sev:'Low',t:'Questionnaire misstates backup retention',d:'You ruled the audited 90 days is correct; Q-DR-04 says 30.',c:['q-dr04','s-cc65']});cond.push('Correct questionnaire Q-DR-04 to state 90-day retention.');}
+  if(r6==='clarify'){F.push({sev:'Medium',t:'Backup retention unconfirmed',d:'Questionnaire says 30 days; SOC 2 says 90.',c:['q-dr04','s-cc65']});open.push('Meridian to confirm backup retention in writing.');cond.push('Confirm backup retention before contract signature.');}
+  F.push({sev:'Medium',t:'BC/DR testing not verified',d:'The BC/DR workbook is password-protected and couldn’t be reviewed.',c:['bcdr']});
+  open.push(r8==='manual'?`Manual review of the BC/DR test summary, assigned to ${REVIEWER}.`:'Waiting on an unprotected copy of the BC/DR test summary.');
+  cond.push('Provide evidence the most recent recovery test met the 4-hour RTO.');
+  F.push({sev:'Low',t:'Fastly missing from subprocessor list',d:'Named in SOC 2 Appendix C but not in the questionnaire.',c:['s-appc','q-sp02']});
+  cond.push('Add Fastly to the subprocessor schedule in the DPA.');
+  F.sort((a,b)=>SEV[a.sev]-SEV[b.sev]);
+  const tier=F.some(f=>f.sev==='High')?'High':F.some(f=>f.sev==='Medium')?'Medium':'Low';
+  let summary=tier==='High'
+    ?'Meridian’s SOC 2 is clean and its core controls hold up. But you ruled that backups are kept only 30 days, below our 35-day minimum, and the breach notification window is 7 days against our 72-hour standard. With BC/DR testing unverified, I don’t recommend approving this submission as it stands.'
+    :'Meridian’s SOC 2 is clean and its core controls hold up. The gaps are contractual and documentary: a 7-day breach notification window, unverified BC/DR testing and an incomplete subprocessor list. Each can be closed with a condition, so this doesn’t need a full resubmission.';
+  let conditions=cond;
+  if(s.edits){summary=s.edits.summary;conditions=s.edits.conditions;}
+  return {tier,findings:F,open,conditions,summary,rec:tier==='High'?'sendback':'approve',edited:!!s.edits};
+}
+const approveLbl=d=>d.tier==='Low'?'Approve':'Approve with conditions';
+const recLbl=d=>d.rec==='sendback'?'Send back':approveLbl(d);
+
+/* ---------- state ---------- */
+const L=(who,text,x)=>Object.assign({t:now(),who,text},x||{});
+function init(){return {phase:'plan',stopped:false,cursor:0,st:CHECKS.map(()=>'todo'),rulings:{},
+  log:[L('SYSTEM','Review opened. Meridian Cloud Storage, Inc. submitted 3 documents.'),L('ASSIST','Proposed a plan of 10 checks. Checks 6 and 8 may need the reviewer’s judgment.')],
+  assist:false,edits:null,editing:false,decision:null,drawer:null,open:{vendor:true,docs:true}};}
+function reducer(s,a){
+  switch(a.type){
+    case 'RUN': return {...s,phase:'running',log:[...s.log,L('YOU','Accepted the plan and started the checks.')]};
+    case 'STOP': return {...s,stopped:true,log:[...s.log,L('YOU',`Stopped the run at check ${s.cursor+1}.`)]};
+    case 'RESUME': return {...s,stopped:false,log:[...s.log,L('YOU','Resumed the run.')]};
+    case 'BEGIN': {const st=[...s.st];st[a.i]='running';return {...s,st};}
+    case 'FINISH': {const c=CHECKS[a.i],st=[...s.st];
+      if(c.judg){st[a.i]='wait';return {...s,st,phase:'judgment',log:[...s.log,L('ASSIST',`Check ${c.n}: ${c.title.charAt(0).toLowerCase()+c.title.slice(1)}. Paused for the reviewer.`,{tag:'NEEDS DECISION',k:'wait',cites:c.cites})]};}
+      st[a.i]=c.result;return {...s,st,cursor:a.i+1,log:[...s.log,L('ASSIST',`Check ${c.n}: ${c.note}`,{tag:c.result==='pass'?'PASSED':'FLAGGED · '+c.sev.toUpperCase(),k:c.result,cites:c.cites})]};}
+    case 'RULE': {const c=CHECKS[a.i],o=c.options.find(x=>x.v===a.v),st=[...s.st];st[a.i]='ruled';
+      return {...s,st,cursor:a.i+1,phase:'running',drawer:null,rulings:{...s.rulings,[c.n]:{v:a.v,note:a.note,t:now()}},
+        log:[...s.log,L('YOU',`Check ${c.n}: ${o.ruled}.${a.note?' Note: “'+a.note+'”':''}`,{tag:'DECISION',k:'rule',cites:c.cites}),L('ASSIST',o.ack)]};}
+    case 'DRAFT': {const d=buildDraft(s);return {...s,phase:'draft',log:[...s.log,L('ASSIST',`Drafted the risk summary. Tier: ${d.tier}. ${d.findings.length} findings, ${d.open.length} open items. Recommendation: ${recLbl(d)}.`)]};}
+    case 'TO_DECISION': return {...s,phase:'decision'};
+    case 'EDIT': return {...s,editing:true};
+    case 'EDIT_CANCEL': return {...s,editing:false};
+    case 'EDIT_SAVE': return {...s,editing:false,edits:a.edits,log:[...s.log,L('YOU','Edited the draft summary and conditions.',{tag:'EDIT',k:'rule'})]};
+    case 'DECIDE': {const d=buildDraft(s),against=d.rec!==a.kind;
+      return {...s,phase:'decided',decision:{kind:a.kind,label:a.label,text:a.text,t:now(),tier:d.tier,rec:recLbl(d),against},
+        log:[...s.log,L('YOU',`${a.label}.${a.text?' “'+a.text+'”':''}${against?' Differs from the recommendation ('+recLbl(d)+').':''}`,{tag:'FINAL DECISION',k:'rule'})]};}
+    case 'ASSIST': return {...s,assist:!s.assist};
+    case 'TOGGLE': return {...s,open:{...s.open,[a.k]:!s.open[a.k]}};
+    case 'DOC': return {...s,drawer:{doc:a.doc,focus:a.focus||null}};
+    case 'DOC_CLOSE': return {...s,drawer:null};
+    case 'RESET': return init();
+  }
+  return s;
+}
+
+/* ---------- pieces ---------- */
+function Cites({ids,d}){
+  return h('span',{className:'cites'},ids.map(id=>h('button',{key:id,type:'button',className:'cite',
+    onClick:()=>d({type:'DOC',doc:citeDoc(id),focus:id==='bcdr'?null:id}),'aria-label':'Open evidence: '+citeLbl(id)},citeLbl(id),h(Icon,{n:'arrow',s:12,sw:2}))));
+}
+function Marked({p,lit,bad}){
+  if(!lit||!p.hl) return p.text;
+  const i=p.text.indexOf(p.hl);
+  if(i<0) return p.text;
+  return h(Fragment,null,p.text.slice(0,i),h('mark',{className:bad?'bad':null},p.hl),p.text.slice(i+p.hl.length));
+}
+function statusOf(c,st,stopped){
+  if(st==='todo') return c.judg?{ic:'qcircle',icc:'judg',pill:'Needs judgment',pc:'judg'}:{ic:'circle',icc:'',pill:'Queued',pc:'q'};
+  if(st==='running') return {ic:'load',icc:'running',pill:stopped?'Paused':'Running',pc:'running',spin:!stopped};
+  if(st==='pass') return {ic:'pass',icc:'pass',pill:'Passed',pc:'pass'};
+  if(st==='flag') return {ic:'flag',icc:'flag',pill:'Flagged · '+c.sev,pc:'flag'};
+  if(st==='wait') return {ic:'qcircle',icc:'wait',pill:'Your decision',pc:'wait'};
+  return {ic:'pass',icc:'ruled',pill:'Decided by you',pc:'ruled'};
+}
+function Judgment({c,i,d}){
+  const [v,setV]=useState(''),[note,setNote]=useState('');
+  return h('div',{className:'jcard',role:'group','aria-label':'Judgment needed for check '+c.n},
+    h('div',{className:'jhead'},h('span',{className:'ico'},h(Icon,{n:c.judg==='conflict'?'qcircle':'lock'})),h('div',null,h('b',null,c.title),h('span',null,c.sub))),
+    h('form',{className:'jbody',onSubmit:e=>{e.preventDefault();if(v)d({type:'RULE',i,v,note:note.trim()});}},
+      c.judg==='conflict'
+        ?h('div',{className:'ev'},c.ev.map((e,k)=>h('div',{key:k,className:'evc'},
+            h('span',{className:'fn'},e.fn),h('span',{className:'loc'},e.loc),
+            h('span',{className:'big'},e.val),
+            h('q',null,e.pre,h('mark',null,e.val),e.post),
+            h('span',{className:'open'},h('button',{type:'button',className:'cite',onClick:()=>d({type:'DOC',doc:P[e.pid].doc,focus:e.pid})},'Read in context',h(Icon,{n:'arrow',s:12,sw:2}))))))
+        :h('div',{className:'unread'},h('span',{className:'fi'},h(Icon,{n:'lock',s:16})),h('div',null,h('div',{className:'fn'},F_B),h('p',null,'Exhibit B · 1 sheet · password-protected, 0 cells readable'))),
+      h('fieldset',{className:'opts'},h('legend',null,c.legend),
+        c.options.map(o=>h('label',{key:o.v,className:cx('opt',v===o.v&&'on'),htmlFor:`o${c.n}-${o.v}`},
+          h('input',{type:'radio',id:`o${c.n}-${o.v}`,name:'o'+c.n,checked:v===o.v,onChange:()=>setV(o.v)}),
+          h('span',null,h('b',null,o.l),h('small',null,o.d))))),
+      h('label',{className:'flbl',htmlFor:'jn'+c.n},'Note for the record (optional)'),
+      h('textarea',{id:'jn'+c.n,rows:2,value:note,onChange:e=>setNote(e.target.value)}),
+      h('div',{className:'jact'},h('button',{type:'submit',className:'btn pri sm',disabled:!v},'Confirm decision'),h('span',null,'Checks resume after you confirm. Your decision goes on the record.'))));
+}
+function CheckList({s,d}){
+  return h('ol',{className:'checks'},CHECKS.map((c,i)=>{
+    const st=s.st[i],S=statusOf(c,st,s.stopped),r=s.rulings[c.n];
+    return h('li',{key:c.n,className:'ck'},
+      h('div',{className:'ckrow'},
+        h('span',{className:cx('ico',S.icc)},h(Icon,{n:S.ic,s:22,sw:1.5,cls:S.spin?'spin':null})),
+        h('span',{className:'ckname'},`${c.n}. ${c.name}`,h('code',null,c.ref)),
+        h('span',{className:cx('pill',S.pc)},S.pill)),
+      (st==='pass'||st==='flag')&&h('p',{className:'ckres'},c.note,h(Cites,{ids:c.cites,d})),
+      st==='ruled'&&h('p',{className:'ckres'},c.options.find(o=>o.v===r.v).ruled+` by ${REVIEWER} at ${hms(r.t)}.`,r.note?` “${r.note}”`:'',h(Cites,{ids:c.cites,d})),
+      st==='wait'&&h(Judgment,{c,i,d}));
+  }));
+}
+function Draft({s,d}){
+  const D=buildDraft(s);
+  const [sum,setSum]=useState(D.summary),[cond,setCond]=useState(D.conditions.join('\n'));
+  useEffect(()=>{if(s.editing){setSum(D.summary);setCond(D.conditions.join('\n'));}},[s.editing]);
+  return h('div',{className:'card'},
+    h('div',{className:'tierrow'},h('span',{className:cx('tier',D.tier)},h(Icon,{n:D.tier==='Low'?'pass':'flag',s:16,sw:2}),D.tier+' risk'),
+      h('span',{className:'meta'},`${D.findings.length} findings · ${D.open.length} open items`),D.edited&&h('span',{className:'edited'},'Edited by you')),
+    s.editing
+      ?h('form',{style:{display:'grid',gap:'8px',marginTop:'16px'},onSubmit:e=>{e.preventDefault();d({type:'EDIT_SAVE',edits:{summary:sum.trim(),conditions:cond.split('\n').map(x=>x.replace(/^[•\-\s]+/,'').trim()).filter(Boolean)}});}},
+          h('label',{className:'flbl',htmlFor:'es'},'Summary'),h('textarea',{id:'es',rows:5,value:sum,onChange:e=>setSum(e.target.value)}),
+          h('label',{className:'flbl',htmlFor:'ec'},'Recommended conditions, one per line'),h('textarea',{id:'ec',rows:5,value:cond,onChange:e=>setCond(e.target.value)}),
+          h('div',{className:'jact'},h('button',{type:'submit',className:'btn pri sm',disabled:!sum.trim()},'Save changes'),h('button',{type:'button',className:'btn sm',onClick:()=>d({type:'EDIT_CANCEL'})},'Cancel')))
+      :h('p',{className:'sum'},D.summary),
+    h('h3',{className:'lbl'},'Findings'),
+    h('ul',{className:'finds'},D.findings.map((f,k)=>h('li',{key:k},h('span',{className:cx('sev',f.sev)},f.sev),h('div',null,h('b',null,f.t),h('p',null,f.d),h(Cites,{ids:f.c,d}))))),
+    h('h3',{className:'lbl'},'Open items'),
+    h('ul',{className:'plain'},D.open.map((x,k)=>h('li',{key:k},x))),
+    !s.editing&&h(Fragment,null,h('h3',{className:'lbl'},'Recommended conditions'),h('ol',{className:'plain'},D.conditions.map((x,k)=>h('li',{key:k},x)))));
+}
+function Decision({s,d}){
+  const D=buildDraft(s),aL=approveLbl(D);
+  const [pend,setPend]=useState(null),[txt,setTxt]=useState('');
+  const high=D.tier==='High';
+  const btns=high
+    ?[{k:'sendback',l:'Send back',c:'pri'},{k:'edit',l:'Edit',c:''},{k:'approve',l:aL,c:'ghost'}]
+    :[{k:'approve',l:aL,c:'pri'},{k:'edit',l:'Edit',c:''},{k:'sendback',l:'Send back',c:''}];
+  const pick=k=>{if(k==='edit'){setPend(null);d({type:'EDIT'});return;}setPend(k);
+    setTxt(k==='sendback'?`Hi Priya, thanks for the submission. Before we can approve, please address:\n${D.conditions.map(x=>'• '+x).join('\n')}`:'');};
+  const need=pend==='approve'&&high;
+  const dec=s.decision;
+  return h(Fragment,null,
+    h('div',{className:'recbox'},h('span',{className:'ico'},h(Icon,{n:'spark'})),h('div',null,
+      h('b',null,`Compliance Assist recommends: ${recLbl(D)}`),
+      h('p',null,high?'There’s a High finding, so this shouldn’t be approved as submitted. The decision is yours.':'Every gap has a condition that closes it. The decision is yours.'))),
+    dec
+      ?h('div',{className:'done',role:'status'},h('strong',null,dec.kind==='sendback'?'Sent back to vendor':dec.label),
+          h('p',null,`Decided by ${REVIEWER} at ${hms(dec.t)} · ${dec.tier} risk · ${dec.against?'differs from':'matches'} the recommendation (${dec.rec})`),
+          dec.text&&h('p',null,'“'+dec.text+'”'),
+          h('div',{className:'jact',style:{marginTop:'8px'}},
+            h('button',{type:'button',className:'btn sm',onClick:()=>{const el=document.getElementById('record');if(el)el.scrollIntoView({behavior:REDUCE?'auto':'smooth'});}},'View the record'),
+            h('button',{type:'button',className:'btn sm',onClick:()=>d({type:'RESET'})},'Reset demo')))
+      :s.editing?null:h(Fragment,null,
+        h('div',{className:'dbtns'},btns.map(b=>h('button',{key:b.k,type:'button',className:cx('btn',b.c),'aria-pressed':pend===b.k,onClick:()=>pick(b.k)},b.l,b.k==='approve'&&high?' (needs justification)':''))),
+        pend&&h('form',{className:'confirm',onSubmit:e=>{e.preventDefault();if(need&&!txt.trim())return;d({type:'DECIDE',kind:pend,label:pend==='sendback'?'Sent back to vendor':aL,text:txt.trim()});}},
+          h('label',{className:'flbl',htmlFor:'dt'},pend==='sendback'?'Message to Meridian':need?'Justification for approving a High-risk vendor (required)':'Note for the record (optional)'),
+          h('textarea',{id:'dt',rows:pend==='sendback'?6:3,value:txt,onChange:e=>setTxt(e.target.value)}),
+          h('div',{className:'jact'},h('button',{type:'submit',className:'btn pri sm',disabled:need&&!txt.trim()},pend==='sendback'?'Send back':'Confirm '+aL.toLowerCase()),
+            h('button',{type:'button',className:'btn sm',onClick:()=>setPend(null)},'Cancel')))));
+}
+function Record({s,d}){
+  const [msg,setMsg]=useState('');
+  const who=e=>e.who==='YOU'?`YOU (${REVIEWER})`:e.who;
+  const copy=()=>{
+    const text=s.log.map((e,i)=>`${String(i+1).padStart(3,'0')}  ${hms(e.t)}  ${who(e)}.  ${e.tag?e.tag+'  ':''}${e.text}${e.cites?'  ['+e.cites.map(citeLbl).join('; ')+']':''}`).join('\n');
+    try{navigator.clipboard.writeText(text).then(()=>setMsg('Copied to clipboard.'),()=>setMsg('Copying isn’t available here.'));}catch(e){setMsg('Copying isn’t available here.');}
+  };
+  return h('section',{className:'recsec',id:'record','aria-label':'Record'},
+    h('div',{className:'sech'},h('div',null,h('h2',null,`Record · ${s.log.length} entries`),
+      h('p',{className:'pnote'},'Every check, pause and decision in order, with the evidence each one relied on. This is what you show an auditor.')),
+      h('button',{type:'button',className:'btn sm',onClick:copy},'Copy record')),
+    msg&&h('p',{className:'recnote',role:'status',style:{marginTop:'8px'}},msg),
+    h('ol',{className:'record'},s.log.map((e,i)=>h('li',{key:i},
+      h('span',{className:'ln'},String(i+1).padStart(3,'0')),
+      h('time',null,hms(e.t)),
+      h('p',null,h('span',{className:'who'},who(e)+'.'),e.tag&&h('span',{className:'tag '+e.k},e.tag),e.text,e.cites&&h(Cites,{ids:e.cites,d}))))));
+}
+function DocDrawer({s,d}){
+  const {doc,focus}=s.drawer, D=DOCS[doc];
+  useEffect(()=>{const b=document.getElementById('drawer-close');if(b)b.focus({preventScroll:true});},[]);
+  useEffect(()=>{
+    const el=focus&&document.getElementById('dp-'+focus);
+    if(el){const b=el.closest('.db');if(b){const r=el.getBoundingClientRect(),br=b.getBoundingClientRect();b.scrollTop+=r.top-br.top-(br.height-r.height)/2;}}
+    else {const b=document.querySelector('.db');if(b)b.scrollTop=0;}
+  },[doc,focus]);
+  useEffect(()=>{const k=e=>{if(e.key==='Escape')d({type:'DOC_CLOSE'});};window.addEventListener('keydown',k);return ()=>window.removeEventListener('keydown',k);},[]);
+  const seen=st=>st!=='todo';
+  const notesFor=id=>CHECKS.filter(c=>c.cites.includes(id)&&seen(s.st[c.n-1]));
+  const Note=({c})=>{
+    const st=s.st[c.n-1],r=s.rulings[c.n];
+    const hd=st==='running'?`Check ${c.n} · reading now`:st==='pass'?`✓ Passed · Check ${c.n}`:st==='flag'?`! Flagged · ${c.sev} · Check ${c.n}`:st==='wait'?`? Needs your decision · Check ${c.n}`:`✓ Decided by you · Check ${c.n}`;
+    const body=st==='running'?c.name:st==='wait'?c.title+'.':st==='ruled'?c.options.find(o=>o.v===r.v).ruled+(r.note?` · “${r.note}”`:''):c.note;
+    return h('div',{className:cx('dnote',st)},h('span',{className:'hd'},hd),body,
+      st==='wait'&&h('div',null,h('button',{type:'button',className:'btn pri sm',onClick:()=>{d({type:'DOC_CLOSE'});setTimeout(()=>{const el=document.querySelector('.jcard');if(el)el.scrollIntoView({block:'center',behavior:REDUCE?'auto':'smooth'});},50);}},'Go to decision')));
+  };
+  let body;
+  if(D.locked){
+    const c=CHECKS[7];
+    body=h(Fragment,null,
+      h('div',{className:'locked'},h('span',{className:'ico'},h(Icon,{n:'lock',s:28})),h('b',null,'This workbook is password-protected'),
+        h('p',null,'Compliance Assist couldn’t open any cells, so nothing in this document was used as evidence. Check 8 needs a readable copy or a manual review.')),
+      seen(s.st[7])&&h(Note,{c}));
+  } else {
+    const pages=[];PARAS.filter(p=>p.doc===doc).forEach(p=>{const g=pages[pages.length-1];if(g&&g.page===p.page)g.items.push(p);else pages.push({page:p.page,items:[p]});});
+    body=h(Fragment,null,h('p',{className:'hint'},'Showing the pages Compliance Assist read. Highlights mark the exact text each check relied on.'),
+      pages.map(g=>h('section',{key:g.page,className:'dpg','aria-label':'Page '+g.page},
+        h('header',null,h('span',null,D.short),h('span',null,'p. '+g.page)),
+        g.items.map(p=>{
+          const ns=notesFor(p.id),lit=ns.filter(c=>s.st[c.n-1]!=='running');
+          const bad=lit.some(c=>c.judg||s.st[c.n-1]==='flag');
+          return h('div',{key:p.id,className:'drow'},
+            h('div',{id:'dp-'+p.id,className:cx('dtext',focus===p.id&&'focus')},h('span',{className:'sec'},p.sec),h(Marked,{p,lit:lit.length>0,bad})),
+            h('div',{className:'dnotes'},ns.map(c=>h(Note,{key:c.n,c}))));
+        }))));
+  }
+  return h(Fragment,null,
+    h('div',{className:'shade',onClick:()=>d({type:'DOC_CLOSE'})}),
+    h('aside',{className:'drawer',role:'dialog','aria-modal':'true','aria-label':'Evidence: '+D.file},
+      h('div',{className:'dh'},h('div',null,h('div',{className:'fn'},D.file),h('div',{className:'m'},D.meta)),
+        h('button',{type:'button',id:'drawer-close',className:'btn sm',onClick:()=>d({type:'DOC_CLOSE'})},'Close')),
+      h('div',{className:'dtabs',role:'tablist','aria-label':'Documents'},Object.keys(DOCS).map(k=>h('button',{key:k,type:'button',role:'tab',className:'dtab','aria-selected':k===doc,onClick:()=>d({type:'DOC',doc:k})},DOCS[k].short))),
+      h('div',{className:'db'},body)));
+}
+function Details({s,d}){
+  const Sec=(k,label,body)=>h('div',{className:'psec'},
+    h('button',{type:'button',className:'psh','aria-expanded':!!s.open[k],onClick:()=>d({type:'TOGGLE',k})},label,h(Icon,{n:s.open[k]?'chevD':'chevR',s:14,sw:2})),
+    s.open[k]&&h('div',{className:'psb'},body));
+  return h('aside',{className:'panel','aria-label':'Details'},
+    h('div',{className:'phead',style:{cursor:'default'}},'Details',h(Icon,{n:'chevD',s:14,sw:2})),
+    Sec('vendor','Vendor',h(Fragment,null,
+      h('div',{className:'vend'},h('div',{className:'av'},'MC'),h('div',null,h('b',null,'Meridian Cloud Storage, Inc.'),h('span',null,'Data Processor — Object Storage'))),
+      h('dl',{className:'kv'},
+        h('dt',null,'Submitted by'),h('dd',null,'Priya Nandakumar, VP Security & Compliance'),
+        h('dt',null,'Submitted on'),h('dd',null,'Sep 15, 2026'),
+        h('dt',null,'Requested by'),h('dd',null,'Data Platform Team'),
+        h('dt',null,'Contract value'),h('dd',{className:'mono'},'$180,000 / yr')))),
+    Sec('docs','Submitted documents',h('ul',{className:'docs'},
+      Object.entries(DOCS).map(([k,D])=>h('li',{key:k},
+        h('span',{className:'fi'},h(Icon,{n:D.locked?'lock':'file',s:15})),
+        h('div',null,h('a',{href:'#',onClick:e=>{e.preventDefault();d({type:'DOC',doc:k});}},D.file),h('span',null,D.meta.split(' · ').slice(0,2).join(' · ')),
+          D.locked&&s.st[7]!=='todo'&&s.st[7]!=='running'&&h('span',{className:'warn'},'Password-protected')))))),
+    h('div',{className:'psec'},h('button',{type:'button',className:'psh',onClick:()=>{const el=document.getElementById('record');if(el)el.scrollIntoView({behavior:REDUCE?'auto':'smooth'});}},
+      `Record · ${s.log.length}`,h(Icon,{n:'chevD',s:14,sw:2}))));
+}
+function Assist({s,d}){
+  const msgs=s.log.filter(e=>e.who==='ASSIST');
+  return h('aside',{className:'panel','aria-label':'Compliance Assist'},
+    h('button',{type:'button',className:'phead',onClick:()=>d({type:'ASSIST'})},h('span',{style:{display:'flex',gap:'8px',alignItems:'center',color:'var(--purple)'}},h(Icon,{n:'spark',s:16}),'Compliance Assist'),h('span',{style:{fontSize:'13px',color:'var(--text3)',fontWeight:500}},'Close')),
+    h('div',{className:'assist',role:'log','aria-live':'polite'},
+      msgs.map((m,k)=>h('div',{key:k,className:'msg'},h('div',{className:'who'},'Assist',h('time',null,hms(m.t))),h('p',null,m.text),m.cites&&h(Cites,{ids:m.cites,d}))),
+      h('p',{className:'note'},'Assist explains what it checked and why. It never approves or sends back on its own.')));
+}
+
+/* ---------- app ---------- */
+function App(){
+  const [s,d]=useReducer(reducer,null,init);
+  // Demo links for the case study: #demo-run, #demo-evidence, #demo-decision
+  const demo=location.hash.slice(1);
+  useEffect(()=>{if(demo.startsWith('demo'))d({type:'RUN'});},[]);
+  useEffect(()=>{
+    if(!demo.startsWith('demo')) return;
+    if(s.phase==='judgment'&&s.cursor===5&&demo==='demo-evidence'&&!s.drawer) d({type:'DOC',doc:'soc',focus:'s-cc65'});
+    if(s.phase==='judgment'&&demo==='demo-decision') d({type:'RULE',i:s.cursor,v:CHECKS[s.cursor].options[0].v,note:''});
+    if(s.phase==='draft'&&demo==='demo-decision') d({type:'TO_DECISION'});
+  },[s.phase,s.cursor]);
+  const [theme,setTheme]=useState(()=>{try{return localStorage.getItem('vrr3-theme');}catch(e){return null;}});
+  const cur=s.st[s.cursor];
+  useEffect(()=>{
+    if(s.phase!=='running'||s.stopped) return;
+    let t;
+    if(s.cursor>=CHECKS.length) t=setTimeout(()=>d({type:'DRAFT'}),1000);
+    else if(cur==='todo') t=setTimeout(()=>d({type:'BEGIN',i:s.cursor}),350);
+    else if(cur==='running') t=setTimeout(()=>d({type:'FINISH',i:s.cursor}),CHECKS[s.cursor].dur);
+    return ()=>clearTimeout(t);
+  },[s.phase,s.stopped,s.cursor,cur]);
+  useEffect(()=>{if(theme)document.documentElement.setAttribute('data-theme',theme);},[theme]);
+  useEffect(()=>{if(s.phase==='draft'||s.phase==='decision')window.scrollTo({top:0,behavior:REDUCE?'auto':'smooth'});},[s.phase]);
+  useEffect(()=>{if(s.phase==='judgment'&&!s.drawer&&!location.hash.startsWith('#demo')){const el=document.querySelector('.jcard');if(el)el.scrollIntoView({block:'center',behavior:REDUCE?'auto':'smooth'});}},[s.phase,s.cursor]);
+  useEffect(()=>{document.body.style.overflow=s.drawer?'hidden':'';},[!!s.drawer]);
+  const eff=theme||document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const flip=()=>{const n=eff==='dark'?'light':'dark';setTheme(n);try{localStorage.setItem('vrr3-theme',n);}catch(e){}};
+
+  const step=s.phase==='plan'?1:(s.phase==='running'||s.phase==='judgment')?2:s.phase==='draft'?3:4;
+  const STEPS=['Plan','Automated Checks','Draft Summary','Decision'];
+  const done=s.st.filter(x=>x==='pass'||x==='flag'||x==='ruled').length;
+
+  let sec;
+  if(s.phase==='plan') sec=h(Fragment,null,
+    h('div',{className:'sech'},h('div',null,h('h2',null,'Review plan for Meridian Cloud Storage, Inc.'),
+      h('p',null,'I’ll run 10 checks against the questionnaire, the SOC 2 Type II report and the BC/DR test summary, then draft a risk summary for your review. Two of these may need your judgment call along the way. Every result links to the text it came from.')),
+      h('button',{type:'button',className:'btn pri',onClick:()=>d({type:'RUN'})},'Run checks',h(Icon,{n:'arrow',s:16,sw:2.25}))),
+    h(CheckList,{s,d}));
+  else if(s.phase==='running'||s.phase==='judgment') sec=h(Fragment,null,
+    h('div',{className:'sech'},h('div',null,
+      h('h2',null,s.phase==='judgment'?'Your judgment is needed':'Running automated checks'),
+      h('p',{role:'status','aria-live':'polite'},s.phase==='judgment'?`Check ${s.cursor+1} is paused until you decide. Nothing else runs in the meantime.`:s.stopped?'Stopped. Nothing runs until you resume.':s.cursor>=CHECKS.length?'All checks complete. Drafting the risk summary…':`Working on check ${s.cursor+1} of 10: ${CHECKS[s.cursor].name.toLowerCase()}.`),
+      h('div',{className:'progress'},`${done} of 10 complete`),h('div',{className:'bar'},h('i',{style:{width:done*10+'%'}}))),
+      s.phase==='running'&&s.cursor<CHECKS.length&&(s.stopped
+        ?h('button',{type:'button',className:'btn pri',onClick:()=>d({type:'RESUME'})},h(Icon,{n:'play',s:14,sw:2}),'Resume')
+        :h('button',{type:'button',className:'btn',onClick:()=>d({type:'STOP'})},h(Icon,{n:'stop',s:14,sw:2}),'Stop'))),
+    h(CheckList,{s,d}));
+  else if(s.phase==='draft') sec=h(Fragment,null,
+    h('div',{className:'sech'},h('div',null,h('h2',null,'Draft risk summary'),h('p',null,'Written by Compliance Assist from the 10 checks and your 2 decisions. Each finding links to its evidence.')),
+      h('button',{type:'button',className:'btn pri',onClick:()=>d({type:'TO_DECISION'})},'Continue to decision',h(Icon,{n:'arrow',s:16,sw:2.25}))),
+    h(Draft,{s,d}));
+  else sec=h(Fragment,null,
+    h('div',{className:'sech'},h('div',null,h('h2',null,'Decision'),h('p',null,'Approve, edit or send back. Your choice and any note go on the record with your name.'))),
+    h(Decision,{s,d}),h(Draft,{s,d}));
+
+  return h(Fragment,null,
+    h('aside',{className:'rail','aria-label':'App navigation'},
+      h('div',{className:'logo'},h(Shield)),
+      h('nav',null,
+        h('button',{type:'button',className:'ib','aria-label':'Search'},h(Icon,{n:'search'})),
+        h('div',{className:'sp'}),
+        h('button',{type:'button',className:'ib','aria-label':'Dashboard'},h(Icon,{n:'grid'})),
+        h('button',{type:'button',className:'ib on','aria-label':'Reviews','aria-current':'page'},h(Icon,{n:'clip'})),
+        h('button',{type:'button',className:'ib','aria-label':'Vendors'},h(Icon,{n:'sheet'})),
+        h('button',{type:'button',className:'ib','aria-label':'Documents'},h(Icon,{n:'file'})),
+        h('button',{type:'button',className:'ib','aria-label':'Reports'},h(Icon,{n:'chart'})),
+        h('button',{type:'button',className:'ib','aria-label':'Policies'},h(Icon,{n:'doc'})))),
+    h('div',{className:'app'},
+      h('header',{className:'topbar'},
+        h('div',{className:'crumb'},h('span',{className:'logo mlogo'},h(Shield)),h('a',{href:'#',onClick:e=>e.preventDefault()},'Reviews'),h('span',{className:'sepc',style:{color:'var(--text2)',display:'inline-flex'}},h(Icon,{n:'chevRs',s:14,sw:2})),h('b',null,'Meridian Cloud Storage, Inc.')),
+        h('div',{className:'tools'},
+          h('button',{type:'button',className:'ib','aria-label':'Notifications'},h(Icon,{n:'bell',s:19})),
+          h('button',{type:'button',className:'ib','aria-label':`Switch to ${eff==='dark'?'light':'dark'} theme`,onClick:flip},eff==='dark'?h(Icon,{n:'sun',s:19}):h(Moon)),
+          h('button',{type:'button',className:'ib','aria-label':'Help'},h(Icon,{n:'help',s:19})))),
+      h('main',{className:'content'},
+        h('div',{className:'head'},
+          h('div',null,h('h1',null,'Vendor Risk Review'),h('p',{className:'sub'},'Reviewing Meridian Cloud Storage, Inc. for security and compliance approval.')),
+          h('div',{className:'hbtns'},
+            h('button',{type:'button',className:'btn lav','aria-pressed':s.assist,onClick:()=>d({type:'ASSIST'}),title:'See what the agent checked and why'},h(Icon,{n:'spark',s:16}),'Compliance Assist'),
+            h('button',{type:'button',className:'btn',onClick:()=>d({type:'RESET'})},'Reset Demo'))),
+        h('ol',{className:'steps','aria-label':'Progress',style:{listStyle:'none',margin:'26px 0 0',padding:'2px'}},STEPS.map((t,i)=>h(Fragment,{key:t},
+          i>0&&h('li',{className:'conn','aria-hidden':'true'}),
+          h('li',{className:cx('step',i+1===step&&'cur',i+1<step&&'past'),'aria-current':i+1===step?'step':null},
+            h('span',{className:'num'},i+1<step?'✓':i+1),t,
+            i===1&&s.phase==='judgment'&&h('span',{className:'wb'},'Waiting for you'))))),
+        h('div',{className:'grid'},
+          h('div',null,h('section',{'aria-label':STEPS[step-1]},sec),h(Record,{s,d})),
+          s.assist?h(Assist,{s,d}):h(Details,{s,d})))),
+    s.drawer&&h(DocDrawer,{s,d}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+})();
+</script>
