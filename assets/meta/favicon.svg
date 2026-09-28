@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
+    <clipPath id="round"><rect width="64" height="64" rx="14"/></clipPath>
     <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#A57890"/>
       <stop offset=".5" stop-color="#7B6BA8"/>
@@ -14,8 +15,10 @@
       <stop offset="1" stop-color="#3F4C98" stop-opacity="0"/>
     </radialGradient>
   </defs>
+  <g clip-path="url(#round)">
   <rect width="64" height="64" fill="url(#base)"/>
   <rect width="64" height="64" fill="url(#blob1)"/>
   <rect width="64" height="64" fill="url(#blob2)"/>
   <path fill="#FFFFFF" d="M29.174 44.564H12.614V19.436000000000003H29.174V23.648000000000003H17.366V29.768H27.805999999999997V33.944H17.366V40.352000000000004H29.174ZM51.385999999999996 44.564H36.733999999999995V19.436000000000003H41.486V40.352000000000004H51.385999999999996Z"/>
+  </g>
 </svg>
