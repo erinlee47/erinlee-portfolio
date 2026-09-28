@@ -284,6 +284,11 @@ img, video { display: block; max-width: 100%; }
   font-family: var(--serif); font-size: 30px; line-height: 1.35; color: var(--ink);
   max-width: 24ch; padding-top: 8px;
 }
+.cs-copy ul { margin: 0; padding-left: 1.15em; display: flex; flex-direction: column; gap: 14px; }
+.cs-copy li { font-size: 18px; line-height: 1.7; color: var(--text); text-wrap: pretty; padding-left: 4px; }
+.cs-copy li::marker { color: var(--text-meta); }
+.cs-copy strong { font-weight: 600; color: var(--text-strong); }
+.cs-copy .cs-question { font-family: var(--serif); font-size: 28px; line-height: 1.35; color: var(--ink); max-width: 34ch; }
 .cs-impact-quote, .cs-copy .cs-impact-quote {
   margin: 0; font-family: var(--serif); font-size: 34px; line-height: 1.3; color: var(--ink);
   max-width: 22ch; text-wrap: pretty;
@@ -355,7 +360,8 @@ img, video { display: block; max-width: 100%; }
   .cs-section { grid-template-columns: 1fr; gap: 16px; padding-top: 48px; padding-bottom: 36px; }
   .cs-section--flush { padding-top: 0; }
   .cs-label { padding-top: 0; }
-  .cs-copy p, p.cs-copy { font-size: 17px; }
+  .cs-copy p, p.cs-copy, .cs-copy li { font-size: 17px; }
+  .cs-copy .cs-question { font-size: 24px; }
   .cs-copy .pullquote { font-size: 26px; }
   .cs-impact-quote, .cs-copy .cs-impact-quote { font-size: 28px; }
   .cs-split { grid-template-columns: 1fr; }

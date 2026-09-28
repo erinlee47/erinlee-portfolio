@@ -27,8 +27,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css">
-<script src="assets/js/reveal.js" defer></script>
+<link rel="stylesheet" href="assets/css/styles.css?v=7">
+<script src="assets/js/reveal.js?v=2" defer></script>
 </head>
 <body>
 
@@ -51,7 +51,7 @@
       <span>Intapp · Intake · 2024</span>
     </div>
     <h1>AI Assisted Intake Form</h1>
-    <p class="cs-hero__lede">At Intapp, I led the design of an AI-assisted intake form for Intake, our internal business intake product used across professional services firms. The idea was straightforward: instead of asking professionals to re-enter information they'd already written in an email, let the system read the email and fill in the form for them.</p>
+    <p class="cs-hero__lede">At Intapp, I led the design of an AI-assisted intake form for Intake, our business intake product used across professional services firms. Instead of retyping what they'd already written in an email, people drop the email in and the system fills in the form. They review it and stay responsible for what's submitted.</p>
   </section>
 
   <div class="meta">
@@ -66,11 +66,11 @@
   </div>
 
   <section class="cs-section">
-    <div class="cs-label">Context</div>
+    <div class="cs-label">The problem</div>
     <div class="cs-copy">
-      <p>The original brief was simple: let AI fill out the form. But the more I talked to users, the more I realized that automation alone wasn't the answer.</p>
-      <p>Enterprise users weren't just dealing with repetitive data entry. They were dealing with the anxiety that comes with it. Who extracted this information? Is it correct? What did the AI change and what was already there? In professional and legal services, where a matter record is a compliance artifact as much as a workflow tool, those questions aren't optional. Users needed to understand what the AI had done, feel confident in the data it surfaced, be able to correct it easily, and know that the final decision was always theirs.</p>
-      <p class="pullquote">The real challenge wasn't building an AI that could fill in fields. It was building an experience where people trusted it enough to use it.</p>
+      <p>An intake request is a long form, around 200 fields, and it becomes the matter record. In professional and legal services, that record is a compliance artifact, so it has to be right. Most of the information already sat in an email, and people were copying it over field by field.</p>
+      <p>The brief was simple: let AI fill out the form. But talking to users, I realized automation alone wasn't the answer. They were anxious about it. Who extracted this? Is it correct? What did the AI change?</p>
+      <p>A form that fills itself creates a new job: checking. If checking takes as long as typing, nothing is saved.</p>
     </div>
   </section>
 
@@ -78,12 +78,29 @@
     <img class="media" src="https://framerusercontent.com/images/6OfsXYrHXoU63CV0iQSXoWSLY.png?width=1734&amp;height=1224" width="1734" height="1224" loading="lazy" alt="Intake context">
   </div>
 
-  <section class="cs-section">
-    <div class="cs-label">Explorations</div>
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">The question</div>
     <div class="cs-copy">
-      <p>The question I kept returning to was how visible the AI should be. Should users feel like the form had been filled in for them, or they were doing the filling with a lot of help?</p>
-      <p>I explored two directions: AI suggestions inline beside each pre-filled field, and a summary panel at the top showing everything the AI had populated before users touched the form.</p>
-      <p>Testing was clear. People skimmed the summary and still questioned what had changed. The panel added a step without adding confidence. The inline approach did the opposite. When suggestions appeared right where users expected to type, they felt in control even though the system had done most of the work. That sense of control made them far more willing to trust what they were seeing.</p>
+      <p class="cs-question">How might we turn an email into intake data people can verify at a glance?</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">What I noticed</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>The worry was about where things came from.</strong> If people can't tell what the AI touched, they re-check everything.</li>
+        <li><strong>Ambiguity is information.</strong> If an email names two possible lawyers, silently picking one is the worst option.</li>
+        <li><strong>The person signs it.</strong> Whatever the AI suggests, the submitter is accountable, and the design should make that feel natural.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Exploration</div>
+    <div class="cs-copy">
+      <p>I tested two directions: AI suggestions <strong>inline</strong> beside each field, and a <strong>summary panel</strong> at the top listing everything the AI had filled.</p>
+      <p>The panel looked more "transparent," but people skimmed it and still questioned what had changed. It added a step without adding confidence. Inline suggestions, right where people expected to type, made them feel in control, even though the system had done most of the work.</p>
     </div>
   </section>
 
@@ -92,10 +109,21 @@
   </div>
 
   <section class="cs-section">
+    <div class="cs-label">The hard part</div>
+    <div class="cs-copy">
+      <p><strong>Showing the AI's work without cluttering the form.</strong> A 200-field form is already a lot. Badging every AI field would make it worse, but hiding them brings the anxiety back. So I split the job:</p>
+      <ul>
+        <li><strong>Reviewing:</strong> a highlight toggle tints every AI-filled field and adds a "(pre-filled)" label, so it doesn't rely on color alone.</li>
+        <li><strong>Working:</strong> toggle it off and the form returns to its normal, tighter layout.</li>
+        <li><strong>Unsure:</strong> the system shows "2 suggestions available" instead of guessing. The AI narrows the choice, and the person makes it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
     <div class="cs-label">Final solution</div>
     <div class="cs-copy">
-      <p>The final design lets users drag an email directly into the form. The system reads it, extracts what's relevant, and pre-populates the fields. Same workflow, just faster.</p>
-      <p>A highlight toggle lets users scan all AI-populated fields at once. Every suggestion is editable in place, and when the system finds more than one plausible value, it surfaces the options rather than guessing. In an environment where accuracy is non-negotiable, that reviewability wasn't a feature. It was a requirement.</p>
+      <p>Drag an email into the form. The system reads it, pulls out what's relevant, and pre-fills the fields. Same workflow, just faster. Every suggestion can be edited in place.</p>
       <p class="pullquote">AI-assisted should never mean AI-controlled. The system does the first draft. The person does the thinking.</p>
     </div>
   </section>
@@ -106,9 +134,37 @@
     <img class="media" src="https://framerusercontent.com/images/AxRcuEh52W4uON28zLccgN7WSQE.png?width=1844&amp;height=1224" width="1844" height="1224" loading="lazy" alt="Highlighted AI-populated fields">
   </div>
 
+  <section class="cs-section">
+    <div class="cs-label">Tradeoffs</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>We rejected the summary panel.</strong> It's the obvious transparency pattern, but it didn't build trust.</li>
+        <li><strong>We don't auto-pick between plausible values.</strong> It costs a click, and it saves a wrong record.</li>
+        <li><strong>The AI prepares, and the person submits.</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">My role</div>
+    <div class="cs-copy">
+      <p>I led the design: the suggestion model, the pre-filled pattern, how ambiguous values are handled, and the testing that settled inline versus summary.</p>
+    </div>
+  </section>
+
   <section class="cs-section cs-section--impact cs-section--impact-gap">
     <div class="cs-label">Impact</div>
-    <p class="cs-impact-quote cs-impact-quote--wide">Email ingestion removes roughly 10% of the ~200 fields a user would otherwise fill by hand.</p>
+    <div class="cs-copy">
+      <p class="cs-impact-quote cs-impact-quote--wide">Email ingestion removes roughly 10% of the ~200 fields a user would otherwise fill by hand.</p>
+      <p>An email only holds so much, and the rest still needs the person.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--last">
+    <div class="cs-label">Reflection</div>
+    <div class="cs-copy">
+      <p>In a form like this, speed comes from trust, and trust comes from being able to tell who did what. Making that line visible was the design.</p>
+    </div>
   </section>
 
   <a href="ai-applied-outreach.html" class="next">

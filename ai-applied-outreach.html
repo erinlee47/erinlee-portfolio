@@ -27,8 +27,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css">
-<script src="assets/js/reveal.js" defer></script>
+<link rel="stylesheet" href="assets/css/styles.css?v=7">
+<script src="assets/js/reveal.js?v=2" defer></script>
 </head>
 <body>
 
@@ -51,7 +51,7 @@
       <span>Intapp · DealCloud · 2023</span>
     </div>
     <h1>AI Applied Outreach</h1>
-    <p class="cs-hero__lede">At Intapp, I led the design of AI applied outreach experience that helps professionals generate personalized client emails using relationship intelligence and firm data.</p>
+    <p class="cs-hero__lede">At Intapp, I led the design of Applied Outreach, an AI experience in DealCloud that helps professionals write personalized client emails using the relationship intelligence and firm data already in the system. The AI drafts. The person decides what gets sent.</p>
   </section>
 
   <div class="meta">
@@ -65,14 +65,38 @@
     <iframe class="media media--embed" src="assets/embed/outreach.html?v=6" title="AI Applied Outreach: one click on Create Content turns a generic email into a personalized draft" loading="lazy"></iframe>
   </div>
 
-  <section class="cs-section cs-section--last">
-    <div class="cs-label">Context</div>
-    <p class="cs-copy">Applied Outreach was initiated as part of Intapp's broader push to embed AI into core DealCloud workflows and improve how business development teams engage clients. The initiative was driven by the reality that users were spending significant effort manually personalizing outreach emails in order to increase engagement.</p>
+  <section class="cs-section">
+    <div class="cs-label">The problem</div>
+    <div class="cs-copy">
+      <p>Applied Outreach was part of Intapp's push to bring AI into core DealCloud workflows. Business development teams were spending real effort personalizing outreach by hand, because personal emails get better engagement.</p>
+      <p>Personal takes research: when did we last talk, who at the firm knows them, what's new at their company. Most of that already lived in DealCloud, spread across records.</p>
+      <p>AI alone doesn't fix this. Any model can write a polite, fluent email, and that's the risk: a generic draft is easy to produce and easy to ignore.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">The question</div>
+    <div class="cs-copy">
+      <p class="cs-question">How might we help someone write outreach that reflects what the firm actually knows about each relationship, without taking the writing away from them?</p>
+    </div>
   </section>
 
   <section class="cs-section">
-    <div class="cs-label">Explorations</div>
-    <p class="cs-copy">The initial concept focused on adding AI-generated talking points for users to select at the end of the email generation flow. While quick to implement, this approach created too much friction and did little to reduce user effort or improve confidence in the output.</p>
+    <div class="cs-label">What I noticed</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>Options at the end didn't help.</strong> Our first concept added a choice without adding context.</li>
+        <li><strong>The best material was already in the system.</strong> Relationship data is what makes an email personal, and no general-purpose model has it.</li>
+        <li><strong>You can only judge a draft if you can see what it's based on.</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Exploration</div>
+    <div class="cs-copy">
+      <p>The first concept offered AI-generated talking points to pick from at the end of the email flow. It was quick to build, but it added friction and did little to reduce effort or build confidence.</p>
+    </div>
   </section>
 
   <div class="cs-media cs-media--tight">
@@ -81,7 +105,9 @@
 
   <section class="cs-section cs-section--flush">
     <div aria-hidden="true"></div>
-    <p class="cs-copy">It also surfaced a larger gap: we were underutilizing the rich relationship and firm intelligence already available in DealCloud. This realization prompted me to step back and connect the dots across our broader capabilities. I partnered with multiple teams to gather buy-in and reframe the experience into a more context-driven solution that better leveraged our existing data to support truly personalized outreach.</p>
+    <div class="cs-copy">
+      <p>It also showed we were underusing the relationship and firm intelligence DealCloud already had. I stepped back, partnered with multiple teams to get buy-in, and reframed the experience around that context. The AI's job changed from offering generic phrases to bringing the right context to the moment of writing.</p>
+    </div>
   </section>
 
   <div class="cs-media">
@@ -89,9 +115,16 @@
   </div>
 
   <section class="cs-section">
+    <div class="cs-label">The hard part</div>
+    <div class="cs-copy">
+      <p><strong>A draft worth editing.</strong> Generating text was easy. Making the draft a real starting point, and making it clear whether to trust it, was not. So the draft is grounded in firm data it can point to, that context sits right beside it, and each email can be previewed one at a time before anything goes out.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
     <div class="cs-label">Final solution</div>
     <div class="cs-copy">
-      <p>The final solution brings forward DealCloud's data to provide richer context and a more agentive workflow. With a single click, the system recognize relevant signals and generates a tailored outreach draft, reducing friction and helping users to create more personalized content</p>
+      <p>With a single click, the system picks up relevant signals and generates a tailored draft. Next to the email, an Insights panel shows what it's built on: recent interactions, relationships, and news, relationship scores for each recipient, and colleagues who already know them.</p>
       <p class="pullquote">The intelligence was already in the system. The design work was putting it in front of the person writing.</p>
     </div>
   </section>
@@ -99,6 +132,45 @@
   <div class="cs-media cs-media--stack">
     <iframe class="media media--embed" src="assets/embed/outreach.html?scene=draft&amp;v=6" title="Generated outreach draft, personalized with relationship insights" loading="lazy"></iframe>
   </div>
+
+  <section class="cs-section cs-section--flush">
+    <div aria-hidden="true"></div>
+    <div class="cs-copy">
+      <p>Before sending, people can preview each email, send themselves a test, or save drafts. Nothing goes out until they send it.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Tradeoffs</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>We dropped the talking points,</strong> even though they were the quickest to build.</li>
+        <li><strong>The reframe took longer and needed cross-team buy-in.</strong> The payoff was a feature built on data only DealCloud has.</li>
+        <li><strong>We didn't automate sending.</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">My role</div>
+    <div class="cs-copy">
+      <p>I led the design. I saw that the first concept wasn't working, made the case for reframing it around relationship data, and got buy-in across teams for that direction.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--impact cs-section--impact-gap">
+    <div class="cs-label">Impact</div>
+    <div class="cs-copy">
+      <p class="cs-impact-quote cs-impact-quote--wide">From a standalone talking-points feature to an experience built on DealCloud's own relationship intelligence.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--last">
+    <div class="cs-label">Reflection</div>
+    <div class="cs-copy">
+      <p>Generating text is the cheap part now. Helping someone say the right thing to the right person depends on context a model doesn't have on its own, and on the sender still recognizing the email as theirs.</p>
+    </div>
+  </section>
 
   <a href="natural-language-filter.html" class="next">
     <span class="next__label">Next project</span>

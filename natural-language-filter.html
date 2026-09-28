@@ -27,8 +27,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css">
-<script src="assets/js/reveal.js" defer></script>
+<link rel="stylesheet" href="assets/css/styles.css?v=7">
+<script src="assets/js/reveal.js?v=2" defer></script>
 </head>
 <body>
 
@@ -51,7 +51,7 @@
       <span>Intapp · DealCloud · 2024</span>
     </div>
     <h1>Natural Language Filter</h1>
-    <p class="cs-hero__lede">At Intapp, I led the design of Natural Language Filter for DealCloud, a CRM used by thousands of financial services professionals across private equity, investment banking, and M&amp;A advisory. The feature lets users find what they need by typing a question in plain English, instead of wrestling with dropdowns or building filters from scratch.</p>
+    <p class="cs-hero__lede">At Intapp, I led the design of Natural Language Filter for DealCloud, a CRM used by thousands of financial services professionals across private equity, investment banking, and M&amp;A advisory. You type a question in plain English, and the system turns it into filters you can see, check, and change.</p>
   </section>
 
   <div class="meta">
@@ -66,11 +66,12 @@
   </div>
 
   <section class="cs-section">
-    <div class="cs-label">Context</div>
+    <div class="cs-label">The problem</div>
     <div class="cs-copy">
-      <p>DealCloud is highly customizable, which is one of the things customers love about it. But that same flexibility made the filter system feel foreign to anyone who didn't set it up. To answer something as simple as <em>"Which Tier A clients haven't been contacted in the last four months?"</em>, you had to know the exact field names your firm had configured, navigate through several menu layers, and stack conditions in the right order.</p>
-      <p>The people who felt this most weren't the admins. They were the relationship managers and partners making decisions on live deals. A lot of them had quietly stopped using filters altogether. When I sat with users early on, I didn't hear frustration. I heard resignation. They'd accepted this was just how it worked.</p>
-      <p class="pullquote">DealCloud had all the data. The gap was that the system spoke schema and users spoke intent.</p>
+      <p>DealCloud is highly customizable, but that flexibility made filters feel foreign to anyone who hadn't set them up. To answer <em>"Which Tier A clients haven't been contacted in the last four months?"</em> you had to know your firm's field names, dig through menus, and stack conditions in the right order.</p>
+      <p>The relationship managers and partners who needed answers most had quietly stopped using filters. When I sat with them, I didn't hear frustration. I heard resignation.</p>
+      <p class="pullquote">DealCloud had all the data. The system spoke schema and users spoke intent.</p>
+      <p>And because these users act on what they see, a black-box answer wouldn't do. They needed to be able to check it.</p>
     </div>
   </section>
 
@@ -78,11 +79,34 @@
     <img class="media" src="https://framerusercontent.com/images/rq9RHV0wJq5PlJhFQWIKehYnuL4.png?width=1844&amp;height=1176" width="1844" height="1176" loading="lazy" alt="Filter system context">
   </div>
 
-  <section class="cs-section">
-    <div class="cs-label">Explorations</div>
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">The question</div>
     <div class="cs-copy">
-      <p>I explored three directions. A conversational overlay broke down the moment users wanted to tweak a result — there was no way to adjust individual conditions without starting over. An AI-enhanced filter builder kept the familiar UI but didn't solve anything. If you didn't know what fields existed, suggestions still didn't help.</p>
-      <p>The direction I pushed for was an integrated view that converts natural language into editable filter tokens right in context. You could see exactly how your words had been interpreted, fix individual pieces without losing the whole query, and build on it. For professionals in regulated industries who need to trust what they're looking at before acting on it, that transparency wasn't optional.</p>
+      <p class="cs-question">How might we let people ask in their own words, and still show them exactly what the system understood?</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">What I noticed</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>People don't start in advanced search.</strong> The PM's first ask was to put this in advanced search. But when I watched people work, they didn't go there to find information. They went straight to the object pages, like Companies. So I proposed building it there, where the question already starts.</li>
+        <li><strong>The problem was translation, not data.</strong> Users knew what they wanted, just not what the system called it.</li>
+        <li><strong>Filters were already the right output.</strong> Instead of inventing a new kind of answer, the AI could build the filters people already knew, so everything downstream kept working.</li>
+        <li><strong>A wrong reading you can see is still useful.</strong> Mostly right and fully visible beats correct and hidden.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Exploration</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>Conversational overlay:</strong> easy to ask, but you couldn't tweak one condition without starting over.</li>
+        <li><strong>AI-enhanced filter builder:</strong> familiar, but suggestions don't help if you don't know what fields exist.</li>
+        <li><strong>Integrated view builder (chosen):</strong> plain language in, editable filter tokens out, right in context. Ask like a conversation, adjust like a filter.</li>
+      </ul>
+      <p>I pushed for the third. For regulated professionals who need to trust what they see before acting on it, that transparency wasn't optional.</p>
     </div>
   </section>
 
@@ -91,8 +115,23 @@
   </div>
 
   <section class="cs-section">
+    <div class="cs-label">The hard part</div>
+    <div class="cs-copy">
+      <p><strong>When the AI reads you wrong.</strong> Every firm names things differently, so misreads will happen. I designed them to be cheap to catch and fix:</p>
+      <ul>
+        <li>Prompt guidance shows which kinds of questions work.</li>
+        <li>The loading state lists each condition as it's set, so you watch the translation happen.</li>
+        <li>Each condition is its own token, so you can fix one without redoing the rest.</li>
+        <li>One step takes you back to your previous view.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
     <div class="cs-label">Final solution</div>
-    <p class="cs-copy">Users describe what they're looking for in plain language, and the system generates structured, editable filter conditions instead of a static result. Because the generated filters use the existing filtering model, users can inspect, adjust, or extend the query using familiar controls rather than starting over.</p>
+    <div class="cs-copy">
+      <p>Generated filters use DealCloud's existing filter model, so people inspect and adjust them with controls they already know.</p>
+    </div>
   </section>
 
   <div class="cs-media">
@@ -102,19 +141,21 @@
   <div class="cs-split">
     <div class="cs-split__col">
       <div class="cs-split__title">Prompt guidance</div>
-      <p>The experience guides users with contextual prompt suggestions and examples, helping them understand what they can ask without needing to learn the underlying data model.</p>
+      <p>Examples show what you can ask, without having to learn the data model.</p>
       <iframe class="media media--embed media--portrait" src="assets/embed/nl-filter-cover.html?scene=guidance" title="Prompt guidance: picking a suggested prompt runs it, then follow-up suggestions appear" loading="lazy"></iframe>
     </div>
     <div class="cs-split__col">
       <div class="cs-split__title">Loading state</div>
-      <p>During processing, the loading state provides clear feedback that the system is interpreting their request and translating it into filter logic.</p>
+      <p>Instead of a spinner, you see each filter being set.</p>
       <iframe class="media media--embed media--portrait" src="assets/embed/nl-filter-cover.html?scene=loading" title="Loading state: the chat lists each filter while the table loads" loading="lazy"></iframe>
     </div>
   </div>
 
   <section class="cs-section">
-    <div class="cs-label cs-label--muted">Generated editable filters</div>
-    <p class="cs-copy">Once generated, the AI output is converted into familiar, editable filter tokens rather than a black-box answer. Users can review how their request was interpreted, adjust individual conditions, and refine the query without starting over — combining the speed of natural language with the flexibility of structured filtering.</p>
+    <div class="cs-label cs-label--muted">Editable filters</div>
+    <div class="cs-copy">
+      <p>The output is tokens, not a black box. You can adjust any condition without starting over.</p>
+    </div>
   </section>
 
   <div class="cs-media">
@@ -123,18 +164,45 @@
 
   <section class="cs-section">
     <div class="cs-label cs-label--muted">Workflow continuity</div>
-    <p class="cs-copy">Users can return to their previous grid view with a single action and switch between AI-generated and manual filters without losing context. They can also save AI-generated views as reusable configurations, turning one-time queries into persistent workflows teams can revisit and build on.</p>
+    <div class="cs-copy">
+      <p>Return to your previous grid view in one step, switch between AI and manual filters, and save an AI-made view for the team to reuse.</p>
+    </div>
   </section>
 
   <div class="cs-media">
     <img class="media" src="https://framerusercontent.com/images/PHJP6h0QdKIr2qPzklSbV86TKww.png?width=1844&amp;height=931" width="1844" height="931" loading="lazy" alt="Workflow continuity">
   </div>
 
-  <section class="cs-section cs-section--impact">
+  <section class="cs-section">
+    <div class="cs-label">Tradeoffs</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>Filters, not free-text answers.</strong> Easier to check, but limited to what filters can express.</li>
+        <li><strong>Chat is where you ask; tokens are where you're in control.</strong> We didn't make chat the main interface.</li>
+        <li><strong>The standard filter stays.</strong> People move freely between the two.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">My role</div>
+    <div class="cs-copy">
+      <p>I was the lead designer. I owned the interaction model, the guidance and loading states, the token output, and the connection to saved views. I made the case for two key calls: building it into the object pages instead of advanced search, and the integrated view builder direction.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--impact cs-section--impact-gap">
     <div class="cs-label">Impact</div>
     <div class="cs-copy">
-      <p>While formal adoption metrics were not available at the time, early feedback showed a shift in how users approached filtering. Instead of building filters from scratch, users used Natural Language Filter to generate a starting point and refined the results from there.</p>
-      <p class="cs-impact-quote">10 of 10 internal testers said they would use it over the standard filter.</p>
+      <p>Formal adoption metrics weren't available at the time. Early feedback still showed people using it as a starting point and refining from there.</p>
+      <p class="cs-impact-quote cs-impact-quote--wide">10 of 10 internal testers said they would use it over the standard filter.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--last">
+    <div class="cs-label">Reflection</div>
+    <div class="cs-copy">
+      <p>The AI was most useful as a translator, not an answer machine. Showing the interpretation made mistakes visible, and visible mistakes are what let people trust the rest.</p>
     </div>
   </section>
 

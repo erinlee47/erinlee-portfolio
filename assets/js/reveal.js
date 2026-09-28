@@ -1,7 +1,7 @@
 // Case study scroll reveal: headings, copy and media fade and rise 12px as they enter view.
 (() => {
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const els = Array.from(document.querySelectorAll('main h1, main p, main img, main video'));
+  const els = Array.from(document.querySelectorAll('main h1, main p, main li, main img, main video'));
   const hidden = new Set(els);
   const ease = 'cubic-bezier(.22,.61,.36,1)';
   const show = el => {
