@@ -18,6 +18,11 @@
     box-shadow: 0 30px 70px -25px rgba(20,16,60,.35), 0 0 0 1px rgba(20,16,60,.06); transform-origin: 0 0; transition: transform 1.1s cubic-bezier(.65,0,.25,1); }
   .nocam { transition: none !important; }
   .base { position: absolute; inset: 0; width: 1440px; height: 1024px; }
+  .fixDivider { position: absolute; left: 1012px; top: 114px; width: 6px; height: 64px; background: #FFFFFF; }
+  /* the header's bottom shadow, borrowed from just right of the divider */
+  .fixShadow { clip-path: inset(178px 414px 838px 1020px); transform: translateX(-8px); }
+  /* rows 300-324 of the same columns, moved up over the scrollbar mark at 254-278 */
+  .fixScroll { clip-path: inset(299px 418px 700px 998px); transform: translateY(-45px); }
   /* Create Content, busy */
   .busy { position: absolute; left: 1032px; top: 194px; width: 392px; height: 40px; background: #522BA2; border-radius: 3px; color: #fff; font-size: 16px;
     display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; transition: opacity .2s ease; }
@@ -50,6 +55,9 @@
 <div class="stage" id="stage" role="img" aria-label="AI Applied Outreach: one click on Create Content turns a generic email into a personalized draft using relationship insights">
   <div class="win" id="win">
     <img class="base" src="outreach-ui/email.webp" alt="">
+    <!-- clean-ups on the design: no dark divider beside the Insights header, no scrollbar mark beside the email -->
+    <div class="fixDivider"></div><img class="base fixShadow" src="outreach-ui/email.webp" alt="">
+    <img class="base fixScroll" src="outreach-ui/email.webp" alt="">
     <div class="body" id="body"><div class="skel" id="skel"><i style="width:18%"></i><i style="width:97%"></i><i style="width:90%"></i><i style="width:94%"></i><i style="width:62%"></i><i style="width:96%"></i><i style="width:40%"></i></div>
       <div class="text" id="text"></div></div>
     <div class="press" id="press"></div>
