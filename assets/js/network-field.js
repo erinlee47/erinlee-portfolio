@@ -4,8 +4,8 @@
   if (customElements.get('network-field')) return;
 
   const LINK = 150;          // px: points closer than this connect
-  const DENSITY = 1 / 11000; // points per px² of hero
-  const SPEED = 7;           // px per second, max drift
+  const DENSITY = 1 / 17000; // points per px² of hero
+  const SPEED = 4;           // px per second, max drift
   const INK = '14,17,22';
 
   let seed = 11;
@@ -82,7 +82,7 @@
           if (dx > LINK || dx < -LINK || dy > LINK || dy < -LINK) continue;
           const dd = Math.hypot(dx, dy);
           if (dd < LINK) {
-            ctx.strokeStyle = `rgba(${INK},${(1 - dd / LINK) * .16})`;
+            ctx.strokeStyle = `rgba(${INK},${(1 - dd / LINK) * .13})`;
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
@@ -93,12 +93,12 @@
         for (const p of pts) {
           const dd = Math.hypot(p.x - m.x, p.y - m.y);
           if (dd < LINK * 1.3) {
-            ctx.strokeStyle = `rgba(${INK},${(1 - dd / (LINK * 1.3)) * .22})`;
+            ctx.strokeStyle = `rgba(${INK},${(1 - dd / (LINK * 1.3)) * .12})`;
             ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(p.x, p.y); ctx.stroke();
           }
         }
       }
-      ctx.fillStyle = `rgba(${INK},.28)`;
+      ctx.fillStyle = `rgba(${INK},.22)`;
       for (const p of pts) { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
     }
   }
