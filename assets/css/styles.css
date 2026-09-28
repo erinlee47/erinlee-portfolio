@@ -81,7 +81,7 @@ img, video { display: block; max-width: 100%; }
 }
 .hero shader-gradient { z-index: 0; }
 .hero__field { top: 0; bottom: 0; left: 0; right: calc(372px + var(--edge)); z-index: 0; }
-@media (max-width: 1100px) { .hero__field { display: none !important; } }
+@media (max-width: 1100px) { .hero__field { right: 0; } }
 .hero__main {
   position: relative; z-index: 1;
   padding: 128px var(--pad) 104px;
