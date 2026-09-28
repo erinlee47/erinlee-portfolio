@@ -261,6 +261,9 @@ img, video { display: block; max-width: 100%; }
 .cs-media--tight { padding-bottom: 48px; }
 .cs-media--stack { padding-bottom: 24px; display: flex; flex-direction: column; gap: 24px; }
 .cs-media--pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+/* a single portrait image, same size it would have in a pair */
+.media--solo { width: calc(50% - 12px); margin: 0 auto; }
+@media (max-width: 900px) { .media--solo { width: 100%; } }
 
 .cs-section {
   padding: 64px var(--pad) 48px;
