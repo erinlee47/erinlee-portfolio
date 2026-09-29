@@ -3,9 +3,8 @@
 (() => {
   if (customElements.get('resolve-field')) return;
 
-  const LINK = 120;          // px: while tangled, points closer than this connect
-  const DENSITY = 1 / 34000; // points per px² of the field
-  const SPEED = 12;          // px per second, drift while tangled
+  const LINK = 170;          // px: while tangled, points closer than this connect
+    const SPEED = 12;          // px per second, drift while tangled
   const DELAY = 700;         // ms of tangle before it starts to settle
   const DUR = 2400;          // ms for each point to reach its place
   const INK = '14,17,22';
@@ -49,15 +48,14 @@
       this.ctx.setTransform(d, 0, 0, d, 0, 0);
       this.w = w; this.h = h;
       const narrow = w < 700;
-      const rows = narrow ? 2 : 3;
-      const n = Math.max(rows * 4, Math.round(w * h * DENSITY));
-      const cols = Math.ceil(n / rows);
+      // always 12 dots: 3 rows of 4
+      const rows = 3, cols = 4;
       // where the clean rows end up: clear of the text. Right of it on desktop, above the headline on phones
-      const x0 = w * (narrow ? .64 : .7), x1 = w * (narrow ? .92 : .95);
-      const y0 = h * (narrow ? .02 : .34), y1 = h * (narrow ? .07 : .66);
+      const x0 = w * (narrow ? .68 : .72), x1 = w * (narrow ? .92 : .93);
+      const y0 = h * (narrow ? .015 : .34), y1 = h * (narrow ? .085 : .66);
       // where the knot starts: one dense, messy cluster around the same spot
       const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
-      const rx = narrow ? w * .2 : w * .16, ry = narrow ? h * .05 : h * .22;
+      const rx = narrow ? w * .14 : w * .11, ry = narrow ? h * .05 : h * .17;
       seed = 11;
       this.pts = [];
       for (let i = 0; i < rows * cols; i++) {
