@@ -303,6 +303,8 @@ img, video { display: block; max-width: 100%; }
 .cs-split__title { font-family: var(--serif); font-size: 30px; letter-spacing: -.01em; }
 .cs-split__col p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--text); text-wrap: pretty; }
 .cs-split__col .media { margin-top: auto; } /* media sits on the bottom edge, so paired columns line up */
+/* one animation beside its text: the text sits centred against the media */
+.cs-split--feature .cs-split__col:first-child { justify-content: center; max-width: 52ch; }
 
 .next {
   display: flex; justify-content: space-between; align-items: baseline; gap: 24px;

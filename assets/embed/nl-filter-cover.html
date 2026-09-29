@@ -640,7 +640,14 @@
           await endLoop(1400);
         }
       },
-      still() { setContent(SF); reset(); stageSetup(CAM_PANEL); }
+      still() {
+        setContent(SF); reset(); stageSetup(CAM_PANEL, async () => {
+          openAsk();
+          $('work').classList.remove('gone'); $('work').classList.add('in');
+          document.querySelectorAll('.fl').forEach(e => e.classList.add('on'));
+          await finish(false);
+        });
+      }
     },
 
     // Between asking and answering: reasoning in the chat, the table loading

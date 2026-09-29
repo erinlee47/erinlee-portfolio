@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=10">
+<link rel="stylesheet" href="assets/css/styles.css?v=11">
 <script src="assets/js/reveal.js?v=2" defer></script>
 </head>
 <body>
@@ -150,16 +150,14 @@
     <iframe class="media media--embed" src="assets/embed/nl-filter-cover.html" title="Natural Language Filter: a plain-language request becomes filters and a filtered table" loading="lazy"></iframe>
   </div>
 
-  <div class="cs-split">
+  <div class="cs-split cs-split--feature">
     <div class="cs-split__col">
-      <div class="cs-split__title">Prompt guidance</div>
-      <p>Examples show what you can ask, without having to learn the data model.</p>
-      <iframe class="media media--embed media--portrait" src="assets/embed/nl-filter-cover.html?scene=guidance&amp;v=2" title="Prompt guidance: filters are set for the request, then follow-up suggestions appear" loading="lazy"></iframe>
+      <div class="cs-split__title">Guidance while it works</div>
+      <p>Instead of a spinner, the chat lists each filter as it's set, so you see how your question was read before the table loads.</p>
+      <p>When it's done, suggestions show what you can do next: fix the view, go back to the default, or save it.</p>
     </div>
     <div class="cs-split__col">
-      <div class="cs-split__title">Loading state</div>
-      <p>Instead of a spinner, you see each filter being set.</p>
-      <iframe class="media media--embed media--portrait" src="assets/embed/nl-filter-cover.html?scene=loading" title="Loading state: the chat lists each filter while the table loads" loading="lazy"></iframe>
+      <iframe class="media media--embed media--portrait" src="assets/embed/nl-filter-cover.html?scene=guidance&amp;v=3" title="The chat lists each filter as it's set, then suggests next steps" loading="lazy"></iframe>
     </div>
   </div>
 
