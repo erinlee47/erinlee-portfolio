@@ -54,7 +54,7 @@
       const want = Math.round(w * h * DENSITY);
       while (this.pts.length < want) {
         const a = rnd() * Math.PI * 2, v = (.35 + rnd() * .65) * SPEED;
-        this.pts.push({ x: rnd() * w, y: rnd() * h, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: .9 + rnd() * .9 });
+        this.pts.push({ x: rnd() * w, y: rnd() * h, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: 1.4 });
       }
       this.pts.length = want;
     }
@@ -73,8 +73,8 @@
       const { ctx, w, h, pts } = this;
       if (!w) return;
       ctx.clearRect(0, 0, w, h);
-      ctx.lineWidth = .7;
-      // hairlines between near neighbours, fading with distance
+      ctx.lineWidth = .8;
+      // hairlines between near neighbours
       for (let i = 0; i < pts.length; i++) {
         const a = pts[i];
         for (let j = i + 1; j < pts.length; j++) {
@@ -82,7 +82,8 @@
           if (dx > LINK || dx < -LINK || dy > LINK || dy < -LINK) continue;
           const dd = Math.hypot(dx, dy);
           if (dd < LINK) {
-            ctx.strokeStyle = `rgba(${INK},${(1 - dd / LINK) * .13})`;
+            // flat: one line weight; only a short fade at the very edge so links don't pop
+            ctx.strokeStyle = `rgba(${INK},${Math.min(1, (LINK - dd) / (LINK * .15)) * .2})`;
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
@@ -93,12 +94,12 @@
         for (const p of pts) {
           const dd = Math.hypot(p.x - m.x, p.y - m.y);
           if (dd < LINK * 1.3) {
-            ctx.strokeStyle = `rgba(${INK},${(1 - dd / (LINK * 1.3)) * .12})`;
+            ctx.strokeStyle = `rgba(${INK},${Math.min(1, (LINK * 1.3 - dd) / (LINK * .2)) * .2})`;
             ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(p.x, p.y); ctx.stroke();
           }
         }
       }
-      ctx.fillStyle = `rgba(${INK},.22)`;
+      ctx.fillStyle = `rgba(${INK},.4)`;
       for (const p of pts) { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
     }
   }
