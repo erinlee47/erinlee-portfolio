@@ -83,7 +83,7 @@
           const dd = Math.hypot(dx, dy);
           if (dd < LINK) {
             // flat: one line weight; only a short fade at the very edge so links don't pop
-            ctx.strokeStyle = `rgba(${INK},${Math.min(1, (LINK - dd) / (LINK * .15)) * .14})`;
+            ctx.strokeStyle = `rgba(${INK},${Math.min(1, (LINK - dd) / (LINK * .15)) * .056})`;
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
@@ -94,7 +94,7 @@
         for (const p of pts) {
           const dd = Math.hypot(p.x - m.x, p.y - m.y);
           if (dd < LINK * 1.3) {
-            ctx.strokeStyle = `rgba(${INK},${Math.min(1, (LINK * 1.3 - dd) / (LINK * .2)) * .14})`;
+            ctx.strokeStyle = `rgba(${INK},${Math.min(1, (LINK * 1.3 - dd) / (LINK * .2)) * .056})`;
             ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(p.x, p.y); ctx.stroke();
           }
         }
