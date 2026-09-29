@@ -3,13 +3,13 @@
 (() => {
   if (customElements.get('resolve-field')) return;
 
-  const LINK = 150;          // px: while tangled, points closer than this connect
-  const DENSITY = 1 / 17000; // points per px² of the field
+  const LINK = 120;          // px: while tangled, points closer than this connect
+  const DENSITY = 1 / 34000; // points per px² of the field
   const SPEED = 12;          // px per second, drift while tangled
   const DELAY = 700;         // ms of tangle before it starts to settle
   const DUR = 2400;          // ms for each point to reach its place
   const INK = '14,17,22';
-  const LINE_TANGLE = .11, LINE_ORDER = .16, DOT = .4;
+  const LINE_TANGLE = .09, LINE_ORDER = .14, DOT = .4;
 
   let seed = 11;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -49,15 +49,15 @@
       this.ctx.setTransform(d, 0, 0, d, 0, 0);
       this.w = w; this.h = h;
       const narrow = w < 700;
-      const rows = narrow ? 2 : 5;
+      const rows = narrow ? 2 : 3;
       const n = Math.max(rows * 4, Math.round(w * h * DENSITY));
       const cols = Math.ceil(n / rows);
       // where the clean rows end up: clear of the text. Right of it on desktop, above the headline on phones
       const x0 = w * (narrow ? .64 : .7), x1 = w * (narrow ? .92 : .95);
-      const y0 = h * (narrow ? .02 : .22), y1 = h * (narrow ? .07 : .78);
+      const y0 = h * (narrow ? .02 : .34), y1 = h * (narrow ? .07 : .66);
       // where the knot starts: one dense, messy cluster around the same spot
       const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
-      const rx = narrow ? w * .2 : w * .19, ry = narrow ? h * .05 : h * .3;
+      const rx = narrow ? w * .2 : w * .16, ry = narrow ? h * .05 : h * .22;
       seed = 11;
       this.pts = [];
       for (let i = 0; i < rows * cols; i++) {
