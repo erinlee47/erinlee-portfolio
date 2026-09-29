@@ -117,10 +117,11 @@
   <section class="cs-section">
     <div class="cs-label">Tradeoffs</div>
     <div class="cs-copy">
+      <p>Picking the integrated view builder meant accepting a few limits on purpose:</p>
       <ul>
-        <li><strong>Filters, not free-text answers.</strong> Easier to check, but limited to what filters can express.</li>
-        <li><strong>Chat is where you ask; tokens are where you're in control.</strong> We didn't make chat the main interface.</li>
-        <li><strong>The standard filter stays.</strong> People move freely between the two.</li>
+        <li><strong>Filters, not free-text answers.</strong> Every result is a set of filters you can check. That keeps it trustworthy, but it can only answer questions filters can express.</li>
+        <li><strong>Chat for asking, not for controlling.</strong> You type your question in the chat panel, but you adjust the result in the filter tokens, not by chatting back and forth.</li>
+        <li><strong>The old way stays.</strong> We didn't replace the standard filter. People can switch between asking a question and building filters by hand.</li>
       </ul>
     </div>
   </section>
@@ -128,7 +129,7 @@
   <section class="cs-section">
     <div class="cs-label">The hard part</div>
     <div class="cs-copy">
-      <p><strong>When the AI reads you wrong.</strong> Every firm names things differently, so misreads will happen. I designed them to be cheap to catch and fix:</p>
+      <p><strong>When the AI reads you wrong.</strong> Editable filters make mistakes visible, but they don't stop them. Every firm names things differently, so misreads will happen. I designed them to be cheap to catch and fix:</p>
       <ul>
         <li>Prompt guidance shows which kinds of questions work.</li>
         <li>The loading state lists each condition as it's set, so you watch the translation happen.</li>

@@ -111,10 +111,11 @@
   <section class="cs-section">
     <div class="cs-label">Tradeoffs</div>
     <div class="cs-copy">
+      <p>Going inline shaped what we chose to leave out:</p>
       <ul>
-        <li><strong>We rejected the summary panel.</strong> It's the obvious transparency pattern, but it didn't build trust.</li>
-        <li><strong>We don't auto-pick between plausible values.</strong> It costs a click, and it saves a wrong record.</li>
-        <li><strong>The AI prepares, and the person submits.</strong></li>
+        <li><strong>No summary panel.</strong> It's the obvious way to show the AI's work, but in testing it didn't build trust, so it didn't ship.</li>
+        <li><strong>No guessing between plausible values.</strong> When an email could mean two things, the person picks. It costs a click, and it saves a wrong record.</li>
+        <li><strong>No auto-submit.</strong> The AI fills in the form. The person reviews it and submits.</li>
       </ul>
     </div>
   </section>
@@ -122,7 +123,7 @@
   <section class="cs-section">
     <div class="cs-label">The hard part</div>
     <div class="cs-copy">
-      <p><strong>Showing the AI's work without cluttering the form.</strong> A 200-field form is already a lot. Badging every AI field would make it worse, but hiding them brings the anxiety back. So I split the job:</p>
+      <p><strong>Showing the AI's work without cluttering the form.</strong> Going inline meant the AI's suggestions live on the form itself. But a 200-field form is already a lot. Badging every AI field would make it worse, and hiding them brings the anxiety back. So I split the job:</p>
       <ul>
         <li><strong>Reviewing:</strong> a highlight toggle tints every AI-filled field and adds a "(pre-filled)" label, so it doesn't rely on color alone.</li>
         <li><strong>Working:</strong> toggle it off and the form returns to its normal, tighter layout.</li>
