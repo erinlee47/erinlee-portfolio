@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=11">
+<link rel="stylesheet" href="assets/css/styles.css?v=12">
 <script src="assets/js/reveal.js?v=2" defer></script>
 </head>
 <body>
@@ -99,8 +99,12 @@
   <section class="cs-section">
     <div class="cs-label">Exploration</div>
     <div class="cs-copy">
-      <p>I tested two directions: AI suggestions <strong>inline</strong> beside each field, and a <strong>summary panel</strong> at the top listing everything the AI had filled.</p>
-      <p>The panel looked more "transparent," but people skimmed it and still questioned what had changed. It added a step without adding confidence. Inline suggestions, right where people expected to type, made them feel in control, even though the system had done most of the work.</p>
+      <p>I tested two directions:</p>
+      <ul>
+        <li><strong>Inline suggestions:</strong> the AI's suggestion sits beside each field, right where people type.</li>
+        <li><strong>Summary panel:</strong> a panel at the top lists everything the AI filled, before people touch the form.</li>
+      </ul>
+      <p>Testing settled it in favor of inline.</p>
     </div>
   </section>
 
@@ -111,12 +115,19 @@
   <section class="cs-section">
     <div class="cs-label">Tradeoffs</div>
     <div class="cs-copy">
-      <p>Going inline shaped what we chose to leave out:</p>
-      <ul>
-        <li><strong>No summary panel.</strong> It's the obvious way to show the AI's work, but in testing it didn't build trust, so it didn't ship.</li>
-        <li><strong>No guessing between plausible values.</strong> When an email could mean two things, the person picks. It costs a click, and it saves a wrong record.</li>
-        <li><strong>No auto-submit.</strong> The AI fills in the form. The person reviews it and submits.</li>
-      </ul>
+      <p>Here's what testing showed about each:</p>
+      <div class="tradeoffs">
+        <div class="tradeoff tradeoff--chosen">
+          <div class="tradeoff__name">Inline suggestions <span class="tradeoff__tag">Chosen</span></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Suggestions appear right where people expect to type. They felt in control, even though the system did most of the work, and that made them far more willing to trust what they saw.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>The AI's work is spread across a 200-field form, so it's harder to see everything it filled at once.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Summary panel</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>All of the AI's work in one place. On paper, it looked like the more transparent option.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>People skimmed it and still questioned what had changed. It added a step without adding confidence.</p></div>
+        </div>
+      </div>
     </div>
   </section>
 

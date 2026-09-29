@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=11">
+<link rel="stylesheet" href="assets/css/styles.css?v=12">
 <script src="assets/js/reveal.js?v=2" defer></script>
 </head>
 <body>
@@ -101,10 +101,11 @@
   <section class="cs-section">
     <div class="cs-label">Exploration</div>
     <div class="cs-copy">
+      <p>I explored three directions:</p>
       <ul>
-        <li><strong>Integrated view builder (chosen):</strong> plain language in, editable filter tokens out, right in context. Ask like a conversation, adjust like a filter.</li>
-        <li><strong>AI-enhanced filter builder:</strong> familiar, but suggestions don't help if you don't know what fields exist.</li>
-        <li><strong>Conversational overlay:</strong> easy to ask, but you couldn't tweak one condition without starting over.</li>
+        <li><strong>Integrated view builder:</strong> plain language in, editable filter tokens out, right in context.</li>
+        <li><strong>AI-enhanced filter builder:</strong> the familiar filter UI, with AI suggestions added.</li>
+        <li><strong>Conversational overlay:</strong> a chat on top of the grid that returns the results.</li>
       </ul>
       <p>I pushed for the integrated view builder. For regulated professionals who need to trust what they see before acting on it, that transparency wasn't optional.</p>
     </div>
@@ -117,12 +118,24 @@
   <section class="cs-section">
     <div class="cs-label">Tradeoffs</div>
     <div class="cs-copy">
-      <p>Picking the integrated view builder meant accepting a few limits on purpose:</p>
-      <ul>
-        <li><strong>Filters, not free-text answers.</strong> Every result is a set of filters you can check. That keeps it trustworthy, but it can only answer questions filters can express.</li>
-        <li><strong>Chat for asking, not for controlling.</strong> You type your question in the chat panel, but you adjust the result in the filter tokens, not by chatting back and forth.</li>
-        <li><strong>The old way stays.</strong> We didn't replace the standard filter. People can switch between asking a question and building filters by hand.</li>
-      </ul>
+      <p>Each direction was good at something. Here's how they compared:</p>
+      <div class="tradeoffs">
+        <div class="tradeoff tradeoff--chosen">
+          <div class="tradeoff__name">Integrated view builder <span class="tradeoff__tag">Chosen</span></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Ask like a conversation, adjust like a filter. Every result is a set of filters you can check and fix one at a time, and it uses DealCloud's existing filter model, so saved views keep working.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>It can only answer questions filters can express, so the standard filter had to stay alongside it.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">AI-enhanced filter builder</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Familiar. It kept the UI people already knew, so there was little new to learn.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>Suggestions don't help if you don't know which fields exist, and that was the real problem.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Conversational overlay</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>The easiest way to ask. Just type the question.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>It broke down the moment people wanted to tweak a result. There was no way to adjust one condition without asking the whole question again.</p></div>
+        </div>
+      </div>
     </div>
   </section>
 

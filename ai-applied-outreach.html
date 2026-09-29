@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=11">
+<link rel="stylesheet" href="assets/css/styles.css?v=12">
 <script src="assets/js/reveal.js?v=2" defer></script>
 </head>
 <body>
@@ -117,12 +117,19 @@
   <section class="cs-section">
     <div class="cs-label">Tradeoffs</div>
     <div class="cs-copy">
-      <p>Reframing around relationship data came with costs we chose to take:</p>
-      <ul>
-        <li><strong>We dropped the talking points,</strong> even though they were the quickest to build.</li>
-        <li><strong>The reframe took longer.</strong> It needed buy-in from multiple teams. The payoff was a feature built on data only DealCloud has.</li>
-        <li><strong>The AI drafts, but never sends.</strong> An email only goes out when the person sends it.</li>
-      </ul>
+      <p>Here's how the two concepts compared:</p>
+      <div class="tradeoffs">
+        <div class="tradeoff tradeoff--chosen">
+          <div class="tradeoff__name">Context-driven drafts <span class="tradeoff__tag">Chosen</span></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Built on relationship and firm data only DealCloud has, so drafts can actually be personal. The AI brings the right context to the moment of writing.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>It took longer, and it needed buy-in from multiple teams.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Talking points at the end of the flow</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Quick to build.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>It added friction and did little to reduce effort or build confidence. It also left the firm's relationship data unused.</p></div>
+        </div>
+      </div>
     </div>
   </section>
 

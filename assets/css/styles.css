@@ -291,6 +291,14 @@ img, video { display: block; max-width: 100%; }
 .cs-copy li::marker { color: var(--text-meta); }
 .cs-copy strong { font-weight: 600; color: var(--text-strong); }
 .cs-copy .cs-question { font-family: var(--serif); font-size: 28px; line-height: 1.35; color: var(--ink); max-width: 34ch; }
+/* Tradeoffs: one card per explored direction, pros and cons side by side */
+.cs-copy .tradeoffs { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+.tradeoff { padding: 18px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.tradeoff__name { font-weight: 600; color: var(--text-strong); font-size: 18px; display: flex; align-items: center; gap: 10px; }
+.tradeoff__tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); border: 1px solid currentColor; border-radius: 999px; padding: 2px 8px; font-weight: 400; }
+.tradeoff__row { display: grid; grid-template-columns: 56px minmax(0,1fr); gap: 12px; align-items: baseline; }
+.tradeoff__k { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-meta); }
+.cs-copy .tradeoff__row p { font-size: 17px; line-height: 1.6; }
 .cs-impact-quote, .cs-copy .cs-impact-quote {
   margin: 0; font-family: var(--serif); font-size: 34px; line-height: 1.3; color: var(--ink);
   max-width: 22ch; text-wrap: pretty;

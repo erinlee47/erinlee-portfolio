@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=7">
+<link rel="stylesheet" href="assets/css/styles.css?v=12">
 <script src="assets/js/reveal.js?v=2" defer></script>
 </head>
 <body>
@@ -98,13 +98,13 @@
     <div class="cs-copy">
       <p>Instead of a sixth restyle, I asked a different question: what should sit at the center of the screen? I explored four directions, each with a different answer.</p>
       <ul>
-        <li><strong>Testimony:</strong> the record at the center, written like a court transcript. Very defensible, but slow to scan.</li>
+        <li><strong>Testimony:</strong> the record at the center, written like a court transcript.</li>
         <li><strong>Margin Notes:</strong> the vendor's documents at the center, with the agent's findings pinned beside the passages they came from.</li>
-        <li><strong>Inspection Lanes:</strong> checks as tickets moving across a board. Fast, but it hid the reasoning, and the tone felt too playful for audit work.</li>
-        <li><strong>The Route:</strong> a transit-style map with one check at a time. Clear about where you are, but too slow for someone doing this all week.</li>
+        <li><strong>Inspection Lanes:</strong> checks as tickets moving across a board.</li>
+        <li><strong>The Route:</strong> a transit-style map with one check at a time.</li>
       </ul>
       <p>I picked Margin Notes because the proof was the main surface. Then I built the existing stepper as a working prototype and compared the two on what reviewers need every day.</p>
-      <p>Margin Notes won on proof. The stepper won on everything else: the at-a-glance overview, speed across many reviews, fitting into the product, and working on a phone. It was the better idea but the worse tool. So I kept the stepper and brought in two pieces: Margin Notes' evidence view, and Testimony's named record.</p>
+      <p>Margin Notes was the better idea but the worse tool. So I kept the stepper and brought in two pieces: Margin Notes' evidence view, and Testimony's named record.</p>
     </div>
   </section>
 
@@ -115,12 +115,34 @@
   <section class="cs-section">
     <div class="cs-label">Tradeoffs</div>
     <div class="cs-copy">
-      <p>Combining the stepper with Margin Notes meant making a few calls:</p>
-      <ul>
-        <li><strong>I didn't build my favorite direction.</strong> Margin Notes made the proof the whole screen, but someone doing many reviews a week needs the overview first. Its best idea lives on as the evidence panel.</li>
-        <li><strong>The reviewer can still overrule the agent.</strong> Approval isn't blocked at High risk. Instead, "Send back" becomes the main button and approving needs a written reason, so overruling is a deliberate, recorded act.</li>
-        <li><strong>The record is a log, not a chat.</strong> The record I borrowed from Testimony stays a numbered log with names and times. A conversation reads as talk. A log reads as something a person can be held to.</li>
-      </ul>
+      <p>Every direction was good at something. Here's how they compared, including the stepper I tested against:</p>
+      <div class="tradeoffs">
+        <div class="tradeoff tradeoff--chosen">
+          <div class="tradeoff__name">The stepper, with pieces of the others <span class="tradeoff__tag">Chosen</span></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>The at-a-glance overview, speed across many reviews, fitting into the product, and working on a phone.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>On its own it didn't show where answers came from, so it needed Margin Notes' evidence view and Testimony's named record.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Margin Notes</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>The proof is the main surface. Every finding sits beside the passage it came from.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>Someone doing many reviews a week needs the overview first. It was the better idea but the worse tool.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Testimony</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Very defensible. The record reads like something a person can be held to.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>Slow to scan.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Inspection Lanes</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Fast to move through.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>It hid the reasoning, and the tone felt too playful for audit work.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">The Route</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Clear about where you are.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>Too slow for someone doing this all week.</p></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -141,6 +163,7 @@
     <div class="cs-label">Final solution</div>
     <div class="cs-copy">
       <p>The agent shows its plan, runs ten checks and pauses when it needs a person. The stepper now says "Waiting for you" when that happens. Every result links to its evidence, and a numbered, timestamped record sits in the main column, ready to copy into an audit file.</p>
+      <p>Two details keep the reviewer accountable. At High risk, approval isn't blocked, but "Send back" becomes the main button and approving needs a written reason, so overruling the agent is a deliberate, recorded act. And the record is a numbered log with names and times, not a chat thread. A conversation reads as talk. A log reads as something a person can be held to.</p>
       <p class="pullquote">The agent does the reading. The reviewer needs to be able to reread any part of it in one click.</p>
     </div>
   </section>
