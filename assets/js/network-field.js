@@ -5,7 +5,7 @@
 
   const LINK = 150;          // px: points closer than this connect
   const DENSITY = 1 / 17000; // points per px² of hero
-  const SPEED = 4;           // px per second, max drift
+  const SPEED = 12;          // px per second, max drift
   const INK = '14,17,22';
 
   let seed = 11;
