@@ -622,41 +622,18 @@
 
     // Suggested prompts show people what they can ask; new suggestions follow the result
     guidance: {
-      label: 'View Builder suggests example prompts; picking one fills the request and returns filtered results with follow-up suggestions',
+      label: 'View Builder sets filters for a request and returns results with follow-up suggestions',
       async run() {
         while (true) {
+          // starts mid-way: the request is in and the filters are being set
           setContent(SF); reset();
-          await stageSetup(CAM_PANEL, () => moveCursor({ x: 1280, y: 560 }));
+          await stageSetup(CAM_PANEL, () => {
+            openAsk(); startLoading();
+            ['work', 'cancel'].forEach(id => { $(id).classList.remove('gone'); $(id).classList.add('in'); });
+            document.querySelectorAll('.fl').forEach(e => e.classList.add('on'));
+          });
           stage.classList.remove('fade');
-          await wait(700);
-          const lis = [...document.querySelectorAll('.intro-list li')];
-          for (const li of lis) { li.classList.add('hl'); await wait(650); li.classList.remove('hl'); }
-          await wait(200);
-          cursor.style.opacity = 1;
-          await cursorTo(lis[0], -40, 2);
-          lis[0].classList.add('hl');
-          await click();
-          await wait(250);
-          const input = $('input');
-          input.classList.add('focus');
-          input.innerHTML = '<span id="typed"></span><span class="caret"></span>';
-          const typed = $('typed');
-          for (const ch of SF.ask) { typed.textContent += ch; await wait(12); }
-          await wait(300);
-          await cursorTo($('send'));
-          await click($('send'));
-          cursor.style.opacity = 0;
-          input.classList.remove('focus');
-          input.innerHTML = '<span class="ph">Tell me what you are looking for</span>';
-          document.querySelectorAll('.intro').forEach(e => e.classList.add('gone'));
-          lis[0].classList.remove('hl');
-          await show($('ask'));
-          await wait(400);
-          startLoading();
-          await show($('work')); await show($('cancel'));
-          await wait(200);
-          for (const f of document.querySelectorAll('.fl')) { f.classList.add('on'); await wait(260); }
-          await wait(200);
+          await wait(1100);
           await finish(true);
           await wait(500);
           for (const sug of document.querySelectorAll('#later .sug')) { sug.classList.add('glow'); await wait(650); sug.classList.remove('glow'); }
