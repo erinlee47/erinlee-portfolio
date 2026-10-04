@@ -259,6 +259,16 @@ img, video { display: block; max-width: 100%; }
 }
 .cs-cover { background: var(--band); padding: 56px var(--pad); }
 .media--embed { display: block; aspect-ratio: 3 / 2; border: 0; overflow: hidden; }
+/* a live embed shown as a window floating on the shared gradient backdrop */
+.media-frame {
+  aspect-ratio: 3 / 2; overflow: hidden; display: grid; place-items: center;
+  background: #E6E3F4 url(../images/embed-bg.jpg) center / cover no-repeat;
+}
+.media-frame iframe {
+  /* full size, then scaled down: the embed keeps its desktop layout inside the smaller window */
+  width: 100%; height: 100%; transform: scale(.8); border: 0; display: block; background: #FFFFFF; border-radius: 18px;
+  box-shadow: 0 32px 75px -22px rgba(40,30,80,.38);
+}
 .media--embed.media--portrait { aspect-ratio: 4 / 5; }
 .media--embed.media--43 { aspect-ratio: 4 / 3; }
 .cs-media { padding: 0 var(--pad) 56px; }
@@ -367,6 +377,8 @@ img, video { display: block; max-width: 100%; }
   .cs-hero__lede { font-size: 18px; }
   .meta { grid-template-columns: 1fr 1fr; gap: 20px; padding-bottom: 36px; }
   .cs-cover { padding: 24px var(--pad); }
+  .media-frame { aspect-ratio: 4 / 5; }
+  .media-frame iframe { width: 90%; height: 92%; transform: none; border-radius: 10px; }
   .cs-media { padding-bottom: 40px; }
   .cs-media--pair { grid-template-columns: 1fr; }
   .cs-section { grid-template-columns: 1fr; gap: 16px; padding-top: 48px; padding-bottom: 36px; }
