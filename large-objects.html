@@ -94,13 +94,10 @@
   </section>
 
   <section class="cs-section">
-    <div class="cs-label">Two constraints</div>
+    <div class="cs-label">One constraint</div>
     <div class="cs-copy">
-      <p>Two things shaped every option, and neither was about users.</p>
-      <ul>
-        <li><strong>The design system had limited chart guidance.</strong> It did have some data visualization, just not enough to cover a page like this. Every new chart type would be a pattern someone had to define, build and maintain. So the question became: how little chart vocabulary can this get away with?</li>
-        <li><strong>AI was outside the scope.</strong> Celeste, Intapp's new AI capability, was coming, but its team had not committed to what it could do. My PM kept both Celeste and <a href="natural-language-filter.html">Natural Language Filter</a> outside the scope of this project. So no option was allowed to depend on AI.</li>
-      </ul>
+      <p>One thing shaped every option, and it was not about users.</p>
+      <p><strong>The design system had limited chart guidance.</strong> It did have some data visualization, just not enough to cover a page like this. Every new chart type would be a pattern someone had to define, build and maintain. So the question became: how little chart vocabulary can this get away with?</p>
     </div>
   </section>
 
@@ -111,7 +108,7 @@
       <ul>
         <li><strong>Chart leads:</strong> open on a trend over time. Select a range of bars and the table below filters to it. The bet was that on a list this large, the first question is "what is changing?", and a chart can answer that from counts alone.</li>
         <li><strong>Table leads:</strong> keep the table people know, group it, and add a small trend inside each grouped row. The bet was that the smallest change is the safest one: people already trust the table, so bring the analysis to it.</li>
-        <li><strong>AI leads (Ask Celeste):</strong> skip the dashboard. Ask in plain language; the answer shows the filters it used and the records behind it. The bet was that a question is faster than any chart, if the AI can be relied on. On top of the Celeste team's direction, I also proposed including <a href="natural-language-filter.html">Natural Language Filter</a> as an option here, since it already turns a plain-language question into filters people can check. My PM kept both outside the scope of this project.</li>
+        <li><strong>AI leads (Ask Celeste):</strong> skip the dashboard. Ask in plain language; the answer shows the filters it used and the records behind it. The bet was that a question is faster than any chart, if the AI can be relied on. On top of the Celeste team's direction, I also proposed including <a href="natural-language-filter.html">Natural Language Filter</a> as an option here, since it already turns a plain-language question into filters people can check. My PM and the engineering team evaluated it.</li>
       </ul>
     </div>
   </section>
@@ -138,7 +135,7 @@
         <div class="tradeoff">
           <div class="tradeoff__name">AI leads (Ask Celeste)</div>
           <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>It avoids the chart problem entirely, and no rows load until asked.</p></div>
-          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>My PM kept both Celeste and Natural Language Filter outside the scope of this project, and the Celeste team's direction was still too far from what I could design against. So I dropped this option. Answers are also hard to scan or repeat, and people must know what to ask.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>My PM and the engineering team evaluated this option and kept both Celeste and Natural Language Filter outside the scope of this project. The Celeste team's direction was also still too far from what I could design against. So I dropped it. Answers are also hard to scan or repeat, and people must know what to ask.</p></div>
         </div>
       </div>
       <p>I went with Chart leads. Table leads kept the slow load, and AI leads was outside the project's scope. That left two things to work out inside the chart direction: what information to show, and what colour to show it in.</p>
@@ -252,7 +249,7 @@
   <section class="cs-section cs-section--last">
     <div class="cs-label">Reflection</div>
     <div class="cs-copy">
-      <p>When people are required to keep everything, the job is not to help them find one thing. It is to help them understand the whole without paying to load it. And when two things are still undefined, the most useful design is the one that works without them and leaves a clear place for them to arrive.</p>
+      <p>When people are required to keep everything, the job is not to help them find one thing. It is to help them understand the whole without paying to load it. And when something is still undefined, the most useful design is the one that works without it and leaves a clear place for it to arrive.</p>
     </div>
   </section>
 
