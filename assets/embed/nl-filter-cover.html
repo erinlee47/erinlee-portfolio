@@ -71,7 +71,7 @@
   .body.closed .pwrap .panel { transform: translateX(105%); opacity: 0; }
   /* Before View Builder opens, the table runs the full width of the window; it narrows as the panel arrives */
   .table, .title { transition: margin-right .6s cubic-bezier(.2,.9,.3,1); position: relative; z-index: 0; }
-  .body.closed .table, .body.closed .title { margin-right: -426px; }
+  .body.closed .table, .body.closed .title, .body.closed .tokens { margin-right: -426px; }
   .pwrap { min-width: 0; overflow: hidden; display: flex; }
   .pwrap .panel { flex: none; width: 406px; }
   .app { transform-origin: 0 0; transition: transform 1.1s cubic-bezier(.65,0,.25,1), opacity .2s ease; }
@@ -693,7 +693,7 @@
 
     // Generated filters are ordinary tokens: switch one off, remove one, the table follows
     filters: {
-      label: 'Generated filters appear as editable tokens; switching one off or removing it updates the table',
+      label: 'Generated filters appear as editable tokens; switching one off updates the table',
       async run() {
         while (true) {
           setContent(TIER); reset();
@@ -715,25 +715,7 @@
           await click();
           t3.querySelector('.toggle').classList.add('off'); t3.classList.add('dim');
           await refreshRows([...banks, ...moreBanks.slice(0, 3)]);
-          await wait(1300);
-
-          // Remove the date range: the token goes and the table widens again
-          const t4 = $('tk4');
-          await cursorTo(t4.querySelector('.rm'), 4, 4);
-          await click();
-          t4.classList.add('removing');
-          await wait(300);
-          t4.classList.remove('shown', 'in', 'removing');
-          $('tokens').style.height = $('tokensIn').offsetHeight + 'px';
-          await refreshRows([...banks, ...moreBanks]);
-          await wait(1300);
-
-          // Switch "Coverage Person(s)" back on
-          await cursorTo(t3.querySelector('.toggle'), 6, 4);
-          await click();
-          t3.querySelector('.toggle').classList.remove('off'); t3.classList.remove('dim');
-          await refreshRows([banks[0], banks[1], moreBanks[0], banks[2], moreBanks[3], banks[3]]);
-          await endLoop(1800);
+          await endLoop(2600);
         }
       },
       still() {
