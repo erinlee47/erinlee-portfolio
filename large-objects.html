@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Large Objects — Erin Lee</title>
+<meta name="description" content="Case study: Large Objects for DealCloud — understanding very large lists of records without loading them.">
+<link rel="icon" href="assets/meta/favicon.ico?v=2" sizes="any">
+<link rel="icon" href="assets/meta/favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="assets/meta/favicon-32.png?v=2" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/meta/apple-touch-icon.png">
+<link rel="manifest" href="assets/meta/site.webmanifest">
+<meta name="theme-color" content="#FBFBFC">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Erin Lee">
+<meta property="og:title" content="Large Objects — Erin Lee">
+<meta property="og:description" content="Case study: Large Objects for DealCloud — understanding very large lists of records without loading them.">
+<meta property="og:url" content="https://erinlee.work/large-objects.html">
+<meta property="og:image" content="https://erinlee.work/assets/meta/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erin Lee's portfolio homepage: Designing simple experiences for complex problems.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Large Objects — Erin Lee">
+<meta name="twitter:description" content="Case study: Large Objects for DealCloud — understanding very large lists of records without loading them.">
+<meta name="twitter:image" content="https://erinlee.work/assets/meta/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css?v=14">
+<script src="assets/js/reveal.js?v=2" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__brand">Erin Lee</a>
+    <nav class="nav__links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="frame">
+
+  <section class="cs-hero">
+    <div class="cs-eyebrow">
+      <span class="cs-eyebrow__num">05</span><span class="cs-eyebrow__rule"></span>
+      <span>Intapp · DealCloud · 2026</span>
+    </div>
+    <h1>Large Objects</h1>
+    <p class="cs-hero__lede">At Intapp, I led the design of Large Objects for DealCloud, a CRM used by thousands of professionals across the legal and financial industries. It helps people who work with very large lists of records see what changed and where, without waiting for every record to load. My PM and I explored the solution together over two weeks.</p>
+  </section>
+
+  <div class="meta">
+    <div class="meta__cell"><div class="meta__label">Role</div><div class="meta__value">Lead designer</div></div>
+    <div class="meta__cell"><div class="meta__label">Focus</div><div class="meta__value">Data visualization &amp; drill-down</div></div>
+    <div class="meta__cell"><div class="meta__label">Timeline</div><div class="meta__value">2 weeks, with PM</div></div>
+    <div class="meta__cell"><div class="meta__label">Year</div><div class="meta__value">2026</div></div>
+  </div>
+
+  <div class="cs-cover">
+    <iframe class="media media--embed" src="assets/embed/large-objects-cover.html?v=2" title="Large Objects: a summary of a very large deal list; clicking a bar and a stage filters it, then records load on request" loading="lazy"></iframe>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">The problem</div>
+    <div class="cs-copy">
+      <p>Some DealCloud lists hold tens of thousands of records, and they cannot be trimmed. DealCloud's customers are in the financial and legal industries, where regulations require firms to keep this information. When an issue comes up, they must be able to retrieve it. The data only grows.</p>
+      <p>People were frustrated by how long these lists took to load and by how hard it was to find their way around the data set.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">The question</div>
+    <div class="cs-copy">
+      <p class="cs-question">How might we help people understand a very large list they are required to keep, without loading every record to do it?</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">What I noticed</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>The records have to stay.</strong> Financial and legal regulations mean firms keep everything, so making the list smaller was never an option.</li>
+        <li><strong>Almost nobody comes here for one record.</strong> There was little usage of finding a specific record in these objects. People need the overall picture day to day, and the exact record only when an issue comes up.</li>
+        <li><strong>Loading is the pain.</strong> Bringing every row to the screen is what made the page slow, and it served a task few people had.</li>
+        <li><strong>People lose their place.</strong> After a few clicks into a drill-down, it is hard to say which filters produced the view in front of you.</li>
+      </ul>
+      <p>These came from working through the problem with my PM and from what we already knew about how people use DealCloud lists. The design had not been tested with customers yet.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Two constraints</div>
+    <div class="cs-copy">
+      <p>Two things shaped every option, and neither was about users.</p>
+      <ul>
+        <li><strong>The design system had limited chart guidance.</strong> It did have some data visualization, just not enough to cover a page like this. Every new chart type would be a pattern someone had to define, build and maintain. So the question became: how little chart vocabulary can this get away with?</li>
+        <li><strong>Celeste was not defined yet.</strong> Intapp's new AI capability was coming, but its team had not committed to what it could do. So no option was allowed to depend on it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Exploration</div>
+    <div class="cs-copy">
+      <p>In two weeks, working side by side with my PM, I explored three directions. Each one puts a different thing in charge:</p>
+      <ul>
+        <li><strong>Chart leads:</strong> open on a trend over time. Select a range of bars and the table below filters to it. The bet was that on a list this large, the first question is "what is changing?", and a chart can answer that from counts alone.</li>
+        <li><strong>Table leads:</strong> keep the table people know, group it, and add a small trend inside each grouped row. The bet was that the smallest change is the safest one: people already trust the table, so bring the analysis to it.</li>
+        <li><strong>AI leads (Ask Celeste):</strong> skip the dashboard. Ask in plain language; the answer shows the filters it used and the records behind it. The bet was that a question is faster than any chart, if the AI can be relied on.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="assets/images/lo-explorations.jpg?v=3" width="1844" height="1145" loading="lazy" alt="Three explored directions side by side: chart leads, table leads, and AI leads with Ask Celeste">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">Evaluation</div>
+    <div class="cs-copy">
+      <p>I considered all three. Here's how they compared:</p>
+      <div class="tradeoffs">
+        <div class="tradeoff tradeoff--chosen">
+          <div class="tradeoff__name">Chart leads <span class="tradeoff__tag">Chosen</span></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>The fastest read on what is changing: a jump in the last three weeks is obvious at a glance. It needs counts, not rows, so it appears straight away at any list size. And it matches the real need, which is the overall picture.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>A trend says when something changed but not where, so people would still load records to find the cause. Selecting a range and comparing periods also needed chart patterns the design system did not have. Both were things I could solve inside the direction.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Table leads</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Nothing new to learn: the same table, filters and columns. It needs only one new chart pattern, a small trend in a cell, so it was the cheapest to build and to add to the design system.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>It still starts from rows, so it keeps the slow load that frustrated people. It is built for finding one record, which few people did here. You must pick how to group before you see anything, and small trends stacked in rows are hard to compare, so a change that cuts across groups is easy to miss.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">AI leads (Ask Celeste)</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>It avoids the chart problem entirely, and no rows load until asked.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>The Celeste team's direction was too far from what I could design against at the time, so I dropped this option. Answers are also hard to scan or repeat, and people must know what to ask.</p></div>
+        </div>
+      </div>
+      <p>I went with Chart leads. Table leads kept the slow load, and AI leads depended on a direction I could not build on. That left two things to work out inside the chart direction: what information to show, and what colour to show it in.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="assets/images/lo-decision.jpg?v=1" width="1844" height="960" loading="lazy" alt="Chart leads chosen; Table leads kept the slow load; AI leads dropped because it depended on Celeste">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label cs-label--muted">What to show</div>
+    <div class="cs-copy">
+      <p>Once the chart led, the question became which information would actually help. I sat down with my PM and we listed two things: what we knew we could produce from the data, and what our users needed to see. The summary shows only what was on both lists: how much, when, where, and what stands out.</p>
+      <p>The two charts filter each other. Click a week and the stage list shows that week's breakdown. Click a stage and the trend shows that stage's history. Two clicks take a very large list down to a few dozen records, before a single record has loaded.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="assets/images/lo-anatomy.jpg?v=1" width="1844" height="911" loading="lazy" alt="The summary card with four numbered parts: how much, when, where, and what stands out">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label cs-label--muted">One card or two</div>
+    <div class="cs-copy">
+      <p>The summary has two views: a trend over time and a breakdown by stage. I compared keeping them as two cards against merging them into one.</p>
+      <div class="tradeoffs">
+        <div class="tradeoff tradeoff--chosen">
+          <div class="tradeoff__name">One combined card <span class="tradeoff__tag">Chosen</span></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Heights match by design, with no filler. One metric switch and one date range clearly apply to both views, and the two answer one question together: what changed, and in which stage.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>No separate menu for each chart, and on a narrow screen the stage list drops below the trend.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Two separate cards</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>The smallest change. Each card keeps its own title and menu, like other DealCloud dashboards.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>The heights only match by stretching one card and padding it with filler, and it is less clear that the controls apply to both.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="assets/images/lo-cards.jpg?v=3" width="1844" height="1366" loading="lazy" alt="Two layouts compared: two separate cards with matched heights, and one combined card">
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label cs-label--muted">What colour</div>
+    <div class="cs-copy">
+      <p>With limited chart guidance in the design system, I kept colour to the minimum the page needed:</p>
+      <ul>
+        <li><strong>One colour for data.</strong> Every bar is the same teal, so nothing implies a difference that is not there.</li>
+        <li><strong>Navy for "selected".</strong> The bar or stage you clicked turns navy and the rest fade, so the selection is clear without a second chart type.</li>
+        <li><strong>Orange only for a big change.</strong> It marks what deserves a look, and nothing else.</li>
+        <li><strong>No green or red.</strong> More deals created is good and more deals going stale is bad, so "up" cannot have a fixed colour.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Final solution</div>
+    <div class="cs-copy">
+      <p>The summary comes first and appears straight away. Records load only when someone asks for them.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <iframe class="media media--embed" src="assets/embed/large-objects-cover.html?v=2" title="Large Objects: a summary of a very large deal list; clicking a bar and a stage filters it, then records load on request" loading="lazy"></iframe>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label cs-label--muted">Every click becomes a filter</div>
+    <div class="cs-copy">
+      <p>Click a bar to pick a period. Click a stage to pick a segment. Each click appears as a chip at the top of the page, in the same form as any other DealCloud filter. A chip can be paused or removed, so people always know why the page shows what it shows.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <iframe class="media media--embed" src="assets/embed/large-objects-cover.html?scene=filter&amp;v=2" title="Clicking a bar and a stage adds two filter chips at the top of the page" loading="lazy"></iframe>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label cs-label--muted">Records on request</div>
+    <div class="cs-copy">
+      <p>Because few people came here for one record, the table no longer loads by default. A button shows how many records match the current filters and loads them when needed. Every record is still retained. When an issue comes up, people can filter down and retrieve exactly the records they need; nothing is fetched until then.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <iframe class="media media--embed" src="assets/embed/large-objects-cover.html?scene=records&amp;v=2" title="The Load records button brings in the matching records on request" loading="lazy"></iframe>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label cs-label--muted">States</div>
+    <div class="cs-copy">
+      <p>Loading and error states say what is happening when counts are slow or fail, and keep the filters in place.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <img class="media" src="assets/images/lo-states.jpg?v=2" width="1844" height="900" loading="lazy" alt="Loading state and error state of the page">
+  </div>
+
+  <section class="cs-section cs-section--impact cs-section--impact-gap">
+    <div class="cs-label">Impact</div>
+    <div class="cs-copy">
+      <p>In two weeks, my PM and I took an open problem to one recommended direction, with three explored options and the reasons each was kept or dropped. The design had not reached customers yet, so there is no usage number to report.</p>
+      <p class="cs-impact-quote cs-impact-quote--wide">Backed by my PM and leadership, and added to the roadmap.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--last">
+    <div class="cs-label">Reflection</div>
+    <div class="cs-copy">
+      <p>When people are required to keep everything, the job is not to help them find one thing. It is to help them understand the whole without paying to load it. And when two things are still undefined, the most useful design is the one that works without them and leaves a clear place for them to arrive.</p>
+    </div>
+  </section>
+
+  <a href="natural-language-filter.html" class="next">
+    <span class="next__label">Next project</span>
+    <span class="next__title">Natural Language Filter →</span>
+  </a>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <span>Erin Lee — All rights reserved</span>
+    <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+  </div>
+</footer>
+
+</body>
+</html>
