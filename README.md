@@ -11,7 +11,7 @@ python3 -m http.server 8000   # then visit http://localhost:8000
 ## Pages
 
 - `index.html` — homepage (hero with animated gradient, selected work, about, contact)
-- `natural-language-filter.html`, `ai-assisted-intake-form.html`, `ai-applied-outreach.html`, `vendor-risk-review.html` — case studies
+- `natural-language-filter.html`, `ai-assisted-intake-form.html`, `ai-applied-outreach.html`, `vendor-risk-review.html`, `large-objects.html` — case studies
 - `vendor-risk-review-prototype.html` — scripted prototype embedded in the Vendor Risk Review case study
 
 ## Editing
