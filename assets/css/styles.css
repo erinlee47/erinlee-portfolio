@@ -292,6 +292,8 @@ img, video { display: block; max-width: 100%; }
 .cs-copy { display: flex; flex-direction: column; gap: 22px; max-width: 68ch; }
 .cs-copy p, p.cs-copy { margin: 0; font-size: 18px; line-height: 1.7; color: var(--text); text-wrap: pretty; }
 .cs-copy em { font-style: italic; color: var(--text-strong); }
+.cs-copy a { color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.cs-copy a:hover { color: var(--accent-hover); }
 .cs-copy .pullquote {
   font-family: var(--serif); font-size: 30px; line-height: 1.35; color: var(--ink);
   max-width: 24ch; padding-top: 8px;
