@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventory Flow — Erin Lee</title>
+<meta name="description" content="Case study: redesigning Inventory Flow at Noodle.ai, an AI supply chain product, with a shared visual language for time, risk and certainty.">
+<link rel="icon" href="assets/meta/favicon.ico?v=2" sizes="any">
+<link rel="icon" href="assets/meta/favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="assets/meta/favicon-32.png?v=2" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/meta/apple-touch-icon.png">
+<link rel="manifest" href="assets/meta/site.webmanifest">
+<meta name="theme-color" content="#FBFBFC">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Erin Lee">
+<meta property="og:title" content="Inventory Flow — Erin Lee">
+<meta property="og:description" content="Case study: redesigning Inventory Flow at Noodle.ai, an AI supply chain product, with a shared visual language for time, risk and certainty.">
+<meta property="og:url" content="https://erinlee.work/inventory-flow.html">
+<meta property="og:image" content="https://erinlee.work/assets/meta/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erin Lee's portfolio homepage: Designing simple experiences for complex problems.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Inventory Flow — Erin Lee">
+<meta name="twitter:description" content="Case study: redesigning Inventory Flow at Noodle.ai, an AI supply chain product, with a shared visual language for time, risk and certainty.">
+<meta name="twitter:image" content="https://erinlee.work/assets/meta/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css?v=15">
+<style>
+/* ---------- Noodle.ai additions: gradient stage + floating screens ---------- */
+.stage {
+  position: relative; overflow: hidden; border-radius: var(--radius-cs);
+  background:
+    radial-gradient(60% 70% at 12% 10%, rgba(120,96,196,.75) 0%, rgba(120,96,196,0) 62%),
+    radial-gradient(55% 65% at 92% 18%, rgba(60,96,176,.7) 0%, rgba(60,96,176,0) 62%),
+    radial-gradient(70% 70% at 60% 108%, rgba(160,96,150,.45) 0%, rgba(160,96,150,0) 66%),
+    #1F1B3A;
+}
+.stage--b {
+  background:
+    radial-gradient(60% 70% at 88% 10%, rgba(120,96,196,.7) 0%, rgba(120,96,196,0) 62%),
+    radial-gradient(55% 65% at 8% 22%, rgba(60,96,176,.7) 0%, rgba(60,96,176,0) 62%),
+    radial-gradient(70% 70% at 40% 108%, rgba(160,96,150,.45) 0%, rgba(160,96,150,0) 66%),
+    #1F1B3A;
+}
+.stage--c {
+  background:
+    radial-gradient(60% 70% at 50% -6%, rgba(120,96,196,.7) 0%, rgba(120,96,196,0) 62%),
+    radial-gradient(55% 65% at 0% 80%, rgba(60,96,176,.7) 0%, rgba(60,96,176,0) 62%),
+    radial-gradient(70% 70% at 100% 100%, rgba(160,96,150,.45) 0%, rgba(160,96,150,0) 66%),
+    #1F1B3A;
+}
+.win {
+  display: block; width: 100%; height: auto; border-radius: 18px; background: #2E2E2E;
+  box-shadow: 0 32px 75px -22px rgba(10,8,30,.65), 0 0 0 1px rgba(255,255,255,.07);
+}
+.stage--cover { aspect-ratio: 3 / 2; }
+.stage--cover .win { position: absolute; }
+.stage--cover .win--main { left: 10%; top: 10%; width: 80%; }
+.stage--cover .win--side { right: 4.5%; bottom: 6.5%; width: 41%; }
+.stage--pad { padding: 72px 0; display: flex; justify-content: center; }
+.stage--pad .win { width: var(--w, 72%); }
+.stage--stack { padding: 64px 0; display: flex; flex-direction: column; align-items: center; gap: 36px; }
+.stage--stack .win { width: var(--w, 82%); }
+.cs-cover .stage, .cs-media .stage { box-shadow: var(--shadow); }
+video.win { background: #2E2E2E; }
+.cap { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(14,17,22,.55); }
+.stage--stack .cap { align-self: flex-start; margin: 0 0 -20px 9%; }
+
+/* visual-language figure */
+.lang { background: var(--band); padding: 56px var(--pad); }
+.lang__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; }
+.lang__card { background: #fff; border-radius: var(--radius-cs); box-shadow: var(--shadow); padding: 36px 40px 40px; display: flex; flex-direction: column; gap: 28px; }
+.lang__title { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-meta); }
+.lang__rows { display: flex; flex-direction: column; gap: 22px; }
+.lang__row { display: grid; grid-template-columns: 148px minmax(0,1fr); gap: 20px; align-items: center; }
+.lang__row b { font-weight: 600; color: var(--text-strong); font-size: 17px; display: block; }
+.lang__row span { font-size: 15px; line-height: 1.5; color: var(--text-muted); }
+.sw { height: 40px; border-radius: 6px; background: #2E2E2E; position: relative; overflow: hidden; }
+.sw i { position: absolute; left: 14px; right: 14px; top: 50%; height: 0; }
+.sw--solid i { height: 14px; margin-top: -7px; background: #A99BFF; border-radius: 2px; }
+.sw--stripe i { height: 14px; margin-top: -7px; border-radius: 2px;
+  background: repeating-linear-gradient(135deg, #A99BFF 0 3px, #5B4FA8 3px 6px); }
+.sw--dash i { border-top: 2px dashed #DCDCDC; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px 10px; }
+.chip { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; color: var(--text-strong); background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px 9px 12px; }
+.chip i { width: 14px; height: 14px; border-radius: 4px; display: block; flex: none; }
+.lang__note { font-size: 15px; line-height: 1.6; color: var(--text-muted); max-width: 46ch; }
+@media (max-width: 900px) { .lang__grid { grid-template-columns: 1fr; } .lang__row { grid-template-columns: 112px minmax(0,1fr); } }
+@media (max-width: 720px) {
+  .stage--pad { padding: 28px 0; } .stage--stack { padding: 28px 0; gap: 20px; }
+  .stage--pad .win, .stage--stack .win { width: 90%; border-radius: 10px; }
+  .stage--cover .win { border-radius: 8px; }
+  .lang { padding: 24px var(--pad); } .lang__card { padding: 24px 22px 28px; }
+}
+
+</style>
+<script src="assets/js/reveal.js?v=2" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__brand">Erin Lee</a>
+    <nav class="nav__links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="frame">
+
+  <section class="cs-hero">
+    <div class="cs-eyebrow">
+      <span class="cs-eyebrow__num">02</span><span class="cs-eyebrow__rule"></span>
+      <span>Noodle.ai · Inventory Flow · 2019–2021</span>
+    </div>
+    <h1>Inventory Flow</h1>
+    <p class="cs-hero__lede">At Noodle.ai, I redesigned Inventory Flow, an AI supply chain product that spots supply and demand imbalances, puts a dollar figure on the risk, and recommends what to do about it. I owned the Supply Network and Production products, gave them one visual language, and added a task flow so decisions get assigned in the app instead of over email.</p>
+  </section>
+
+  <div class="meta">
+    <div class="meta__cell"><div class="meta__label">Role</div><div class="meta__value">Product designer</div></div>
+    <div class="meta__cell"><div class="meta__label">Focus</div><div class="meta__value">Data visualization &amp; decision workflows</div></div>
+    <div class="meta__cell"><div class="meta__label">Discipline</div><div class="meta__value">Web design</div></div>
+    <div class="meta__cell"><div class="meta__label">Year</div><div class="meta__value">2019–2021</div></div>
+  </div>
+
+  <div class="cs-cover">
+    <div class="stage stage--cover" id="cover">
+      <img class="win win--main" src="assets/images/inventory-flow/supply_top.jpg" alt="Supply Network: inbound shipments, weekly metrics and the 24-week risk strip" width="1440" height="960">
+    </div>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">The problem</div>
+    <div class="cs-copy">
+      <p>Inventory Flow already knew where supply and demand were out of step. It could find an imbalance, size it as Value at Risk (VAR), and recommend a fix. The hard part was everything after that: a planner had to read weeks of numbers, decide whether to trust the recommendation, act on it, and then tell someone.</p>
+      <p>Supply Network and Production answered different questions, but planners moved between them all day. They needed to read like one system, and the work needed to stay in one place.</p>
+      <p class="pullquote">The model knew what to do. People still had to trust it, act on it, and tell someone.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">The question</div>
+    <div class="cs-copy">
+      <p class="cs-question">How might we make a wall of weekly numbers readable at a glance, and get from a recommendation to a decision without leaving the app?</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">What I noticed</div>
+    <div class="cs-copy">
+      <ul>
+        <li><strong>Everything happens by the week.</strong> Supply, demand, days of supply, shipments and orders all play out week by week. So a shared week grid became the backbone: every chart on a screen lines up to it, and a 24-week strip in the title shows risk before you scroll.</li>
+        <li><strong>Moving through the weeks took too long.</strong> Before the redesign, people had to click the right or left arrow over and over to move the charts week by week. For a planner chasing one problem week, that was slow. I added the 24-week strip to the title so they can go straight to the week they need.</li>
+        <li><strong>Real and predicted values had to look different.</strong> A number that already happened looks a lot like one that is only planned or forecast, and mixing them up is dangerous in a planning tool. So the difference had to be visible without reading a label.</li>
+        <li><strong>Color had to carry meaning.</strong> With this many charts, a color that means one thing on one screen and something else on the next gets misread. I decided what each color means once, then held to it.</li>
+        <li><strong>Planners work by market.</strong> A client asked to see both the overall picture and each market, because so many planners are responsible for just one. We needed both views, one tap apart.</li>
+        <li><strong>The handoff left the app.</strong> Someone spotted a problem in the product, then assigned the fix over email. That is where context gets lost, so assignment needed to live next to the alert.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">Visual language</div>
+    <div class="cs-copy">
+      <p>I defined the system for the whole redesign, so every screen reads the same way. Three line and fill patterns say how certain a value is. Each color has one job.</p>
+    </div>
+  </section>
+
+  <div class="lang">
+    <div class="lang__grid">
+      <div class="lang__card">
+        <div class="lang__title">How sure are we</div>
+        <div class="lang__rows">
+          <div class="lang__row"><div class="sw sw--solid"><i></i></div><div><b>Solid</b><span>Actual. It already happened.</span></div></div>
+          <div class="lang__row"><div class="sw sw--stripe"><i></i></div><div><b>Striped</b><span>Forecast. The model's prediction.</span></div></div>
+          <div class="lang__row"><div class="sw sw--dash"><i></i></div><div><b>Dashed</b><span>Target, or a projected line. Not real yet.</span></div></div>
+        </div>
+      </div>
+      <div class="lang__card">
+        <div class="lang__title">What it is about</div>
+        <div class="chips">
+          <span class="chip"><i style="background:#8A8A8A"></i>Low risk</span>
+          <span class="chip"><i style="background:#FFD49A"></i>Medium risk</span>
+          <span class="chip"><i style="background:#E0502A"></i>High risk</span>
+          <span class="chip"><i style="background:#5AA9FF"></i>Shipments, recommendation</span>
+          <span class="chip"><i style="background:#A99BFF"></i>Demand</span>
+          <span class="chip"><i style="background:#4F8F2C"></i>Days of supply</span>
+        </div>
+        <p class="lang__note">One color, one meaning. If a planner sees blue, it is stock moving through the network. If they see purple, it is what customers want.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">Final solution</div>
+    <div class="cs-copy">
+      <p>Four parts of the product changed. Each one reuses the same grid, colors and patterns.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label cs-label--muted">Supply Network</div>
+    <div class="cs-copy">
+      <p>One screen from alert to action. The 24-week strip in the title shows where risk is coming, and it is also the fastest way to move around: pick a week to jump there, instead of stepping through the charts with the arrows. Below it, inbound shipments, weekly metrics and outbound shipments share the same week columns, so a planner can read straight down a single week.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <div class="stage stage--pad stage--b" style="--w:68%">
+      <img class="win" src="assets/images/inventory-flow/supply_full.jpg" alt="Supply Network screen" width="1440" height="1522" loading="lazy">
+    </div>
+  </div>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label cs-label--muted">Weekly demand</div>
+    <div class="cs-copy">
+      <p>Demand shows overall by default, with a toggle for By Market. I tried stacking the markets in one bar, but only the bottom slice sits on a flat line, so it was hard to compare them. Instead, each market gets its own short row on the same weeks and the same scale.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <div class="stage stage--stack stage--c" style="--w:84%">
+      <img class="win" src="assets/images/inventory-flow/demand_overall.jpg" alt="Weekly demand, overall" width="1184" height="232" loading="lazy">
+      <img class="win" src="assets/images/inventory-flow/demand_market.jpg" alt="Weekly demand, by market: one row per market on a shared scale" width="1184" height="478" loading="lazy">
+    </div>
+  </div>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label cs-label--muted">Reallocate shipments</div>
+    <div class="cs-copy">
+      <p>I redesigned the modal for moving outbound shipments. Arrival weeks by destination sit in one heatmap, and planned, recommended and requested quantities line up side by side with the difference. One button accepts the recommendation.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <div class="stage stage--pad" style="--w:70%">
+      <img class="win" src="assets/images/inventory-flow/modal.jpg" alt="Reallocate Weekly Outbound Shipments modal" width="1004" height="638" loading="lazy">
+    </div>
+  </div>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label cs-label--muted">Production</div>
+    <div class="cs-copy">
+      <p>Production uses the same week grid. I added DOS and Past Due filters, and designed how orders move on the chart: lift an order, drag it to the recommended week, see the fill rate change before it lands, and undo if it was wrong.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <div class="stage stage--pad stage--b" style="--w:68%">
+      <img class="win" src="assets/images/inventory-flow/production.jpg" alt="Production screen with the order gantt chart" width="1440" height="1540" loading="lazy">
+    </div>
+  </div>
+
+  <div class="cs-media">
+    <div class="stage stage--stack stage--c" style="--w:84%">
+      <video class="win" src="assets/video/inventory-flow-gantt.mp4" poster="assets/images/inventory-flow/gantt_poster.jpg" width="1184" height="256" autoplay muted loop playsinline preload="metadata" aria-label="Moving an order on the gantt chart: lift, drag to the recommended week, snap, confirm and undo"></video>
+    </div>
+  </div>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label cs-label--muted">Tasks, not email</div>
+    <div class="cs-copy">
+      <p>Anyone can turn an alert into a task and assign it right where they found it. The Task Report rolls it all up, with weekly performance showing the total VAR against how much has been addressed, split by status.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <div class="stage stage--pad" style="--w:72%">
+      <img class="win" src="assets/images/inventory-flow/tasks.jpg" alt="Task Report: weekly performance KPIs and task list" width="1440" height="1000" loading="lazy">
+    </div>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">Evaluation</div>
+    <div class="cs-copy">
+      <p>The by-market view was the one decision with real trade-offs. Here is how the two options compared:</p>
+      <div class="tradeoffs">
+        <div class="tradeoff tradeoff--chosen">
+          <div class="tradeoff__name">One row per market <span class="tradeoff__tag">Chosen</span></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Every market sits on the same baseline and the same scale, so you can compare them and follow one across weeks. A planner who owns one market can focus on their row.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>It takes more vertical space, so the section grows taller than the overall view.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">Stacked bar by market</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>Compact, and good at showing how each market adds up to the total.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>Only the bottom slice sits on a flat line. The rest float, which makes comparing markets or tracking one over time hard, and it needs a color per market.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--impact cs-section--impact-gap">
+    <div class="cs-label">Impact</div>
+    <div class="cs-copy">
+      <p>This is an older project, so I don't have formal metrics to share. What I can point to is the system it left behind: one grid, one set of colors, and one way to show what is real and what is predicted, applied across Supply Network, Production and Tasks.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--last">
+    <div class="cs-label">Reflection</div>
+    <div class="cs-copy">
+      <p>A chart full of predictions is only trustworthy if you can tell, at a glance, what already happened and what is a guess. Making that difference visible, and giving every color one job, did more for the product than any single screen.</p>
+    </div>
+  </section>
+
+  <a href="natural-language-filter.html" class="next">
+    <span class="next__label">Also</span>
+    <span class="next__title">Natural Language Filter →</span>
+  </a>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <span>Erin Lee — All rights reserved</span>
+    <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+  </div>
+</footer>
+
+</body>
+</html>
