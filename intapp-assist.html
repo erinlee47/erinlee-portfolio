@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intapp Assist — Erin Lee</title>
+<meta name="description" content="Case study: Intapp Assist for DealCloud — testing an executive AI vision with users, and finding where AI could really help.">
+<link rel="icon" href="assets/meta/favicon.ico?v=2" sizes="any">
+<link rel="icon" href="assets/meta/favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="assets/meta/favicon-32.png?v=2" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/meta/apple-touch-icon.png">
+<link rel="manifest" href="assets/meta/site.webmanifest">
+<meta name="theme-color" content="#FBFBFC">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Erin Lee">
+<meta property="og:title" content="Intapp Assist — Erin Lee">
+<meta property="og:description" content="Case study: Intapp Assist for DealCloud — testing an executive AI vision with users, and finding where AI could really help.">
+<meta property="og:url" content="https://erinlee.work/intapp-assist.html">
+<meta property="og:image" content="https://erinlee.work/assets/meta/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erin Lee's portfolio homepage: Designing simple experiences for complex problems.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Intapp Assist — Erin Lee">
+<meta name="twitter:description" content="Case study: Intapp Assist for DealCloud — testing an executive AI vision with users, and finding where AI could really help.">
+<meta name="twitter:image" content="https://erinlee.work/assets/meta/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css?v=15">
+<script src="assets/js/reveal.js?v=2" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__brand">Erin Lee</a>
+    <nav class="nav__links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="frame">
+
+  <section class="cs-hero">
+    <div class="cs-eyebrow">
+      <span class="cs-eyebrow__num">07</span><span class="cs-eyebrow__rule"></span>
+      <span>Intapp · DealCloud · 2023</span>
+    </div>
+    <h1>Intapp Assist</h1>
+    <p class="cs-hero__lede">When ChatGPT launched, leadership wanted an AI assistant that could answer anything about a firm's DealCloud data. I tested that idea with users before we built it. Nobody wanted it. So I worked with product and AI partners to find a problem AI could actually solve, and designed the chat experience that came out of it.</p>
+  </section>
+
+  <div class="meta">
+    <div class="meta__cell"><div class="meta__label">Role</div><div class="meta__value">Lead designer</div></div>
+    <div class="meta__cell"><div class="meta__label">Focus</div><div class="meta__value">AI strategy &amp; conversational UX</div></div>
+    <div class="meta__cell"><div class="meta__label">Discipline</div><div class="meta__value">Web design</div></div>
+    <div class="meta__cell"><div class="meta__label">Year</div><div class="meta__value">2023</div></div>
+  </div>
+
+  <div class="cs-cover">
+    <iframe class="media media--embed" src="assets/embed/assist.html?v=1" title="Intapp Assist: a user opens Assist from the top bar, asks how to add someone to a deal team, and gets a short answer with its sources" loading="lazy"></iframe>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">The problem</div>
+    <div class="cs-copy">
+      <p>After ChatGPT came out, every enterprise company felt pressure to add generative AI, and Intapp was no different. DealCloud is a CRM for financial and legal firms, full of each firm's own data. Leadership pictured an assistant where you could ask about that data and get an answer right away:</p>
+      <ul>
+        <li><em>"I'll be in Boston next week. Who should I reach out to?"</em></li>
+        <li><em>"I'm hosting a golf tournament. Find relevant contacts from our relationship history."</em></li>
+        <li><em>"Show me all active opportunities in a particular market."</em></li>
+      </ul>
+      <p>The goal made sense: let people get to their data without learning DealCloud's structure. But there was a big gap between the idea and what our technology could do.</p>
+      <p class="pullquote">The question wasn't how to bring AI into DealCloud. It was where AI could actually help.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Challenge</div>
+    <div class="cs-copy">
+      <p>Every firm sets up DealCloud differently. One calls it a "Deal," another an "Opportunity," another an "Engagement." Even something as simple as location can live in different custom fields.</p>
+      <p>To answer questions like the ones above, the AI needed a map of what each firm's fields mean. DealCloud didn't have that yet, and building it would take much longer than our release timeline.</p>
+      <p>So we had two things to figure out: what we could realistically ship, and, more importantly, whether users even wanted this.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label">The question</div>
+    <div class="cs-copy">
+      <p class="cs-question">Before we build an AI assistant for everything, do people actually want it, and where would it really help them?</p>
+    </div>
+  </section>
+
+  <div class="cs-split cs-split--feature">
+    <div class="cs-split__col">
+      <div class="cs-split__title">First prototype: testing the idea</div>
+      <p>Instead of debating the concept in meetings, I built a chatbot prototype. Since the AI couldn't reliably understand any question about any firm's data, I limited it to a set of questions you could click, each with a ready answer.</p>
+      <p>I partnered with a user researcher to test it with customers.</p>
+      <p><strong>The feedback was clear: none of the users we tested wanted to use it.</strong> A chat box on top of things DealCloud could already do wasn't adding value.</p>
+    </div>
+    <div class="cs-split__col">
+      <iframe class="media media--embed media--portrait" src="assets/embed/assist.html?scene=prototype&amp;v=1" title="The first prototype: a fixed set of questions to click, each returning a ready answer" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-label">What I noticed</div>
+    <div class="cs-copy">
+      <p>Instead of pushing the original vision forward, I brought the findings back to our product partners. With our Product Manager, AI Scientist and AI Product Manager, I looked for a smaller problem AI could solve well with the technology we had.</p>
+      <ul>
+        <li><strong>The answers already existed.</strong> DealCloud University had lots of learning content: video tutorials, training courses, certifications and documentation.</li>
+        <li><strong>Finding them took too long.</strong> Most of it was video, so getting one answer could mean watching a lot of content. <strong>7 out of 10 users</strong> told us it took too long to find what they needed.</li>
+        <li><strong>People wanted search, not more training.</strong> They expected something closer to Google: ask a question, find the right information, get a useful answer fast.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Evaluation</div>
+    <div class="cs-copy">
+      <p>That gave us two directions to compare:</p>
+      <div class="tradeoffs">
+        <div class="tradeoff tradeoff--chosen">
+          <div class="tradeoff__name">Help people find answers in DealCloud's knowledge <span class="tradeoff__tag">Chosen</span></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>A clear user need, content that already existed, and a scope our AI could handle well today.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>Narrower. It answers "how do I…" questions, not questions about the firm's own data.</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="tradeoff__name">An assistant for all of the firm's CRM data</div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Pros</span><p>The big vision. Ask anything about your firm's relationships and deals.</p></div>
+          <div class="tradeoff__row"><span class="tradeoff__k">Cons</span><p>It needed a field-mapping layer we didn't have, it couldn't ship on time, and users in testing didn't want it.</p></div>
+        </div>
+      </div>
+      <p>Using the prototype, the research and the technical limits together, I helped get leadership on board to change direction.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-label">Final solution</div>
+    <div class="cs-copy">
+      <p>DealCloud had never had a chat experience, so I designed Assist's chat as a set of reusable pieces that other AI features could use later. The work focused on three things.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--flush">
+    <div class="cs-label cs-label--muted">Conversational interaction</div>
+    <div class="cs-copy">
+      <p>Assist opens from the top bar on any page, next to the work you're doing. Asking a question and reading the answer should feel as simple as a search box.</p>
+    </div>
+  </section>
+
+  <div class="cs-media">
+    <iframe class="media media--embed" src="assets/embed/assist.html?v=1" title="A user opens Assist from the top bar, types a question and gets an answer" loading="lazy"></iframe>
+  </div>
+
+  <div class="cs-split cs-split--feature">
+    <div class="cs-split__col">
+      <div class="cs-split__title">Source attribution</div>
+      <p>Every answer lists where it came from: a video, a course lesson, a help article. People can check the answer and jump to the original when they want more.</p>
+    </div>
+    <div class="cs-split__col">
+      <iframe class="media media--embed media--portrait" src="assets/embed/assist.html?scene=sources&amp;v=1" title="Each answer lists its sources, and each source links to the original" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <div class="cs-split cs-split--feature">
+    <div class="cs-split__col">
+      <div class="cs-split__title">Progressive disclosure</div>
+      <p>Answers from training content can get long. I added "Show more" inside the chat bubble, so people can scan the short version first and open the rest only when they need it.</p>
+    </div>
+    <div class="cs-split__col">
+      <iframe class="media media--embed media--portrait" src="assets/embed/assist.html?scene=more&amp;v=1" title="A long answer starts short; Show more opens the rest inside the chat bubble" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <section class="cs-section cs-section--impact cs-section--impact-gap">
+    <div class="cs-label">Impact</div>
+    <div class="cs-copy">
+      <p>Assist changed the direction of our first AI project. Instead of rushing a broad chatbot out without checking it with users, we used research and technical limits to find a focused problem worth solving.</p>
+      <p>It also set up what came next. For <a href="natural-language-filter.html">Natural Language Filter</a>, I reused and grew the same chat patterns, this time to turn plain-language requests into filters people can check and change.</p>
+      <p class="cs-impact-quote cs-impact-quote--wide">The chat patterns from Assist became the base for later AI work in DealCloud.</p>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--last">
+    <div class="cs-label">Reflection</div>
+    <div class="cs-copy">
+      <p>Just because AI can do something doesn't mean users need it. My job wasn't to turn an executive's vision into screens. It was to help the company find out if that vision solved a real problem.</p>
+      <p>Sometimes the most useful design decision is knowing what not to build.</p>
+    </div>
+  </section>
+
+  <a href="natural-language-filter.html" class="next">
+    <span class="next__label">Next project</span>
+    <span class="next__title">Natural Language Filter →</span>
+  </a>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <span>Erin Lee — All rights reserved</span>
+    <a href="https://www.linkedin.com/in/erin-lee-39859195">LinkedIn ↗</a>
+  </div>
+</footer>
+
+</body>
+</html>
