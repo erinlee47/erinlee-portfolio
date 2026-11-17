@@ -534,15 +534,13 @@
       still() { bodyEl.classList.remove('closed'); reset(INTRO + THREAD); $('helpBtn').classList.add('active'); answered(true); }
     },
 
-    // Fixed, clickable questions: the composer is locked
+    // Guided click-through: pick a question, then a follow-up
     prototype: {
       label: 'The first prototype: a guided click-through. Pick a question, get a ready answer, then pick a follow-up',
       setup() {
         framePanel(); reset(PROTO); zoomTo(CAM_PANEL.p, CAM_PANEL.z, true);
         convo.scrollTop = 0;
         $('powered').innerHTML = 'Powered by <em>Intapp Assist</em>';
-        $('composer').classList.add('locked');
-        setInput('<span class="ph">Choose a question above</span>');
       },
       async run() {
         while (true) {
