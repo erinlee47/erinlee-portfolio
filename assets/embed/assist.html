@@ -85,7 +85,8 @@
   @keyframes halo { 0% { box-shadow: 0 0 0 0 rgba(203,196,247,.75); } 100% { box-shadow: 0 0 0 16px rgba(203,196,247,0); } }
 
   .body { display: grid; grid-template-columns: 60px 1fr 420px; min-height: 0; }
-  .pwrap { min-width: 0; overflow: hidden; display: flex; }
+  .pwrap { min-width: 0; min-height: 0; overflow: hidden; display: flex; }
+  .pwrap .panel { max-height: calc(100% - 28px); }
   .pwrap .panel { flex: none; width: 406px; transition: transform .6s cubic-bezier(.2,.9,.3,1), opacity .35s ease; }
   .body.closed .pwrap .panel { transform: translateX(105%); opacity: 0; }
   .table, .title { transition: margin-right .6s cubic-bezier(.2,.9,.3,1); position: relative; z-index: 0; }
@@ -388,17 +389,30 @@
     </div>`;
 
   // The first prototype: a fixed set of questions you could click, and nothing else
-  const PROTO = `
-    <div class="b ai pop in" id="pIntro">Hi! Here are some things I can help with.</div>
-    <div class="chips" id="chips">
-      <div class="sug pop in" id="chip1">I’ll be in Boston next week. Who should I reach out to?</div>
-      <div class="sug pop in">I’m hosting a golf tournament. Find relevant contacts.</div>
-      <div class="sug pop in">Show me all active opportunities in healthcare.</div>
-    </div>
-    <div class="b me pop gone" id="pAsk">I’ll be in Boston next week. Who should I reach out to?</div>
-    <div class="b ai pop gone" id="pWork">Looking through your relationships<span class="dots"><i></i><i></i><i></i></span></div>
-    <div class="b ai pop gone" id="pAns">Here are 3 Boston contacts you haven’t met with in 6+ months:
-      <ol style="margin:6px 0 0;padding-left:20px"><li>Rachel Kim, Bluehaven Capital</li><li>Tom Alvarez, Harborline Securities</li><li>Nina Brooks, Crescent Ridge Partners</li></ol></div>`;
+  // The first prototype: a guided click-through. Each answer offers the next questions to click.
+  const PROTO = `<div class="b ai pop in" id="pIntro">Hi! Here are some things I can help with.</div>`;
+  const PSTEPS = [
+    { chips: ['I’ll be in Boston next week. Who should I reach out to?', 'I’m hosting a golf tournament. Find relevant contacts.', 'Show me all active opportunities in healthcare.'],
+      work: 'Looking through your relationships',
+      ans: `Here are 3 Boston contacts you haven’t met with in 6+ months:
+        <ol style="margin:6px 0 0;padding-left:20px"><li>Rachel Kim, Bluehaven Capital</li><li>Tom Alvarez, Harborline Securities</li><li>Nina Brooks, Crescent Ridge Partners</li></ol>` },
+    { chips: ['Show my last interaction with each', 'Who else do we know in Boston?'],
+      work: 'Checking recent activity',
+      ans: `Your last interaction with each:
+        <ol style="margin:6px 0 0;padding-left:20px"><li>Rachel Kim: meeting, March</li><li>Tom Alvarez: email, January</li><li>Nina Brooks: call, December</li></ol>` },
+    { chips: ['Who else do we know at Bluehaven Capital?', 'Show my last email with Tom'],
+      work: 'Looking up Bluehaven Capital',
+      ans: `You know 2 other people at Bluehaven Capital:
+        <ol style="margin:6px 0 0;padding-left:20px"><li>James Liu, Managing Director</li><li>Ava Patel, Vice President</li></ol>` }
+  ];
+  function addEl(html) {
+    const d = document.createElement('div'); d.innerHTML = html.trim();
+    const el = d.firstChild; convo.appendChild(el); return el;
+  }
+  function addChips(list) {
+    return addEl(`<div class="chips pop">${list.map(c => `<div class="sug">${c}</div>`).join('')}</div>`);
+  }
+  const toBottom = () => convo.scrollTo({ top: convo.scrollHeight, behavior: reduced ? 'auto' : 'smooth' });
 
   function setInput(html) { $('input').innerHTML = html; }
   function reset(html) {
@@ -522,35 +536,58 @@
 
     // Fixed, clickable questions: the composer is locked
     prototype: {
-      label: 'The first prototype: Assist offers a fixed set of questions to click, and returns a canned answer',
-      async run() {
-        while (true) {
-          framePanel(); reset(PROTO); zoomTo(CAM_PANEL.p, CAM_PANEL.z, true);
-          $('powered').innerHTML = 'Powered by <em>Intapp Assist</em>';
-          $('composer').classList.add('locked');
-          setInput('<span class="ph">Choose a question above</span>');
-          moveCursor({ x: 1300, y: 600 });
-          await wait(700);
-          cursor.style.opacity = 1;
-          for (const c of document.querySelectorAll('#chips .sug')) { c.classList.add('glow'); await wait(450); c.classList.remove('glow'); }
-          await cursorTo($('chip1'), 30, 4);
-          await click($('chip1'));
-          $('chips').classList.add('gone'); $('pIntro').classList.add('gone');
-          cursor.style.opacity = 0;
-          await show($('pAsk'));
-          await wait(500);
-          await show($('pWork'));
-          await wait(1500);
-          $('pWork').classList.add('gone');
-          await show($('pAns'));
-          await endLoop(3200);
-        }
-      },
-      still() {
+      label: 'The first prototype: a guided click-through. Pick a question, get a ready answer, then pick a follow-up',
+      setup() {
         framePanel(); reset(PROTO); zoomTo(CAM_PANEL.p, CAM_PANEL.z, true);
+        convo.scrollTop = 0;
         $('powered').innerHTML = 'Powered by <em>Intapp Assist</em>';
         $('composer').classList.add('locked');
         setInput('<span class="ph">Choose a question above</span>');
+      },
+      async run() {
+        while (true) {
+          this.setup();
+          moveCursor({ x: 1300, y: 600 });
+          await wait(600);
+          for (const step of PSTEPS) {
+            const chips = addChips(step.chips);
+            await wait(20); chips.classList.add('in'); toBottom();
+            await wait(500);
+            cursor.style.opacity = 1;
+            const pick = chips.firstChild;
+            pick.classList.add('glow');
+            await cursorTo(pick, 30, 4);
+            await click(pick);
+            await wait(150);
+            pick.classList.remove('glow');
+            chips.remove();
+            cursor.style.opacity = 0;
+            const ask = addEl(`<div class="b me pop">${pick.textContent}</div>`);
+            await wait(20); ask.classList.add('in'); toBottom();
+            await wait(450);
+            const work = addEl(`<div class="b ai pop">${step.work}<span class="dots"><i></i><i></i><i></i></span></div>`);
+            await wait(20); work.classList.add('in'); toBottom();
+            await wait(1300);
+            work.remove();
+            const ans = addEl(`<div class="b ai pop">${step.ans}</div>`);
+            await wait(20); ans.classList.add('in'); toBottom();
+            await wait(1100);
+          }
+          // the last step offers "Start over"
+          const last = addChips(['Start over']);
+          await wait(20); last.classList.add('in'); toBottom();
+          await wait(500);
+          cursor.style.opacity = 1;
+          await cursorTo(last.firstChild, 30, 4);
+          await click(last.firstChild);
+          await endLoop(400);
+        }
+      },
+      still() {
+        this.setup();
+        addEl(`<div class="b me pop in">${PSTEPS[0].chips[0]}</div>`);
+        addEl(`<div class="b ai pop in">${PSTEPS[0].ans}</div>`);
+        addChips(PSTEPS[1].chips).classList.add('in');
       }
     },
 
